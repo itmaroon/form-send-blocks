@@ -70,11 +70,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./editor.scss */ "./src/blocks/confirm-figure-block/editor.scss");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
+/* harmony import */ var fast_deep_equal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! fast-deep-equal */ "./node_modules/fast-deep-equal/index.js");
+/* harmony import */ var fast_deep_equal__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(fast_deep_equal__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
+
 
 
 
@@ -109,19 +112,6 @@ const units = [{
   value: 'rem',
   label: 'rem'
 }];
-
-// セル要素を生成する関数
-const cellObjects = inputInnerBlocks => {
-  return inputInnerBlocks.map(input_elm => ({
-    cells: [{
-      content: input_elm.attributes.labelContent,
-      tag: 'td'
-    }, {
-      content: input_elm.attributes.inputValue,
-      tag: 'td'
-    }]
-  }));
-};
 function Edit({
   attributes,
   setAttributes,
@@ -137,14 +127,27 @@ function Edit({
     padding_form
   } = attributes;
 
+  // セル要素を生成する関数
+  const cellObjects = inputInnerBlocks => {
+    return inputInnerBlocks.map(input_elm => ({
+      cells: [{
+        content: input_elm.attributes.labelContent,
+        tag: 'td'
+      }, {
+        content: input_elm.attributes.inputValue,
+        tag: 'td'
+      }]
+    }));
+  };
+
   //単色かグラデーションかの選択
   const bgColor = bgColor_form || bgGradient_form;
 
   //ブロックのスタイル設定
-  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.marginProperty)(margin_form);
-  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.paddingProperty)(padding_form);
-  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.radiusProperty)(radius_form);
-  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.borderProperty)(border_form);
+  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.marginProperty)(margin_form);
+  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.paddingProperty)(padding_form);
+  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.radiusProperty)(radius_form);
+  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.borderProperty)(border_form);
   const blockStyle = {
     background: bgColor,
     ...margin_obj,
@@ -159,40 +162,83 @@ function Edit({
     updateBlockAttributes
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
 
-  //ブロック取得の関数
-  const {
-    getBlockRootClientId,
-    getBlocks,
-    getBlockOrder
-  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/block-editor'), [clientId]);
-
-  // 親ブロックのclientIdを取得
-  const parentClientId = getBlockRootClientId(clientId);
-  // 親ブロックを取得
-  const parentInnerBlocks = getBlocks(parentClientId);
-  //親のインナーブロックからitmar/input-figure-blockを抽出
-  const inputFigureBlock = parentInnerBlocks.find(block => block.name === 'itmar/input-figure-block');
-  //その中のインナーブロック
-  const inputInnerBlocks = inputFigureBlock ? inputFigureBlock.innerBlocks : [];
-  const [innerTemplate, setInnerTemplate] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
-  const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useInnerBlocksProps)({}, {
-    //allowedBlocks: ['itmar/input-figure-block'],
-    template: innerTemplate
-    //templateLock: true
-  });
+  // 監視対象のinput要素を取得する
+  const inputFigureBlocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const {
+      getBlockRootClientId,
+      getBlocks
+    } = select('core/block-editor');
+    // 親ブロックのclientIdを取得
+    const parentClientId = getBlockRootClientId(clientId);
+    // 親ブロックを取得
+    const parentInnerBlocks = getBlocks(parentClientId);
+    //親のインナーブロックからitmar/input-figure-blockを抽出
+    const inputFigureBlock = parentInnerBlocks.find(block => block.name === 'itmar/input-figure-block');
+    //その中のインナーブロック
+    const inputInnerBlocks = inputFigureBlock ? inputFigureBlock.innerBlocks : [];
+    return inputInnerBlocks; // 監視対象のstateを返す
+  }, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
   //自分のインナーブロック
-  const innerBlocks = getBlocks(clientId);
+  const innerBlocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/block-editor').getBlocks(clientId), [clientId]);
+  // 自分のインナーブロックのID
+  const innerBlocksIds = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/block-editor').getBlocks(clientId).map(block => block.clientId), [clientId]);
 
-  // 自分のインナーブロックのIDを取得
-  const innerBlocksIds = getBlockOrder(clientId);
+  //タイトルの属性を初期化
+  const titleBlockAttributes = innerBlocks.filter(block => block.name === 'itmar/design-title').map(block => block.attributes);
+  const [titleAttributes, setTitleAttributes] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(titleBlockAttributes[0]);
+
+  //インナーブロックのテンプレートを初期化
+  const orgTemplate = [['itmar/design-title', {
+    ...titleAttributes
+  }], ['core/table', {}]];
+  const [innerTemplate, setInnerTemplate] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(orgTemplate);
+
+  //インナーブロックのひな型を作る
+  const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useInnerBlocksProps)({}, {
+    //allowedBlocks: ['itmar/input-figure-block'],
+    template: innerTemplate,
+    templateLock: false
+  });
 
   //inputInnerBlocks に変化があればinnerTemplateを更新
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (inputInnerBlocks.length !== 0) {
+    if (inputFigureBlocks.length !== 0) {
       //テーブルボディを生成
       const tableHead = [];
-      const tableBody = cellObjects(inputInnerBlocks);
+      const tableBody = cellObjects(inputFigureBlocks);
+      const tablefoot = [];
+      const tableBlock = ['core/table', {
+        className: 'itmar_md_block',
+        hasFixedLayout: true,
+        head: tableHead,
+        body: tableBody,
+        foot: tablefoot
+      }];
+      const newTemplate = [['itmar/design-title', {
+        ...titleAttributes
+      }], tableBlock];
+      if (!fast_deep_equal__WEBPACK_IMPORTED_MODULE_4___default()(innerTemplate, newTemplate)) {
+        //一旦既存のブロックを削除
+        if (innerBlocksIds.length > 0) {
+          //タイトル部分の属性を退避
+          const titleBlockAttributes = innerBlocks.filter(block => block.name === 'itmar/design-title').map(block => block.attributes);
+          setTitleAttributes(titleBlockAttributes[0]);
+          console.log('削除前:' + titleAttributes?.headingContent);
+          //インナーブロック削除
+          removeBlocks(innerBlocksIds[1], false);
+        }
+      }
+    }
+  }, [inputFigureBlocks]);
+
+  //ブロックの削除を確認して再度ブロックをレンダリング
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (innerBlocksIds.length === 0 && inputFigureBlocks.length > 0) {
+      console.log('再レンダリング前:' + titleAttributes?.headingContent);
+      //テーブルボディを生成
+      const tableHead = [];
+      const tableBody = cellObjects(inputFigureBlocks);
       const tablefoot = [];
       const tableBlock = ['core/table', {
         className: 'itmar_md_block',
@@ -203,16 +249,12 @@ function Edit({
       }];
 
       // Set the new template
-      setInnerTemplate([['itmar/design-title', {}], tableBlock]);
-    }
-  }, [inputInnerBlocks]);
 
-  //ブロックの削除を確認して再度ブロックをレンダリング
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (innerBlocks.length === 0) {
-      //setAttributes({ blockArray: tempBlockArray });
+      setInnerTemplate([['itmar/design-title', {
+        ...state.titleAttributes
+      }], tableBlock]);
     }
-  }, [innerBlocks]);
+  }, [innerBlocksIds.length]);
 
   //Submitによるプロセス変更
   const handleSubmit = e => {
@@ -224,17 +266,17 @@ function Edit({
   };
 
   //ルート要素にスタイルとクラスを付加	
-  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useBlockProps)({
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)({
     style: blockStyle,
     className: context['itmar/state_process'] === 'confirm' ? 'appear' : ""
   });
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.InspectorControls, {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, {
     group: "styles"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelBody, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, {
     title: "\u78BA\u8A8D\u30D5\u30A9\u30FC\u30E0\u30B9\u30BF\u30A4\u30EB\u8A2D\u5B9A",
     initialOpen: true,
     className: "form_design_ctrl"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.__experimentalPanelColorGradientSettings, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.__experimentalPanelColorGradientSettings, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting"),
     settings: [{
       colorValue: bgColor_form,
@@ -247,11 +289,11 @@ function Edit({
         bgGradient_form: newValue
       })
     }]
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelBody, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, {
     title: "\u30DC\u30FC\u30C0\u30FC\u8A2D\u5B9A",
     initialOpen: false,
     className: "border_design_ctrl"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.__experimentalBorderBoxControl, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.__experimentalBorderBoxControl, {
     onChange: newValue => setAttributes({
       border_form: newValue
     }),
@@ -259,14 +301,14 @@ function Edit({
     allowReset: true // リセットの可否
     ,
     resetValues: border_resetValues // リセット時の値
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.__experimentalBorderRadiusControl, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.__experimentalBorderRadiusControl, {
     values: radius_form,
     onChange: newBrVal => setAttributes({
       radius_form: typeof newBrVal === 'string' ? {
         "value": newBrVal
       } : newBrVal
     })
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.__experimentalBoxControl, {
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.__experimentalBoxControl, {
     label: "\u30DE\u30FC\u30B8\u30F3\u8A2D\u5B9A",
     values: margin_form,
     onChange: value => setAttributes({
@@ -277,7 +319,7 @@ function Edit({
     allowReset: true // リセットの可否
     ,
     resetValues: padding_resetValues // リセット時の値
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.__experimentalBoxControl, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.__experimentalBoxControl, {
     label: "\u30D1\u30C6\u30A3\u30F3\u30B0\u8A2D\u5B9A",
     values: padding_form,
     onChange: value => setAttributes({
@@ -478,6 +520,62 @@ function paddingProperty(paddingObj) {
   };
   return ret_val;
 }
+
+/***/ }),
+
+/***/ "./node_modules/fast-deep-equal/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/fast-deep-equal/index.js ***!
+  \***********************************************/
+/***/ ((module) => {
+
+
+
+// do not edit .js files directly - edit src/index.jst
+
+
+
+module.exports = function equal(a, b) {
+  if (a === b) return true;
+
+  if (a && b && typeof a == 'object' && typeof b == 'object') {
+    if (a.constructor !== b.constructor) return false;
+
+    var length, i, keys;
+    if (Array.isArray(a)) {
+      length = a.length;
+      if (length != b.length) return false;
+      for (i = length; i-- !== 0;)
+        if (!equal(a[i], b[i])) return false;
+      return true;
+    }
+
+
+
+    if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
+    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
+    if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+
+    keys = Object.keys(a);
+    length = keys.length;
+    if (length !== Object.keys(b).length) return false;
+
+    for (i = length; i-- !== 0;)
+      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+
+    for (i = length; i-- !== 0;) {
+      var key = keys[i];
+
+      if (!equal(a[key], b[key])) return false;
+    }
+
+    return true;
+  }
+
+  // true if both NaN, false otherwise
+  return a!==a && b!==b;
+};
+
 
 /***/ }),
 

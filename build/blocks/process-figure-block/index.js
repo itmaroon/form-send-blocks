@@ -130,15 +130,6 @@ function Edit({
     ...radius_obj,
     ...border_obj
   };
-
-  //インナーブロックの制御
-  const TEMPLATE = [['itmar/design-title', {}], ['core/paragraph', {
-    className: 'itmar_md_block'
-  }]];
-  const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useInnerBlocksProps)({}, {
-    template: TEMPLATE,
-    templateLock: true
-  });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
     group: "styles"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
@@ -203,9 +194,11 @@ function Edit({
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)({
       style: blockStyle
     })
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ...innerBlocksProps
-  })));
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
+    id: "progressbar"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    class: "active"
+  }, "\u30C6\u30AD\u30B9\u30C8\u60C5\u5831"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "\u30E1\u30C7\u30A3\u30A2\u9078\u629E"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "\u30AA\u30D7\u30B7\u30E7\u30F3\u9078\u629E"))));
 }
 
 /***/ }),

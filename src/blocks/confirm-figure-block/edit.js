@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n';
 import './editor.scss';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
+import equal from 'fast-deep-equal';
 
 import {
 	useBlockProps,
@@ -55,23 +56,6 @@ const units = [
 ];
 
 
-
-// セル要素を生成する関数
-const cellObjects = (inputInnerBlocks) => {
-	return inputInnerBlocks.map((input_elm) => ({
-		cells: [
-			{
-				content: input_elm.attributes.labelContent,
-				tag: 'td'
-			},
-			{
-				content: input_elm.attributes.inputValue,
-				tag: 'td'
-			}
-		]
-	}));
-}
-
 export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const {
 		bgColor_form,
@@ -81,6 +65,22 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		margin_form,
 		padding_form,
 	} = attributes;
+
+	// セル要素を生成する関数
+	const cellObjects = (inputInnerBlocks) => {
+		return inputInnerBlocks.map((input_elm) => ({
+			cells: [
+				{
+					content: input_elm.attributes.labelContent,
+					tag: 'td'
+				},
+				{
+					content: input_elm.attributes.inputValue,
+					tag: 'td'
+				}
+			]
+		}));
+	}
 
 	//単色かグラデーションかの選択
 	const bgColor = bgColor_form || bgGradient_form;
@@ -96,60 +96,104 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	// dispatch関数を取得
 	const { removeBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
 
-	//ブロック取得の関数
-	const { getBlockRootClientId, getBlocks, getBlockOrder } = useSelect((select) => select('core/block-editor'), [clientId]);
 
-	// 親ブロックのclientIdを取得
-	const parentClientId = getBlockRootClientId(clientId);
-	// 親ブロックを取得
-	const parentInnerBlocks = getBlocks(parentClientId);
-	//親のインナーブロックからitmar/input-figure-blockを抽出
-	const inputFigureBlock = parentInnerBlocks.find(block => block.name === 'itmar/input-figure-block');
-	//その中のインナーブロック
-	const inputInnerBlocks = inputFigureBlock ? inputFigureBlock.innerBlocks : [];
+	// 監視対象のinput要素を取得する
+	const inputFigureBlocks = useSelect((select) => {
+		const { getBlockRootClientId, getBlocks } = select('core/block-editor');
+		// 親ブロックのclientIdを取得
+		const parentClientId = getBlockRootClientId(clientId);
+		// 親ブロックを取得
+		const parentInnerBlocks = getBlocks(parentClientId);
+		//親のインナーブロックからitmar/input-figure-blockを抽出
+		const inputFigureBlock = parentInnerBlocks.find(block => block.name === 'itmar/input-figure-block');
+		//その中のインナーブロック
+		const inputInnerBlocks = inputFigureBlock ? inputFigureBlock.innerBlocks : [];
+		return inputInnerBlocks; // 監視対象のstateを返す
+	}, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
-	const [innerTemplate, setInnerTemplate] = useState([]);
+	//自分のインナーブロック
+	const innerBlocks = useSelect(
+		(select) => select('core/block-editor').getBlocks(clientId), [clientId]
+	);
+	// 自分のインナーブロックのID
+	const innerBlocksIds = useSelect((select) =>
+		select('core/block-editor').getBlocks(clientId).map((block) => block.clientId), [clientId]
+	);
 
+	//タイトルの属性を初期化
+	const titleBlockAttributes = innerBlocks
+		.filter(block => block.name === 'itmar/design-title')
+		.map(block => block.attributes);
+	const [titleAttributes, setTitleAttributes] = useState(titleBlockAttributes[0]);
+
+
+	//インナーブロックのテンプレートを初期化
+	const orgTemplate = [
+		['itmar/design-title', { ...titleAttributes }],
+		['core/table', {}]
+	];
+	const [innerTemplate, setInnerTemplate] = useState(orgTemplate);
+
+	//インナーブロックのひな型を作る
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
 		{
 			//allowedBlocks: ['itmar/input-figure-block'],
 			template: innerTemplate,
-			//templateLock: true
+			templateLock: false
 		}
 	);
-
-	//自分のインナーブロック
-	const innerBlocks = getBlocks(clientId);
-
-	// 自分のインナーブロックのIDを取得
-	const innerBlocksIds = getBlockOrder(clientId);
 
 	//inputInnerBlocks に変化があればinnerTemplateを更新
 	useEffect(() => {
 
-		if (inputInnerBlocks.length !== 0) {
+		if (inputFigureBlocks.length !== 0) {
+
 			//テーブルボディを生成
 			const tableHead = [];
-			const tableBody = cellObjects(inputInnerBlocks);
+			const tableBody = cellObjects(inputFigureBlocks);
+			const tablefoot = [];
+			const tableBlock = ['core/table', { className: 'itmar_md_block', hasFixedLayout: true, head: tableHead, body: tableBody, foot: tablefoot }];
+			const newTemplate = [
+				['itmar/design-title', { ...titleAttributes }],
+				tableBlock
+			];
+			if (!equal(innerTemplate, newTemplate)) {
+				//一旦既存のブロックを削除
+				if (innerBlocksIds.length > 0) {
+					//タイトル部分の属性を退避
+					const titleBlockAttributes = innerBlocks
+						.filter(block => block.name === 'itmar/design-title')
+						.map(block => block.attributes);
+
+					setTitleAttributes(titleBlockAttributes[0]);
+					console.log('削除前:' + titleAttributes?.headingContent);
+					//インナーブロック削除
+					removeBlocks(innerBlocksIds[1], false);
+				}
+			}
+		}
+	}, [inputFigureBlocks]);
+
+
+	//ブロックの削除を確認して再度ブロックをレンダリング
+	useEffect(() => {
+		if (innerBlocksIds.length === 0 && inputFigureBlocks.length > 0) {
+			console.log('再レンダリング前:' + titleAttributes?.headingContent);
+			//テーブルボディを生成
+			const tableHead = [];
+			const tableBody = cellObjects(inputFigureBlocks);
 			const tablefoot = [];
 			const tableBlock = ['core/table', { className: 'itmar_md_block', hasFixedLayout: true, head: tableHead, body: tableBody, foot: tablefoot }];
 
 			// Set the new template
+
 			setInnerTemplate([
-				['itmar/design-title', {}],
+				['itmar/design-title', { ...state.titleAttributes }],
 				tableBlock
 			]);
-
 		}
-	}, [inputInnerBlocks]);
-
-	//ブロックの削除を確認して再度ブロックをレンダリング
-	useEffect(() => {
-		if (innerBlocks.length === 0) {
-			//setAttributes({ blockArray: tempBlockArray });
-		}
-	}, [innerBlocks]);
+	}, [innerBlocksIds.length]);
 
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
@@ -222,6 +266,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			<div {...blockProps} >
 				<form onSubmit={handleSubmit}>
 					<div {...innerBlocksProps}></div>
+
 					<input type="submit" value="送信実行" />
 				</form>
 			</div>

@@ -380,10 +380,9 @@ function save({
     ...radius_obj,
     ...border_obj
   };
-  const extraClassName = state_process === 'input' ? 'appear' : '';
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
     style: blockStyle,
-    className: extraClassName
+    className: state_process === 'input' ? 'appear' : ''
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps

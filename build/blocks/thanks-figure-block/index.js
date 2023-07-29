@@ -393,28 +393,47 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
+/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
 
 
-/**
- * The save function defines the way in which the different attributes should
- * be combined into the final markup, which is then serialized by the block
- * editor into `post_content`.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#save
- *
- * @return {WPElement} Element to render.
- */
-function save() {
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
-    ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save()
-  }, 'Thanks Figure – hello from the saved content!');
+
+function save({
+  attributes
+}) {
+  const {
+    bgColor_form,
+    bgGradient_form,
+    radius_form,
+    border_form,
+    margin_form,
+    padding_form
+  } = attributes;
+
+  //単色かグラデーションかの選択
+  const bgColor = bgColor_form || bgGradient_form;
+
+  //ブロックのスタイル設定
+  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_2__.marginProperty)(margin_form);
+  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_2__.paddingProperty)(padding_form);
+  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_2__.radiusProperty)(radius_form);
+  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_2__.borderProperty)(border_form);
+  const blockStyle = {
+    background: bgColor,
+    ...margin_obj,
+    ...padding_obj,
+    ...radius_obj,
+    ...border_obj
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
+      style: blockStyle
+    })
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    id: "to_home"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "submit",
+    value: "\u30DB\u30FC\u30E0\u753B\u9762\u3078"
+  })));
 }
 
 /***/ }),

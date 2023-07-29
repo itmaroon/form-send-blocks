@@ -25,10 +25,9 @@ export default function save({ attributes }) {
 	const border_obj = borderProperty(border_form);
 	const blockStyle = { background: bgColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj };
 
-	const extraClassName = state_process === 'input' ? 'appear' : '';
 	const blockProps = useBlockProps.save({
 		style: blockStyle,
-		className: extraClassName,
+		className: state_process === 'input' ? 'appear' : ''
 	});
 
 	return (

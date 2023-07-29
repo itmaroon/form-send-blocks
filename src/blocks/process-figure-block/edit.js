@@ -72,18 +72,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const border_obj = borderProperty(border_form);
 	const blockStyle = { background: bgColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj };
 
-	//インナーブロックの制御
-	const TEMPLATE = [
-		['itmar/design-title', {}],
-		['core/paragraph', { className: 'itmar_md_block' }]
-	];
-	const innerBlocksProps = useInnerBlocksProps(
-		{},
-		{
-			template: TEMPLATE,
-			templateLock: true
-		}
-	);
+
 	return (
 		<>
 			<InspectorControls group="styles">
@@ -140,7 +129,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			</InspectorControls>
 
 			<div {...useBlockProps({ style: blockStyle })} >
-				<div {...innerBlocksProps}></div>
+				<ul id="progressbar">
+					<li class="active">テキスト情報</li>
+					<li>メディア選択</li>
+					<li>オプション選択</li>
+				</ul>
 			</div>
 		</>
 	);
