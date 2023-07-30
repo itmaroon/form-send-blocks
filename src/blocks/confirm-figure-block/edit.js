@@ -1,7 +1,7 @@
 
 import { __ } from '@wordpress/i18n';
 import './editor.scss';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch, dispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import equal from 'fast-deep-equal';
 
@@ -30,6 +30,7 @@ import {
 	__experimentalUnitControl as UnitControl,
 	__experimentalBorderBoxControl as BorderBoxControl
 } from '@wordpress/components';
+import { createBlock } from '@wordpress/blocks';
 
 import { borderProperty, radiusProperty, marginProperty, paddingProperty } from '../styleProperty';
 
@@ -94,7 +95,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const blockStyle = { background: bgColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj };
 
 	// dispatch関数を取得
-	const { removeBlocks, updateBlockAttributes } = useDispatch('core/block-editor');
+	const { updateBlockAttributes, replaceInnerBlocks } = useDispatch('core/block-editor');
 
 
 	// 監視対象のinput要素を取得する
@@ -111,89 +112,45 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		return inputInnerBlocks; // 監視対象のstateを返す
 	}, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
-	//自分のインナーブロック
-	const innerBlocks = useSelect(
-		(select) => select('core/block-editor').getBlocks(clientId), [clientId]
-	);
-	// 自分のインナーブロックのID
-	const innerBlocksIds = useSelect((select) =>
-		select('core/block-editor').getBlocks(clientId).map((block) => block.clientId), [clientId]
-	);
-
-	//タイトルの属性を初期化
-	const titleBlockAttributes = innerBlocks
-		.filter(block => block.name === 'itmar/design-title')
-		.map(block => block.attributes);
-	const [titleAttributes, setTitleAttributes] = useState(titleBlockAttributes[0]);
+	//タイトル属性の監視（最初のitmar/design-title）
+	const titleBlockAttributes = useSelect((select) => {
+		const blocks = select('core/block-editor').getBlocks(clientId);
+		const titleBlock = blocks.find(block => block.name === 'itmar/design-title');
+		return titleBlock ? titleBlock.attributes : {};
+	}, [clientId]);
 
 
 	//インナーブロックのテンプレートを初期化
 	const orgTemplate = [
-		['itmar/design-title', { ...titleAttributes }],
+		['itmar/design-title', {}],
 		['core/table', {}]
 	];
-	const [innerTemplate, setInnerTemplate] = useState(orgTemplate);
 
 	//インナーブロックのひな型を作る
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
 		{
 			//allowedBlocks: ['itmar/input-figure-block'],
-			template: innerTemplate,
+			template: orgTemplate,
 			templateLock: false
 		}
 	);
 
-	//inputInnerBlocks に変化があればinnerTemplateを更新
 	useEffect(() => {
+		//テーブルボディを初期化
+		const tableHead = [];
+		const tableBody = cellObjects(inputFigureBlocks);
+		const tablefoot = [];
+		const tableAttributes = { className: 'itmar_md_block', hasFixedLayout: true, head: tableHead, body: tableBody, foot: tablefoot };
 
-		if (inputFigureBlocks.length !== 0) {
+		const newInnerBlocks = [
+			createBlock('itmar/design-title', { ...titleBlockAttributes }),
+			createBlock('core/table', { ...tableAttributes }),
+		];
 
-			//テーブルボディを生成
-			const tableHead = [];
-			const tableBody = cellObjects(inputFigureBlocks);
-			const tablefoot = [];
-			const tableBlock = ['core/table', { className: 'itmar_md_block', hasFixedLayout: true, head: tableHead, body: tableBody, foot: tablefoot }];
-			const newTemplate = [
-				['itmar/design-title', { ...titleAttributes }],
-				tableBlock
-			];
-			if (!equal(innerTemplate, newTemplate)) {
-				//一旦既存のブロックを削除
-				if (innerBlocksIds.length > 0) {
-					//タイトル部分の属性を退避
-					const titleBlockAttributes = innerBlocks
-						.filter(block => block.name === 'itmar/design-title')
-						.map(block => block.attributes);
-
-					setTitleAttributes(titleBlockAttributes[0]);
-					console.log('削除前:' + titleAttributes?.headingContent);
-					//インナーブロック削除
-					removeBlocks(innerBlocksIds[1], false);
-				}
-			}
-		}
+		replaceInnerBlocks(clientId, newInnerBlocks, false);
 	}, [inputFigureBlocks]);
 
-
-	//ブロックの削除を確認して再度ブロックをレンダリング
-	useEffect(() => {
-		if (innerBlocksIds.length === 0 && inputFigureBlocks.length > 0) {
-			console.log('再レンダリング前:' + titleAttributes?.headingContent);
-			//テーブルボディを生成
-			const tableHead = [];
-			const tableBody = cellObjects(inputFigureBlocks);
-			const tablefoot = [];
-			const tableBlock = ['core/table', { className: 'itmar_md_block', hasFixedLayout: true, head: tableHead, body: tableBody, foot: tablefoot }];
-
-			// Set the new template
-
-			setInnerTemplate([
-				['itmar/design-title', { ...state.titleAttributes }],
-				tableBlock
-			]);
-		}
-	}, [innerBlocksIds.length]);
 
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
@@ -266,7 +223,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			<div {...blockProps} >
 				<form onSubmit={handleSubmit}>
 					<div {...innerBlocksProps}></div>
-
 					<input type="submit" value="送信実行" />
 				</form>
 			</div>

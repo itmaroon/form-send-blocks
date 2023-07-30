@@ -76,7 +76,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
+
 
 
 
@@ -144,10 +147,10 @@ function Edit({
   const bgColor = bgColor_form || bgGradient_form;
 
   //ブロックのスタイル設定
-  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.marginProperty)(margin_form);
-  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.paddingProperty)(padding_form);
-  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.radiusProperty)(radius_form);
-  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.borderProperty)(border_form);
+  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.marginProperty)(margin_form);
+  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.paddingProperty)(padding_form);
+  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.radiusProperty)(radius_form);
+  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.borderProperty)(border_form);
   const blockStyle = {
     background: bgColor,
     ...margin_obj,
@@ -158,8 +161,8 @@ function Edit({
 
   // dispatch関数を取得
   const {
-    removeBlocks,
-    updateBlockAttributes
+    updateBlockAttributes,
+    replaceInnerBlocks
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
 
   // 監視対象のinput要素を取得する
@@ -179,82 +182,41 @@ function Edit({
     return inputInnerBlocks; // 監視対象のstateを返す
   }, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
-  //自分のインナーブロック
-  const innerBlocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/block-editor').getBlocks(clientId), [clientId]);
-  // 自分のインナーブロックのID
-  const innerBlocksIds = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => select('core/block-editor').getBlocks(clientId).map(block => block.clientId), [clientId]);
-
-  //タイトルの属性を初期化
-  const titleBlockAttributes = innerBlocks.filter(block => block.name === 'itmar/design-title').map(block => block.attributes);
-  const [titleAttributes, setTitleAttributes] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(titleBlockAttributes[0]);
+  //タイトル属性の監視（最初のitmar/design-title）
+  const titleBlockAttributes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const blocks = select('core/block-editor').getBlocks(clientId);
+    const titleBlock = blocks.find(block => block.name === 'itmar/design-title');
+    return titleBlock ? titleBlock.attributes : {};
+  }, [clientId]);
 
   //インナーブロックのテンプレートを初期化
-  const orgTemplate = [['itmar/design-title', {
-    ...titleAttributes
-  }], ['core/table', {}]];
-  const [innerTemplate, setInnerTemplate] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(orgTemplate);
+  const orgTemplate = [['itmar/design-title', {}], ['core/table', {}]];
 
   //インナーブロックのひな型を作る
   const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useInnerBlocksProps)({}, {
     //allowedBlocks: ['itmar/input-figure-block'],
-    template: innerTemplate,
+    template: orgTemplate,
     templateLock: false
   });
-
-  //inputInnerBlocks に変化があればinnerTemplateを更新
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (inputFigureBlocks.length !== 0) {
-      //テーブルボディを生成
-      const tableHead = [];
-      const tableBody = cellObjects(inputFigureBlocks);
-      const tablefoot = [];
-      const tableBlock = ['core/table', {
-        className: 'itmar_md_block',
-        hasFixedLayout: true,
-        head: tableHead,
-        body: tableBody,
-        foot: tablefoot
-      }];
-      const newTemplate = [['itmar/design-title', {
-        ...titleAttributes
-      }], tableBlock];
-      if (!fast_deep_equal__WEBPACK_IMPORTED_MODULE_4___default()(innerTemplate, newTemplate)) {
-        //一旦既存のブロックを削除
-        if (innerBlocksIds.length > 0) {
-          //タイトル部分の属性を退避
-          const titleBlockAttributes = innerBlocks.filter(block => block.name === 'itmar/design-title').map(block => block.attributes);
-          setTitleAttributes(titleBlockAttributes[0]);
-          console.log('削除前:' + titleAttributes?.headingContent);
-          //インナーブロック削除
-          removeBlocks(innerBlocksIds[1], false);
-        }
-      }
-    }
+    //テーブルボディを初期化
+    const tableHead = [];
+    const tableBody = cellObjects(inputFigureBlocks);
+    const tablefoot = [];
+    const tableAttributes = {
+      className: 'itmar_md_block',
+      hasFixedLayout: true,
+      head: tableHead,
+      body: tableBody,
+      foot: tablefoot
+    };
+    const newInnerBlocks = [(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-title', {
+      ...titleBlockAttributes
+    }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('core/table', {
+      ...tableAttributes
+    })];
+    replaceInnerBlocks(clientId, newInnerBlocks, false);
   }, [inputFigureBlocks]);
-
-  //ブロックの削除を確認して再度ブロックをレンダリング
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (innerBlocksIds.length === 0 && inputFigureBlocks.length > 0) {
-      console.log('再レンダリング前:' + titleAttributes?.headingContent);
-      //テーブルボディを生成
-      const tableHead = [];
-      const tableBody = cellObjects(inputFigureBlocks);
-      const tablefoot = [];
-      const tableBlock = ['core/table', {
-        className: 'itmar_md_block',
-        hasFixedLayout: true,
-        head: tableHead,
-        body: tableBody,
-        foot: tablefoot
-      }];
-
-      // Set the new template
-
-      setInnerTemplate([['itmar/design-title', {
-        ...state.titleAttributes
-      }], tableBlock]);
-    }
-  }, [innerBlocksIds.length]);
 
   //Submitによるプロセス変更
   const handleSubmit = e => {
