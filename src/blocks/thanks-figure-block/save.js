@@ -9,8 +9,7 @@ export default function save({ attributes }) {
 		radius_form,
 		border_form,
 		margin_form,
-		padding_form,
-
+		padding_form
 	} = attributes;
 
 	//単色かグラデーションかの選択
@@ -23,11 +22,15 @@ export default function save({ attributes }) {
 	const border_obj = borderProperty(border_form);
 	const blockStyle = { background: bgColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj };
 
+	const blockProps = useBlockProps.save({
+		style: blockStyle,
+		className: 'figure_fieldset'
+	});
+
+
 	return (
-		<div {...useBlockProps.save({ style: blockStyle })}>
-			<form
-				id="to_home"
-			>
+		<div {...blockProps}>
+			<form id="to_home">
 				<InnerBlocks.Content />
 				<input type="submit" value="ホーム画面へ" />
 			</form>

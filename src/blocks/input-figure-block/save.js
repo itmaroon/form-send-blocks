@@ -10,8 +10,7 @@ export default function save({ attributes }) {
 		radius_form,
 		border_form,
 		margin_form,
-		padding_form,
-		state_process
+		padding_form
 	} = attributes;
 
 	//単色かグラデーションかの選択
@@ -27,14 +26,12 @@ export default function save({ attributes }) {
 
 	const blockProps = useBlockProps.save({
 		style: blockStyle,
-		className: state_process === 'input' ? 'appear' : ''
+		className: 'figure_fieldset appear first_appear'
 	});
 
 	return (
 		<div {...blockProps}>
-			<form
-				id="to_confirm_form"
-			>
+			<form id="to_confirm_form">
 				<InnerBlocks.Content />
 				<input type="submit" value="確認画面へ" />
 			</form>

@@ -136,7 +136,7 @@ function Edit({
     return inputInnerBlocks.map(input_elm => ({
       cells: [{
         content: input_elm.attributes.labelContent,
-        tag: 'td'
+        tag: 'th'
       }, {
         content: input_elm.attributes.inputValue,
         tag: 'td'
@@ -230,13 +230,22 @@ function Edit({
   }, [inputFigureBlocks]);
 
   //Submitによるプロセス変更
+  const [submitBtn, setSubmitBtn] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const handleClick = btn => {
+    setSubmitBtn(btn);
+  };
   const handleSubmit = e => {
     e.preventDefault();
-
     // 親ブロックのstate_process属性を更新
-    updateBlockAttributes(parentClientId, {
-      state_process: 'thanks'
-    });
+    if (submitBtn === 'exec') {
+      updateBlockAttributes(parentClientId, {
+        state_process: 'thanks'
+      });
+    } else if (submitBtn === 'cancel') {
+      updateBlockAttributes(parentClientId, {
+        state_process: 'input'
+      });
+    }
   };
 
   //ルート要素にスタイルとクラスを付加	
@@ -325,7 +334,12 @@ function Edit({
     ...innerBlocksProps
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "submit",
-    value: "\u9001\u4FE1\u5B9F\u884C"
+    value: "\u9001\u4FE1\u5B9F\u884C",
+    onClick: () => handleClick('exec')
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "submit",
+    value: "\u5165\u529B\u753B\u9762\u306B\u623B\u308B",
+    onClick: () => handleClick('cancel')
   }))));
 }
 
@@ -414,7 +428,7 @@ function save({
   };
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
     style: blockStyle,
-    className: state_process === 'input' ? 'appear' : ''
+    className: 'figure_fieldset'
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
@@ -422,7 +436,12 @@ function save({
     id: "send_exec"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "submit",
-    value: "\u9001\u4FE1\u5B9F\u884C"
+    value: "\u9001\u4FE1\u5B9F\u884C",
+    id: "send_exec_btn"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "submit",
+    value: "\u5165\u529B\u753B\u9762\u306B\u623B\u308B",
+    id: "send_cancel_btn"
   })));
 }
 

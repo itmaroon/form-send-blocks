@@ -28,17 +28,15 @@ export default function save({ attributes }) {
 
 	const blockProps = useBlockProps.save({
 		style: blockStyle,
-		className: state_process === 'input' ? 'appear' : ''
+		className: 'figure_fieldset',
 	});
-
 
 	return (
 		<div {...blockProps}>
-			<form
-				id="send_exec"
-			>
+			<form id="send_exec">
 				<InnerBlocks.Content />
-				<input type="submit" value="送信実行" />
+				<input type="submit" value="送信実行" id='send_exec_btn' />
+				<input type="submit" value="入力画面に戻る" id='send_cancel_btn' />
 			</form>
 		</div>
 	);

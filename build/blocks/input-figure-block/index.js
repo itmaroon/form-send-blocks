@@ -368,8 +368,7 @@ function save({
     radius_form,
     border_form,
     margin_form,
-    padding_form,
-    state_process
+    padding_form
   } = attributes;
 
   //単色かグラデーションかの選択
@@ -389,7 +388,7 @@ function save({
   };
   const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
     style: blockStyle,
-    className: state_process === 'input' ? 'appear' : ''
+    className: 'figure_fieldset appear first_appear'
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps

@@ -74,7 +74,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			cells: [
 				{
 					content: input_elm.attributes.labelContent,
-					tag: 'td'
+					tag: 'th'
 				},
 				{
 					content: input_elm.attributes.inputValue,
@@ -161,11 +161,18 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 
 	//Submitによるプロセス変更
+	const [submitBtn, setSubmitBtn] = useState(null);
+	const handleClick = (btn) => {
+		setSubmitBtn(btn);
+	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		// 親ブロックのstate_process属性を更新
-		updateBlockAttributes(parentClientId, { state_process: 'thanks' });
+		if (submitBtn === 'exec') {
+			updateBlockAttributes(parentClientId, { state_process: 'thanks' });
+		} else if (submitBtn === 'cancel') {
+			updateBlockAttributes(parentClientId, { state_process: 'input' });
+		}
 	};
 
 	//ルート要素にスタイルとクラスを付加	
@@ -244,7 +251,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			<div {...blockProps} >
 				<form onSubmit={handleSubmit}>
 					<div {...innerBlocksProps}></div>
-					<input type="submit" value="送信実行" />
+					<input type="submit" value="送信実行" onClick={() => handleClick('exec')} />
+					<input type="submit" value="入力画面に戻る" onClick={() => handleClick('cancel')} />
 				</form>
 			</div>
 		</>
