@@ -46,6 +46,10 @@
         "bottom": "1em",
         "right": "2em"
       }
+    },
+    "stage_info": {
+      "type": "string",
+      "default": "処理完了"
     }
   },
   "usesContext": [

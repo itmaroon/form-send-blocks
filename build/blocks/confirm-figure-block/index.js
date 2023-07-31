@@ -127,7 +127,8 @@ function Edit({
     radius_form,
     border_form,
     margin_form,
-    padding_form
+    padding_form,
+    stage_info
   } = attributes;
 
   // セル要素を生成する関数
@@ -164,6 +165,16 @@ function Edit({
     updateBlockAttributes,
     replaceInnerBlocks
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useDispatch)('core/block-editor');
+
+  // 親ブロックのclientIdを取得
+  const parentClientId = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const {
+      getBlockRootClientId
+    } = select('core/block-editor');
+    // 親ブロックのclientIdを取得
+    const parentClientId = getBlockRootClientId(clientId);
+    return parentClientId;
+  }, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
   // 監視対象のinput要素を取得する
   const inputFigureBlocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
@@ -221,6 +232,7 @@ function Edit({
   //Submitによるプロセス変更
   const handleSubmit = e => {
     e.preventDefault();
+
     // 親ブロックのstate_process属性を更新
     updateBlockAttributes(parentClientId, {
       state_process: 'thanks'
@@ -230,9 +242,22 @@ function Edit({
   //ルート要素にスタイルとクラスを付加	
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)({
     style: blockStyle,
-    className: context['itmar/state_process'] === 'confirm' ? 'appear' : ""
+    className: `figure_fieldset ${context['itmar/state_process'] === 'confirm' ? 'appear' : ""}`
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, {
+    group: "settings"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, {
+    title: "\u9001\u4FE1\u30D5\u30A9\u30FC\u30E0\u60C5\u5831\u8A2D\u5B9A",
+    initialOpen: true,
+    className: "form_setteing_ctrl"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.TextControl, {
+    label: "\u30B9\u30C6\u30FC\u30B8\u306E\u60C5\u5831",
+    value: stage_info,
+    help: "\u30D7\u30ED\u30BB\u30B9\u30A8\u30EA\u30A2\u306B\u8868\u793A\u3059\u308B\u30B9\u30C6\u30FC\u30B8\u306E\u60C5\u5831\u3092\u5165\u529B\u3057\u3066\u4E0B\u3055\u3044\u3002",
+    onChange: newVal => setAttributes({
+      stage_info: newVal
+    })
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, {
     group: "styles"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, {
     title: "\u78BA\u8A8D\u30D5\u30A9\u30FC\u30E0\u30B9\u30BF\u30A4\u30EB\u8A2D\u5B9A",
@@ -368,7 +393,8 @@ function save({
     radius_form,
     border_form,
     margin_form,
-    padding_form
+    padding_form,
+    state_process
   } = attributes;
 
   //単色かグラデーションかの選択
@@ -386,10 +412,12 @@ function save({
     ...radius_obj,
     ...border_obj
   };
+  const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
+    style: blockStyle,
+    className: state_process === 'input' ? 'appear' : ''
+  });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    ..._wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps.save({
-      style: blockStyle
-    })
+    ...blockProps
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     id: "send_exec"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -641,7 +669,7 @@ module.exports = window["wp"]["i18n"];
   \****************************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/confirm-figure-block","version":"0.1.0","title":"Comfirm Figure","category":"design","description":"フォームに入力された内容を確認するために表示されるブロックです","supports":{"html":false},"attributes":{"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}}},"usesContext":["itmar/state_process"],"textdomain":"confirm-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/confirm-figure-block","version":"0.1.0","title":"Comfirm Figure","category":"design","description":"フォームに入力された内容を確認するために表示されるブロックです","supports":{"html":false},"attributes":{"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"stage_info":{"type":"string","default":"確認"}},"usesContext":["itmar/state_process"],"textdomain":"confirm-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

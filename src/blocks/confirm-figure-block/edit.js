@@ -65,6 +65,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		border_form,
 		margin_form,
 		padding_form,
+		stage_info
 	} = attributes;
 
 	// セル要素を生成する関数
@@ -97,6 +98,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	// dispatch関数を取得
 	const { updateBlockAttributes, replaceInnerBlocks } = useDispatch('core/block-editor');
 
+	// 親ブロックのclientIdを取得
+	const parentClientId = useSelect((select) => {
+		const { getBlockRootClientId } = select('core/block-editor');
+		// 親ブロックのclientIdを取得
+		const parentClientId = getBlockRootClientId(clientId);
+		return parentClientId;
+	}, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
 	// 監視対象のinput要素を取得する
 	const inputFigureBlocks = useSelect((select) => {
@@ -155,6 +163,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
 		// 親ブロックのstate_process属性を更新
 		updateBlockAttributes(parentClientId, { state_process: 'thanks' });
 	};
@@ -162,12 +171,24 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ルート要素にスタイルとクラスを付加	
 	const blockProps = useBlockProps({
 		style: blockStyle,
-		className: context['itmar/state_process'] === 'confirm' ? 'appear' : "",
+		className: `figure_fieldset ${context['itmar/state_process'] === 'confirm' ? 'appear' : ""}`,
 	});
 
 
 	return (
 		<>
+			<InspectorControls group="settings">
+				<PanelBody title="送信フォーム情報設定" initialOpen={true} className="form_setteing_ctrl">
+					<TextControl
+						label="ステージの情報"
+						value={stage_info}
+						help="プロセスエリアに表示するステージの情報を入力して下さい。"
+						onChange={(newVal) => setAttributes({ stage_info: newVal })}
+					/>
+
+				</PanelBody>
+
+			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title="確認フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
 

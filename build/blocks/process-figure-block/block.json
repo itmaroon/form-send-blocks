@@ -9,7 +9,22 @@
   "supports": {
     "html": false
   },
+  "styles": [
+    {
+      "name": "progress",
+      "label": "デフォルト",
+      "isDefault": true
+    },
+    {
+      "name": "card",
+      "label": "カード形式"
+    }
+  ],
   "attributes": {
+    "progress_count": {
+      "type": "number",
+      "default": 0
+    },
     "bgColor_form": {
       "type": "string"
     },

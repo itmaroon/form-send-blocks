@@ -68,7 +68,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
+
 
 
 
@@ -115,14 +118,17 @@ function Edit({
     margin_form,
     padding_form
   } = attributes;
+
+  //ステージの状態を親ブロックから取得
+  const state_process = context['itmar/state_process'];
   //単色かグラデーションかの選択
   const bgColor = bgColor_form || bgGradient_form;
 
   //ブロックのスタイル設定
-  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_5__.marginProperty)(margin_form);
-  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_5__.paddingProperty)(padding_form);
-  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_5__.radiusProperty)(radius_form);
-  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_5__.borderProperty)(border_form);
+  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.marginProperty)(margin_form);
+  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.paddingProperty)(padding_form);
+  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.radiusProperty)(radius_form);
+  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.borderProperty)(border_form);
   const blockStyle = {
     background: bgColor,
     ...margin_obj,
@@ -130,11 +136,28 @@ function Edit({
     ...radius_obj,
     ...border_obj
   };
+
+  // 兄弟ブロックの取得
+  const figureBlocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.useSelect)(select => {
+    const {
+      getBlockRootClientId,
+      getBlocks
+    } = select('core/block-editor');
+    // 親ブロックのclientIdを取得
+    const parentClientId = getBlockRootClientId(clientId);
+    // 兄弟ブロックを取得
+    let siblingBlocks = getBlocks(parentClientId);
+    siblingBlocks = siblingBlocks.filter(block => block.clientId !== clientId);
+    return siblingBlocks; //ブロックを返す
+  }, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
+  //現在のステージはどこにあるか
+  const stage_index = figureBlocks.findIndex(block => block.name.includes(state_process));
+  console.log(stage_index);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
     group: "styles"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
     title: "\u30D7\u30ED\u30B0\u30EC\u30B9\u30D5\u30A9\u30FC\u30E0\u30B9\u30BF\u30A4\u30EB\u8A2D\u5B9A",
-    initialOpen: true,
+    initialOpen: false,
     className: "form_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.__experimentalPanelColorGradientSettings, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting"),
@@ -196,9 +219,14 @@ function Edit({
     })
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("ul", {
     id: "progressbar"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
-    class: "active"
-  }, "\u30C6\u30AD\u30B9\u30C8\u60C5\u5831"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "\u30E1\u30C7\u30A3\u30A2\u9078\u629E"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", null, "\u30AA\u30D7\u30B7\u30E7\u30F3\u9078\u629E"))));
+  }, figureBlocks.map((block, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("li", {
+    key: index,
+    className: stage_index >= index ? "ready" : ""
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "stage_num"
+  }, index + 1), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "stage_bar"
+  }), block.attributes.stage_info)))));
 }
 
 /***/ }),
@@ -427,6 +455,16 @@ module.exports = window["wp"]["components"];
 
 /***/ }),
 
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["data"];
+
+/***/ }),
+
 /***/ "@wordpress/element":
 /*!*********************************!*\
   !*** external ["wp","element"] ***!
@@ -453,7 +491,7 @@ module.exports = window["wp"]["i18n"];
   \****************************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/process-figure-block","version":"0.1.0","title":"Process Figure","category":"design","description":"進捗状況を表示するブロックです","supports":{"html":false},"attributes":{"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}}},"usesContext":["itmar/state_process"],"textdomain":"process-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/process-figure-block","version":"0.1.0","title":"Process Figure","category":"design","description":"進捗状況を表示するブロックです","supports":{"html":false},"styles":[{"name":"progress","label":"デフォルト","isDefault":true},{"name":"card","label":"カード形式"}],"attributes":{"progress_count":{"type":"number","default":0},"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}}},"usesContext":["itmar/state_process"],"textdomain":"process-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

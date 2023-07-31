@@ -63,6 +63,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		border_form,
 		margin_form,
 		padding_form,
+		stage_info
 	} = attributes;
 	//単色かグラデーションかの選択
 	const bgColor = bgColor_form || bgGradient_form;
@@ -108,11 +109,23 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ルート要素にスタイルとクラスを付加	
 	const blockProps = useBlockProps({
 		style: blockStyle,
-		className: context['itmar/state_process'] === 'thanks' ? 'appear' : "",
+		className: `figure_fieldset ${context['itmar/state_process'] === 'thanks' ? 'appear' : ""}`,
 	});
 
 	return (
 		<>
+			<InspectorControls group="settings">
+				<PanelBody title="送信フォーム情報設定" initialOpen={true} className="form_setteing_ctrl">
+					<TextControl
+						label="ステージの情報"
+						value={stage_info}
+						help="プロセスエリアに表示するステージの情報を入力して下さい。"
+						onChange={(newVal) => setAttributes({ stage_info: newVal })}
+					/>
+
+				</PanelBody>
+
+			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title="完了フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
 

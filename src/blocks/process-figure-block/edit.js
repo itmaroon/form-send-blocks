@@ -28,6 +28,8 @@ import {
 	__experimentalBorderBoxControl as BorderBoxControl
 } from '@wordpress/components';
 
+import { useSelect } from '@wordpress/data';
+
 import { borderProperty, radiusProperty, marginProperty, paddingProperty } from '../styleProperty';
 
 //スペースのリセットバリュー
@@ -61,6 +63,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		margin_form,
 		padding_form,
 	} = attributes;
+
+	//ステージの状態を親ブロックから取得
+	const state_process = context['itmar/state_process'];
 	//単色かグラデーションかの選択
 	const bgColor = bgColor_form || bgGradient_form;
 
@@ -72,11 +77,25 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const border_obj = borderProperty(border_form);
 	const blockStyle = { background: bgColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj };
 
+	// 兄弟ブロックの取得
+	const figureBlocks = useSelect((select) => {
+		const { getBlockRootClientId, getBlocks } = select('core/block-editor');
+		// 親ブロックのclientIdを取得
+		const parentClientId = getBlockRootClientId(clientId);
+		// 兄弟ブロックを取得
+		let siblingBlocks = getBlocks(parentClientId);
+		siblingBlocks = siblingBlocks.filter(block => block.clientId !== clientId);
+		return siblingBlocks; //ブロックを返す
+	}, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
+	//現在のステージはどこにあるか
+	const stage_index = figureBlocks.findIndex(block => block.name.includes(state_process));
+	console.log(stage_index)
+
 
 	return (
 		<>
 			<InspectorControls group="styles">
-				<PanelBody title="プログレスフォームスタイル設定" initialOpen={true} className="form_design_ctrl">
+				<PanelBody title="プログレスフォームスタイル設定" initialOpen={false} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
 						title={__(" Background Color Setting")}
@@ -130,9 +149,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 			<div {...useBlockProps({ style: blockStyle })} >
 				<ul id="progressbar">
-					<li class="active">テキスト情報</li>
-					<li>メディア選択</li>
-					<li>オプション選択</li>
+					{figureBlocks.map((block, index) =>
+						<li key={index} className={stage_index >= index ? "ready" : ""}>
+							<div className='stage_num'>{index + 1}</div>
+							<div className='stage_bar'></div>
+							{block.attributes.stage_info}
+						</li>
+					)}
 				</ul>
 			</div>
 		</>

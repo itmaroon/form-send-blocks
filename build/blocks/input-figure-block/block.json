@@ -51,9 +51,9 @@
         "right": "2em"
       }
     },
-    "state_process": {
+    "stage_info": {
       "type": "string",
-      "default": ""
+      "default": "情報入力"
     }
   },
   "providesContext": {

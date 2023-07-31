@@ -11,6 +11,7 @@ export default function save({ attributes }) {
 		border_form,
 		margin_form,
 		padding_form,
+		state_process
 
 	} = attributes;
 
@@ -25,8 +26,14 @@ export default function save({ attributes }) {
 	const border_obj = borderProperty(border_form);
 	const blockStyle = { background: bgColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj };
 
+	const blockProps = useBlockProps.save({
+		style: blockStyle,
+		className: state_process === 'input' ? 'appear' : ''
+	});
+
+
 	return (
-		<div {...useBlockProps.save({ style: blockStyle })}>
+		<div {...blockProps}>
 			<form
 				id="send_exec"
 			>

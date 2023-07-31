@@ -6,7 +6,79 @@
  */
 
 .wp-block-itmar-process-figure-block {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
+
+	/*progressbar*/
+	#progressbar {
+		list-style: none;
+		overflow: hidden;
+		/*CSS counters to number the steps*/
+		counter-reset: step;
+		position: relative;
+		z-index: 10;
+
+		li {
+
+			color: #000;
+			text-transform: uppercase;
+			font-size: 1em;
+			width: 33.33%;
+			float: left;
+			position: relative;
+			letter-spacing: 1px;
+			text-align: center;
+
+			.stage_num {
+				content: counter(step);
+				counter-increment: step;
+				width: 1.5em;
+				height: 1.5em;
+				line-height: 1.5em;
+				text-align: center;
+				display: block;
+				font-size: 2em;
+				color: #333;
+				background: white;
+				border: #000 solid 1px;
+				border-radius: 50%;
+				margin: 0 auto 10px auto;
+			}
+
+			.stage_bar {
+				content: '';
+				width: 100%;
+				height: 2px;
+				position: absolute;
+				left: -50%;
+				top: 1.5em;
+				background-image: linear-gradient(to right, rgb(12, 11, 11) 50%, #ee0979 50%);
+				background-position: 0 0;
+				background-size: 200% auto;
+				transition: all 1s;
+				z-index: -1;
+				/*put it behind the numbers*/
+			}
+
+			&:first-child {
+				.stage_bar {
+					/*connector not needed before the first step*/
+					display: none;
+				}
+			}
+
+			&.ready {
+				.stage_num {
+					background: #ee0979;
+					color: white;
+					border: none;
+				}
+
+				.stage_bar {
+					background-position: -100% 0;
+					color: #fff;
+				}
+			}
+		}
+	}
+
+
 }

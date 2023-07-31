@@ -74,13 +74,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		border_form,
 		margin_form,
 		padding_form,
+		stage_info
 	} = attributes;
-
-
-	// contextからstate_processの値を取得し、attributesに保存する
-	useEffect(() => {
-		setAttributes({ state_process: context['itmar/state_process'] });
-	}, [context['itmar/state_process']]);
 
 
 	//単色かグラデーションかの選択
@@ -138,11 +133,23 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ルート要素にスタイルとクラスを付加	
 	const blockProps = useBlockProps({
 		style: blockStyle,
-		className: context['itmar/state_process'] === 'input' ? 'appear' : "",
+		className: `figure_fieldset ${context['itmar/state_process'] === 'input' ? 'appear' : ""}`,
 	});
 
 	return (
 		<>
+			<InspectorControls group="settings">
+				<PanelBody title="送信フォーム情報設定" initialOpen={true} className="form_setteing_ctrl">
+					<TextControl
+						label="ステージの情報"
+						value={stage_info}
+						help="プロセスエリアに表示するステージの情報を入力して下さい。"
+						onChange={(newVal) => setAttributes({ stage_info: newVal })}
+					/>
+
+				</PanelBody>
+
+			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title="送信フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
 
