@@ -407,8 +407,7 @@ function save({
     radius_form,
     border_form,
     margin_form,
-    padding_form,
-    state_process
+    padding_form
   } = attributes;
 
   //単色かグラデーションかの選択

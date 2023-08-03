@@ -3,7 +3,6 @@ import { __ } from '@wordpress/i18n';
 import './editor.scss';
 import { useSelect, useDispatch, dispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
-import equal from 'fast-deep-equal';
 
 import {
 	useBlockProps,

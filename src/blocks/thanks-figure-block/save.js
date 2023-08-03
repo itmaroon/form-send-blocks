@@ -4,6 +4,11 @@ import { borderProperty, radiusProperty, marginProperty, paddingProperty } from 
 
 export default function save({ attributes }) {
 	const {
+		infomail_success,
+		infomail_faile,
+		retmail_success,
+		retmail_faile,
+		selectedPageUrl,
 		bgColor_form,
 		bgGradient_form,
 		radius_form,
@@ -30,7 +35,14 @@ export default function save({ attributes }) {
 
 	return (
 		<div {...blockProps}>
-			<form id="to_home">
+			<form
+				id="to_home"
+				data-info_mail_success={infomail_success}
+				data-info_mail_error={infomail_faile}
+				data-ret_mail_success={retmail_success}
+				data-ret_mail_error={retmail_faile}
+				data-selected_page={selectedPageUrl}
+			>
 				<InnerBlocks.Content />
 				<input type="submit" value="ホーム画面へ" />
 			</form>

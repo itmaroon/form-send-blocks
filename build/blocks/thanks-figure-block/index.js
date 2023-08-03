@@ -210,6 +210,10 @@ function Edit({
   clientId
 }) {
   const {
+    infomail_success,
+    infomail_faile,
+    retmail_success,
+    retmail_faile,
     bgColor_form,
     bgGradient_form,
     radius_form,
@@ -263,8 +267,51 @@ function Edit({
     templateLock: true
   });
 
-  //インナーブロックを取得
-  const innerBlocks = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.useSelect)(select => select('core/block-editor').getBlocks(clientId), [clientId]);
+  //終了時のリダイレクト先を固定ページから選択
+  const RedirectSelectControl = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withSelect)(select => {
+    const pages = select('core').getEntityRecords('postType', 'page');
+    if (pages && !pages.some(page => page.id === -1)) {
+      // ホームページ用の選択肢を追加します。
+      pages.unshift({
+        id: -1,
+        title: {
+          rendered: 'ホーム'
+        },
+        link: '/'
+      });
+    }
+    return {
+      pages
+    };
+  })(function ({
+    pages,
+    setAttributes,
+    attributes
+  }) {
+    const {
+      selectedPageId,
+      selectedPageUrl
+    } = attributes;
+    // 選択肢が選択されたときの処理です。
+    const handleChange = selectedId => {
+      const selectedPage = pages.find(page => page.id === selectedId);
+      setAttributes({
+        selectedPageId: selectedId,
+        selectedPageUrl: selectedPage ? selectedPage.link : '/'
+      });
+    };
+    // 選択肢を作成します。
+    const options = pages ? pages.map(page => ({
+      value: page.id,
+      label: page.title.rendered
+    })) : [];
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ComboboxControl, {
+      label: "\u30EA\u30C0\u30A4\u30EC\u30AF\u30C8\u5148\u3092\u9078\u629E",
+      options: options,
+      value: selectedPageId,
+      onChange: handleChange
+    });
+  });
 
   //ルート要素にスタイルとクラスを付加	
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)({
@@ -274,7 +321,7 @@ function Edit({
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
     group: "settings"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-    title: "\u9001\u4FE1\u30D5\u30A9\u30FC\u30E0\u60C5\u5831\u8A2D\u5B9A",
+    title: "\u5B8C\u4E86\u30D5\u30A9\u30FC\u30E0\u60C5\u5831\u8A2D\u5B9A",
     initialOpen: true,
     className: "form_setteing_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
@@ -284,7 +331,40 @@ function Edit({
     onChange: newVal => setAttributes({
       stage_info: newVal
     })
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
+    label: "\u901A\u77E5\u30E1\u30FC\u30EB\u9001\u4FE1\u594F\u529F\u8868\u793A",
+    value: infomail_success,
+    onChange: newVal => setAttributes({
+      infomail_success: newVal
+    }),
+    rows: "3"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
+    label: "\u901A\u77E5\u30E1\u30FC\u30EB\u9001\u4FE1\u30A8\u30E9\u30FC\u8868\u793A",
+    value: infomail_faile,
+    onChange: newVal => setAttributes({
+      infomail_faile: newVal
+    }),
+    rows: "3"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
+    label: "\u5FDC\u7B54\u30E1\u30FC\u30EB\u9001\u4FE1\u594F\u529F\u8868\u793A",
+    value: retmail_success,
+    onChange: newVal => setAttributes({
+      retmail_success: newVal
+    }),
+    rows: "3"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
+    label: "\u5FDC\u7B54\u30E1\u30FC\u30EB\u9001\u4FE1\u30A8\u30E9\u30FC\u8868\u793A",
+    value: retmail_faile,
+    onChange: newVal => setAttributes({
+      retmail_faile: newVal
+    }),
+    rows: "3"
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+    title: "\u7D42\u4E86\u6642\u306E\u30EA\u30C0\u30A4\u30EC\u30AF\u30C8\u5148\u9078\u629E"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RedirectSelectControl, {
+    attributes: attributes,
+    setAttributes: setAttributes
+  })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
     group: "styles"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
     title: "\u5B8C\u4E86\u30D5\u30A9\u30FC\u30E0\u30B9\u30BF\u30A4\u30EB\u8A2D\u5B9A",
@@ -415,6 +495,11 @@ function save({
   attributes
 }) {
   const {
+    infomail_success,
+    infomail_faile,
+    retmail_success,
+    retmail_faile,
+    selectedPageUrl,
     bgColor_form,
     bgGradient_form,
     radius_form,
@@ -445,7 +530,12 @@ function save({
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
-    id: "to_home"
+    id: "to_home",
+    "data-info_mail_success": infomail_success,
+    "data-info_mail_error": infomail_faile,
+    "data-ret_mail_success": retmail_success,
+    "data-ret_mail_error": retmail_faile,
+    "data-selected_page": selectedPageUrl
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "submit",
     value: "\u30DB\u30FC\u30E0\u753B\u9762\u3078"
@@ -554,7 +644,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/thanks-figure-block","version":"0.1.0","title":"Thanks Figure","category":"design","description":"処理が完了したときに感謝を伝えるための表示をするブロックです","supports":{"html":false},"attributes":{"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"stage_info":{"type":"string","default":"処理完了"}},"usesContext":["itmar/state_process"],"textdomain":"thanks-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/thanks-figure-block","version":"0.1.0","title":"Thanks Figure","category":"design","description":"処理が完了したときに感謝を伝えるための表示をするブロックです","supports":{"html":false},"attributes":{"infomail_success":{"type":"string","default":"担当者にお問合せ内容が通知されました。回答までしばらくお待ちください。"},"infomail_faile":{"type":"string","default":"担当者へのメール通知に失敗しました"},"retmail_success":{"type":"string","default":"貴殿に対し自動応答メールを送信しましたので、ご確認ください。"},"retmail_faile":{"type":"string","default":"貴殿に対する自動応答メールの送信に失敗しました。"},"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"stage_info":{"type":"string","default":"処理完了"},"selectedPageId":{"type":"number","default":-1},"selectedPageUrl":{"type":"string","default":"/"}},"usesContext":["itmar/state_process"],"textdomain":"thanks-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

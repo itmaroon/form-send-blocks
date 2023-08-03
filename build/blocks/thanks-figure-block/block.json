@@ -10,6 +10,22 @@
     "html": false
   },
   "attributes": {
+    "infomail_success": {
+      "type": "string",
+      "default": "担当者にお問合せ内容が通知されました。回答までしばらくお待ちください。"
+    },
+    "infomail_faile": {
+      "type": "string",
+      "default": "担当者へのメール通知に失敗しました"
+    },
+    "retmail_success": {
+      "type": "string",
+      "default": "貴殿に対し自動応答メールを送信しましたので、ご確認ください。"
+    },
+    "retmail_faile": {
+      "type": "string",
+      "default": "貴殿に対する自動応答メールの送信に失敗しました。"
+    },
     "bgColor_form": {
       "type": "string"
     },
@@ -50,6 +66,14 @@
     "stage_info": {
       "type": "string",
       "default": "処理完了"
+    },
+    "selectedPageId": {
+      "type": "number",
+      "default": -1
+    },
+    "selectedPageUrl": {
+      "type": "string",
+      "default": "/"
     }
   },
   "usesContext": [

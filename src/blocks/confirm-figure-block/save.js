@@ -11,7 +11,6 @@ export default function save({ attributes }) {
 		border_form,
 		margin_form,
 		padding_form,
-		state_process
 
 	} = attributes;
 

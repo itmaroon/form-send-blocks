@@ -18,9 +18,7 @@ import {
 	PanelRow,
 	ToggleControl,
 	TextareaControl,
-	Notice,
-	RangeControl,
-	RadioControl,
+	ComboboxControl,
 	TextControl,
 	__experimentalBoxControl as BoxControl,
 	__experimentalUnitControl as UnitControl,
@@ -30,7 +28,7 @@ import {
 import './editor.scss';
 
 import { useEffect, useState } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch, withSelect } from '@wordpress/data';
 import { borderProperty, radiusProperty, marginProperty, paddingProperty } from '../styleProperty';
 
 //スペースのリセットバリュー
@@ -57,6 +55,10 @@ const units = [
 
 export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const {
+		infomail_success,
+		infomail_faile,
+		retmail_success,
+		retmail_faile,
 		bgColor_form,
 		bgGradient_form,
 		radius_form,
@@ -103,8 +105,42 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		}
 	);
 
-	//インナーブロックを取得
-	const innerBlocks = useSelect((select) => select('core/block-editor').getBlocks(clientId), [clientId]);
+	//終了時のリダイレクト先を固定ページから選択
+	const RedirectSelectControl = withSelect((select) => {
+		const pages = select('core').getEntityRecords('postType', 'page');
+		if (pages && !pages.some(page => page.id === -1)) {
+			// ホームページ用の選択肢を追加します。
+			pages.unshift({ id: -1, title: { rendered: 'ホーム' }, link: '/' });
+		}
+		return { pages }
+
+	})(function ({ pages, setAttributes, attributes }) {
+		const { selectedPageId, selectedPageUrl } = attributes;
+		// 選択肢が選択されたときの処理です。
+		const handleChange = (selectedId) => {
+			const selectedPage = pages.find(page => page.id === selectedId);
+			setAttributes({
+				selectedPageId: selectedId,
+				selectedPageUrl: selectedPage ? selectedPage.link : '/'
+			});
+		};
+		// 選択肢を作成します。
+		const options = pages ? pages.map(page => ({
+			value: page.id,
+			label: page.title.rendered
+		})) : [];
+
+		return (
+			<ComboboxControl
+				label="リダイレクト先を選択"
+				options={options}
+				value={selectedPageId}
+				onChange={handleChange}
+			/>
+		);
+	});
+
+
 
 	//ルート要素にスタイルとクラスを付加	
 	const blockProps = useBlockProps({
@@ -115,13 +151,44 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title="送信フォーム情報設定" initialOpen={true} className="form_setteing_ctrl">
+				<PanelBody title="完了フォーム情報設定" initialOpen={true} className="form_setteing_ctrl">
 					<TextControl
 						label="ステージの情報"
 						value={stage_info}
 						help="プロセスエリアに表示するステージの情報を入力して下さい。"
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
+					<TextareaControl
+						label="通知メール送信奏功表示"
+						value={infomail_success}
+						onChange={(newVal) => setAttributes({ infomail_success: newVal })}
+						rows="3"
+					/>
+					<TextareaControl
+						label="通知メール送信エラー表示"
+						value={infomail_faile}
+						onChange={(newVal) => setAttributes({ infomail_faile: newVal })}
+						rows="3"
+					/>
+					<TextareaControl
+						label="応答メール送信奏功表示"
+						value={retmail_success}
+						onChange={(newVal) => setAttributes({ retmail_success: newVal })}
+						rows="3"
+					/>
+					<TextareaControl
+						label="応答メール送信エラー表示"
+						value={retmail_faile}
+						onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
+						rows="3"
+					/>
+
+					<PanelBody title="終了時のリダイレクト先選択">
+						<RedirectSelectControl
+							attributes={attributes}
+							setAttributes={setAttributes}
+						/>
+					</PanelBody>
 
 				</PanelBody>
 
