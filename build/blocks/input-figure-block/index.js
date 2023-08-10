@@ -239,11 +239,11 @@ function Edit({
     initialOpen: true,
     className: "form_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.__experimentalPanelColorGradientSettings, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting"),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'form-send-blocks'),
     settings: [{
       colorValue: bgColor_form,
       gradientValue: bgGradient_form,
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color"),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'form-send-blocks'),
       onColorChange: newValue => setAttributes({
         bgColor_form: newValue
       }),

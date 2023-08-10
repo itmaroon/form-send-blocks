@@ -70,16 +70,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./editor.scss */ "./src/blocks/confirm-figure-block/editor.scss");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var fast_deep_equal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! fast-deep-equal */ "./node_modules/fast-deep-equal/index.js");
-/* harmony import */ var fast_deep_equal__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(fast_deep_equal__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
-
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
 
 
 
@@ -148,10 +145,10 @@ function Edit({
   const bgColor = bgColor_form || bgGradient_form;
 
   //ブロックのスタイル設定
-  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.marginProperty)(margin_form);
-  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.paddingProperty)(padding_form);
-  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.radiusProperty)(radius_form);
-  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_8__.borderProperty)(border_form);
+  const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.marginProperty)(margin_form);
+  const padding_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.paddingProperty)(padding_form);
+  const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.radiusProperty)(radius_form);
+  const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_7__.borderProperty)(border_form);
   const blockStyle = {
     background: bgColor,
     ...margin_obj,
@@ -204,7 +201,7 @@ function Edit({
   const orgTemplate = [['itmar/design-title', {}], ['core/table', {}]];
 
   //インナーブロックのひな型を作る
-  const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useInnerBlocksProps)({}, {
+  const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useInnerBlocksProps)({}, {
     //allowedBlocks: ['itmar/input-figure-block'],
     template: orgTemplate,
     templateLock: false
@@ -221,9 +218,9 @@ function Edit({
       body: tableBody,
       foot: tablefoot
     };
-    const newInnerBlocks = [(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-title', {
+    const newInnerBlocks = [(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__.createBlock)('itmar/design-title', {
       ...titleBlockAttributes
-    }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('core/table', {
+    }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__.createBlock)('core/table', {
       ...tableAttributes
     })];
     replaceInnerBlocks(clientId, newInnerBlocks, false);
@@ -249,35 +246,35 @@ function Edit({
   };
 
   //ルート要素にスタイルとクラスを付加	
-  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.useBlockProps)({
+  const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useBlockProps)({
     style: blockStyle,
     className: `figure_fieldset ${context['itmar/state_process'] === 'confirm' ? 'appear' : ""}`
   });
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.InspectorControls, {
     group: "settings"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelBody, {
     title: "\u9001\u4FE1\u30D5\u30A9\u30FC\u30E0\u60C5\u5831\u8A2D\u5B9A",
     initialOpen: true,
     className: "form_setteing_ctrl"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.TextControl, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.TextControl, {
     label: "\u30B9\u30C6\u30FC\u30B8\u306E\u60C5\u5831",
     value: stage_info,
     help: "\u30D7\u30ED\u30BB\u30B9\u30A8\u30EA\u30A2\u306B\u8868\u793A\u3059\u308B\u30B9\u30C6\u30FC\u30B8\u306E\u60C5\u5831\u3092\u5165\u529B\u3057\u3066\u4E0B\u3055\u3044\u3002",
     onChange: newVal => setAttributes({
       stage_info: newVal
     })
-  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, {
+  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.InspectorControls, {
     group: "styles"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelBody, {
     title: "\u78BA\u8A8D\u30D5\u30A9\u30FC\u30E0\u30B9\u30BF\u30A4\u30EB\u8A2D\u5B9A",
     initialOpen: true,
     className: "form_design_ctrl"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.__experimentalPanelColorGradientSettings, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting"),
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.__experimentalPanelColorGradientSettings, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'form-send-blocks'),
     settings: [{
       colorValue: bgColor_form,
       gradientValue: bgGradient_form,
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color"),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'form-send-blocks'),
       onColorChange: newValue => setAttributes({
         bgColor_form: newValue
       }),
@@ -285,11 +282,11 @@ function Edit({
         bgGradient_form: newValue
       })
     }]
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.PanelBody, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelBody, {
     title: "\u30DC\u30FC\u30C0\u30FC\u8A2D\u5B9A",
     initialOpen: false,
     className: "border_design_ctrl"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.__experimentalBorderBoxControl, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.__experimentalBorderBoxControl, {
     onChange: newValue => setAttributes({
       border_form: newValue
     }),
@@ -297,14 +294,14 @@ function Edit({
     allowReset: true // リセットの可否
     ,
     resetValues: border_resetValues // リセット時の値
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.__experimentalBorderRadiusControl, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.__experimentalBorderRadiusControl, {
     values: radius_form,
     onChange: newBrVal => setAttributes({
       radius_form: typeof newBrVal === 'string' ? {
         "value": newBrVal
       } : newBrVal
     })
-  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.__experimentalBoxControl, {
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.__experimentalBoxControl, {
     label: "\u30DE\u30FC\u30B8\u30F3\u8A2D\u5B9A",
     values: margin_form,
     onChange: value => setAttributes({
@@ -315,7 +312,7 @@ function Edit({
     allowReset: true // リセットの可否
     ,
     resetValues: padding_resetValues // リセット時の値
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.__experimentalBoxControl, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.__experimentalBoxControl, {
     label: "\u30D1\u30C6\u30A3\u30F3\u30B0\u8A2D\u5B9A",
     values: padding_form,
     onChange: value => setAttributes({
@@ -528,62 +525,6 @@ function paddingProperty(paddingObj) {
   };
   return ret_val;
 }
-
-/***/ }),
-
-/***/ "./node_modules/fast-deep-equal/index.js":
-/*!***********************************************!*\
-  !*** ./node_modules/fast-deep-equal/index.js ***!
-  \***********************************************/
-/***/ ((module) => {
-
-
-
-// do not edit .js files directly - edit src/index.jst
-
-
-
-module.exports = function equal(a, b) {
-  if (a === b) return true;
-
-  if (a && b && typeof a == 'object' && typeof b == 'object') {
-    if (a.constructor !== b.constructor) return false;
-
-    var length, i, keys;
-    if (Array.isArray(a)) {
-      length = a.length;
-      if (length != b.length) return false;
-      for (i = length; i-- !== 0;)
-        if (!equal(a[i], b[i])) return false;
-      return true;
-    }
-
-
-
-    if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
-    if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
-    if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
-
-    keys = Object.keys(a);
-    length = keys.length;
-    if (length !== Object.keys(b).length) return false;
-
-    for (i = length; i-- !== 0;)
-      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
-
-    for (i = length; i-- !== 0;) {
-      var key = keys[i];
-
-      if (!equal(a[key], b[key])) return false;
-    }
-
-    return true;
-  }
-
-  // true if both NaN, false otherwise
-  return a!==a && b!==b;
-};
-
 
 /***/ }),
 

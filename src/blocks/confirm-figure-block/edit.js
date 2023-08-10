@@ -199,13 +199,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<PanelBody title="確認フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__(" Background Color Setting")}
+						title={__(" Background Color Setting", 'form-send-blocks')}
 						settings={[
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Background color"),
+								label: __("Choose Background color", 'form-send-blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
 								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
 							},
