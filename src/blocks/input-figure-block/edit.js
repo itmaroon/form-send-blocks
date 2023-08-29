@@ -4,33 +4,21 @@ import './editor.scss';
 
 import {
 	useBlockProps,
-	useBlockSyncContext,
-	InnerBlocks,
-	RichText,
 	useInnerBlocksProps,
 	InspectorControls,
 	__experimentalPanelColorGradientSettings as PanelColorGradientSettings,
 	__experimentalBorderRadiusControl as BorderRadiusControl
 } from '@wordpress/block-editor';
 import {
-	Button,
-	Panel,
 	PanelBody,
-	PanelRow,
-	ToggleControl,
-	TextareaControl,
-	Notice,
-	RangeControl,
-	RadioControl,
 	TextControl,
 	__experimentalBoxControl as BoxControl,
-	__experimentalUnitControl as UnitControl,
 	__experimentalBorderBoxControl as BorderBoxControl
 } from '@wordpress/components';
 
 import './editor.scss';
 
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { borderProperty, radiusProperty, marginProperty, paddingProperty } from '../styleProperty';
 
