@@ -93,13 +93,15 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//インナーブロックの制御
 	const TEMPLATE = [
-		['itmar/design-text-ctrl', { inputName: 'user_name', labelContent: 'お名前', required: { flg: true, display: "*" } }],
-		['itmar/design-text-ctrl', { inputName: 'email', labelContent: 'メールアドレス', inputType: 'email', required: { flg: true, display: "*" } }]
+		['itmar/design-text-ctrl', { inputName: 'user_name', labelContent: __("Name", 'form-send-blocks'), required: { flg: true, display: "*" } }],
+		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'form-send-blocks'), inputType: 'email', required: { flg: true, display: "*" } }],
+		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: "*" } }],
+		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'form-send-blocks') }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
 		{
-			allowedBlocks: ['itmar/design-text-ctrl'],
+			allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox'],
 			template: TEMPLATE,
 			templateLock: false
 		}
@@ -110,7 +112,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//インナーブロックのラベル幅を取得
 	useEffect(() => {
-		const maxNum = innerBlocks.reduce((max, block) => {
+		//'itmar/design-checkbox'を除外
+		const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox');
+		const maxNum = filteredBlocks.reduce((max, block) => {
 			//必須項目の表示を設定
 			const dispLabel = block.attributes.required.flg ? `${block.attributes.labelContent}(${block.attributes.required.display})` : block.attributes.labelContent;
 			return Math.max(max, measureTextWidth(dispLabel, block.attributes.font_style_label.fontSize, block.attributes.font_style_label.fontFamily));
