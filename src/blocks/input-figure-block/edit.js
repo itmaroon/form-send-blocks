@@ -95,7 +95,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const TEMPLATE = [
 		['itmar/design-text-ctrl', { inputName: 'user_name', labelContent: __("Name", 'form-send-blocks'), required: { flg: true, display: "*" } }],
 		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'form-send-blocks'), inputType: 'email', required: { flg: true, display: "*" } }],
-		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: "*" } }],
+		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: "*" } }],
 		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'form-send-blocks') }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(

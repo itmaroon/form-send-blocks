@@ -193,7 +193,7 @@ function Edit({
       display: "*"
     }
   }], ['itmar/design-text-ctrl', {
-    inputName: 'email',
+    inputName: 'message',
     labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Inquiry details", 'form-send-blocks'),
     inputType: 'textarea',
     required: {
