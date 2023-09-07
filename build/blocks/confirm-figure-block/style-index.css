@@ -10,5 +10,10 @@
 .wp-block-itmar-confirm-figure-block {
   color: #000;
 }
+.wp-block-itmar-confirm-figure-block .wp-block-group-is-layout-flow {
+  display: flex;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+}
 
 /*# sourceMappingURL=style-index.css.map*/

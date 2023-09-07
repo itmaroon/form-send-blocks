@@ -50,6 +50,12 @@
     "stage_info": {
       "type": "string",
       "default": "確認"
+    },
+    "send_id": {
+      "type": "string"
+    },
+    "cancel_id": {
+      "type": "string"
     }
   },
   "usesContext": [

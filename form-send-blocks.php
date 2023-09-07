@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Form Send
+ * Plugin Name:       Form Send Blocks
  * Plugin URI:        https://itmaroon.net
  * Description:       フォーム送信するときの表示画面をまとめたブロックです
  * Requires at least: 6.1
@@ -9,7 +9,7 @@
  * Author:            WebクリエイターITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       form-send-blocks
+ * Text Domain:       itmar_form_send_blocks
  *
  * @package           itmar
  */
@@ -34,7 +34,7 @@ function itmar_form_send_blocks_block_init() {
 			)
 		);
 		// その後、このハンドルを使用してスクリプトの翻訳をセット
-		wp_set_script_translations( $script_handle, 'form-send-blocks', plugin_dir_path( __FILE__ ) . 'languages' );
+		wp_set_script_translations( $script_handle, 'itmar_form_send_blocks', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
 	
 }

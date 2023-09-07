@@ -8,5 +8,9 @@
 .wp-block-itmar-confirm-figure-block {
 	color: #000;
 
+	.wp-block-group-is-layout-flow {
+		display: flex;
+		column-gap: 10px;
+	}
 
 }

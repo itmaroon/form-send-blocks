@@ -44,7 +44,6 @@ export default function save({ attributes }) {
 				data-selected_page={selectedPageUrl}
 			>
 				<InnerBlocks.Content />
-				<input type="submit" value="ホーム画面へ" />
 			</form>
 		</div>
 	);

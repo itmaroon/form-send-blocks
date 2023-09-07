@@ -1,7 +1,7 @@
 
 import { __ } from '@wordpress/i18n';
 import './editor.scss';
-import { useSelect, useDispatch, dispatch } from '@wordpress/data';
+import { useSelect, useDispatch, select } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 
 import {
@@ -64,12 +64,16 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		border_form,
 		margin_form,
 		padding_form,
+		send_id,
+		cancel_id,
 		stage_info
 	} = attributes;
 
 	// セル要素を生成する関数
 	const cellObjects = (inputInnerBlocks) => {
-		return inputInnerBlocks.map((input_elm) => ({
+		//'itmar/design-checkbox''itmar/design-button'を除外
+		const filteredBlocks = inputInnerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
+		return filteredBlocks.map((input_elm) => ({
 			cells: [
 				{
 					content: input_elm.attributes.labelContent,
@@ -119,19 +123,40 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		return inputInnerBlocks; // 監視対象のstateを返す
 	}, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
+	//Nestされたブロックの情報取得
+	function getAllNestedBlocks(clientId) {
+		const block = select('core/block-editor').getBlock(clientId);
+		if (!block) {
+			return [];
+		}
+		const children = block.innerBlocks.map(innerBlock => getAllNestedBlocks(innerBlock.clientId));
+		return [block, ...children.flat()];
+	}
+
 	//タイトル属性の監視（最初のitmar/design-title）
 	const titleBlockAttributes = useSelect((select) => {
 		const blocks = select('core/block-editor').getBlocks(clientId);
+		//タイトル属性の取得・初期化
 		const titleBlock = blocks.find(block => block.name === 'itmar/design-title');
-		return titleBlock ? titleBlock.attributes : {};
+		return titleBlock ? titleBlock.attributes : { headingContent: __("Please check your entries", 'itmar_form_send_blocks') };
+	}, [clientId]);
+	//ボタン属性の監視（２つのitmar/design-button）
+	const buttonBlockAttributes = useSelect(() => {
+		//ネストされたブロックも取得
+		const blocks = getAllNestedBlocks(clientId);
+		const buttonBlocks = blocks.filter(block => block.name === 'itmar/design-button');
+		//ボタン属性の取得・初期化
+		const buttonAttributes = buttonBlocks.length ? buttonBlocks.map(block => block.attributes)
+			: [
+				{ buttonType: 'submit', buttonId: 'btn_id_send', labelContent: __("Send", 'itmar_form_send_blocks') },
+				{ buttonType: 'submit', buttonId: 'btn_id_cancel', labelContent: __("Return to send screen", 'itmar_form_send_blocks') }
+			];
+		return buttonAttributes;
 	}, [clientId]);
 
 
 	//インナーブロックのテンプレートを初期化
-	const orgTemplate = [
-		['itmar/design-title', {}],
-		['core/table', {}]
-	];
+	const orgTemplate = [];
 
 	//インナーブロックのひな型を作る
 	const innerBlocksProps = useInnerBlocksProps(
@@ -139,9 +164,15 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		{
 			//allowedBlocks: ['itmar/input-figure-block'],
 			template: orgTemplate,
-			templateLock: false
+			templateLock: true
 		}
 	);
+
+	useEffect(() => {
+		//ボタンのID属性をブロック属性に保存
+		setAttributes({ send_id: buttonBlockAttributes[0].buttonId });
+		setAttributes({ cancel_id: buttonBlockAttributes[1].buttonId });
+	}, [buttonBlockAttributes]);
 
 	useEffect(() => {
 		//テーブルボディを初期化
@@ -150,9 +181,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		const tablefoot = [];
 		const tableAttributes = { className: 'itmar_md_block', hasFixedLayout: true, head: tableHead, body: tableBody, foot: tablefoot };
 
+		const button1 = createBlock('itmar/design-button', { ...buttonBlockAttributes[0] });
+		const button2 = createBlock('itmar/design-button', { ...buttonBlockAttributes[1] });
+		const groupBlock = createBlock('core/group', {}, [button1, button2]);
 		const newInnerBlocks = [
 			createBlock('itmar/design-title', { ...titleBlockAttributes }),
 			createBlock('core/table', { ...tableAttributes }),
+			groupBlock
 		];
 
 		replaceInnerBlocks(clientId, newInnerBlocks, false);
@@ -160,16 +195,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 
 	//Submitによるプロセス変更
-	const [submitBtn, setSubmitBtn] = useState(null);
-	const handleClick = (btn) => {
-		setSubmitBtn(btn);
-	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		const click_id = e.nativeEvent.submitter.id;
 		// 親ブロックのstate_process属性を更新
-		if (submitBtn === 'exec') {
+		if (click_id === send_id) {
 			updateBlockAttributes(parentClientId, { state_process: 'thanks' });
-		} else if (submitBtn === 'cancel') {
+		} else if (click_id === cancel_id) {
 			updateBlockAttributes(parentClientId, { state_process: 'input' });
 		}
 	};
@@ -199,13 +231,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<PanelBody title="確認フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__(" Background Color Setting", 'form-send-blocks')}
+						title={__(" Background Color Setting", 'itmar_form_send_blocks')}
 						settings={[
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Background color", 'form-send-blocks'),
+								label: __("Choose Background color", 'itmar_form_send_blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
 								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
 							},
@@ -250,8 +282,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			<div {...blockProps} >
 				<form onSubmit={handleSubmit}>
 					<div {...innerBlocksProps}></div>
-					<input type="submit" value="送信実行" onClick={() => handleClick('exec')} />
-					<input type="submit" value="入力画面に戻る" onClick={() => handleClick('cancel')} />
 				</form>
 			</div>
 		</>

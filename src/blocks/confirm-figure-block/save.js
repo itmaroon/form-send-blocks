@@ -11,7 +11,8 @@ export default function save({ attributes }) {
 		border_form,
 		margin_form,
 		padding_form,
-
+		send_id,
+		cancel_id,
 	} = attributes;
 
 	//単色かグラデーションかの選択
@@ -32,10 +33,12 @@ export default function save({ attributes }) {
 
 	return (
 		<div {...blockProps}>
-			<form id="send_exec">
+			<form
+				id="itmar_send_exec"
+				data-send_id={send_id}
+				data-cancel_id={cancel_id}
+			>
 				<InnerBlocks.Content />
-				<input type="submit" value="送信実行" id='send_exec_btn' />
-				<input type="submit" value="入力画面に戻る" id='send_cancel_btn' />
 			</form>
 		</div>
 	);

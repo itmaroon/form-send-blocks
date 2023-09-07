@@ -179,14 +179,14 @@ function Edit({
   //インナーブロックの制御
   const TEMPLATE = [['itmar/design-text-ctrl', {
     inputName: 'user_name',
-    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Name", 'form-send-blocks'),
+    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Name", 'itmar_form_send_blocks'),
     required: {
       flg: true,
       display: "*"
     }
   }], ['itmar/design-text-ctrl', {
     inputName: 'email',
-    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("E-mail Address", 'form-send-blocks'),
+    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("E-mail Address", 'itmar_form_send_blocks'),
     inputType: 'email',
     required: {
       flg: true,
@@ -194,17 +194,20 @@ function Edit({
     }
   }], ['itmar/design-text-ctrl', {
     inputName: 'message',
-    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Inquiry details", 'form-send-blocks'),
+    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Inquiry details", 'itmar_form_send_blocks'),
     inputType: 'textarea',
     required: {
       flg: true,
       display: "*"
     }
   }], ['itmar/design-checkbox', {
-    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Agree to the privacy policy and send.", 'form-send-blocks')
+    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Agree to the privacy policy and send.", 'itmar_form_send_blocks')
+  }], ['itmar/design-button', {
+    buttonType: 'submit',
+    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("To confirmation screen", 'itmar_form_send_blocks')
   }]];
   const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useInnerBlocksProps)({}, {
-    allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox'],
+    allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox', 'itmar/design-button'],
     template: TEMPLATE,
     templateLock: false
   });
@@ -214,8 +217,8 @@ function Edit({
 
   //インナーブロックのラベル幅を取得
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    //'itmar/design-checkbox'を除外
-    const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox');
+    //'itmar/design-checkbox''itmar/design-button'を除外
+    const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
     const maxNum = filteredBlocks.reduce((max, block) => {
       //必須項目の表示を設定
       const dispLabel = block.attributes.required.flg ? `${block.attributes.labelContent}(${block.attributes.required.display})` : block.attributes.labelContent;
@@ -251,11 +254,11 @@ function Edit({
     initialOpen: true,
     className: "form_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.__experimentalPanelColorGradientSettings, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'form-send-blocks'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'itmar_form_send_blocks'),
     settings: [{
       colorValue: bgColor_form,
       gradientValue: bgGradient_form,
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'form-send-blocks'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'itmar_form_send_blocks'),
       onColorChange: newValue => setAttributes({
         bgColor_form: newValue
       }),
@@ -310,9 +313,6 @@ function Edit({
     onSubmit: handleSubmit
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...innerBlocksProps
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u78BA\u8A8D\u753B\u9762\u3078"
   }))));
 }
 
@@ -406,10 +406,7 @@ function save({
     ...blockProps
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     id: "to_confirm_form"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u78BA\u8A8D\u753B\u9762\u3078"
-  })));
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)));
 }
 
 /***/ }),

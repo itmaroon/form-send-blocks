@@ -93,15 +93,16 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//インナーブロックの制御
 	const TEMPLATE = [
-		['itmar/design-text-ctrl', { inputName: 'user_name', labelContent: __("Name", 'form-send-blocks'), required: { flg: true, display: "*" } }],
-		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'form-send-blocks'), inputType: 'email', required: { flg: true, display: "*" } }],
-		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: "*" } }],
-		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'form-send-blocks') }]
+		['itmar/design-text-ctrl', { inputName: 'user_name', labelContent: __("Name", 'itmar_form_send_blocks'), required: { flg: true, display: "*" } }],
+		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'itmar_form_send_blocks'), inputType: 'email', required: { flg: true, display: "*" } }],
+		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'itmar_form_send_blocks'), inputType: 'textarea', required: { flg: true, display: "*" } }],
+		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'itmar_form_send_blocks') }],
+		['itmar/design-button', { buttonType: 'submit', labelContent: __("To confirmation screen", 'itmar_form_send_blocks') }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
 		{
-			allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox'],
+			allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox', 'itmar/design-button'],
 			template: TEMPLATE,
 			templateLock: false
 		}
@@ -112,8 +113,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//インナーブロックのラベル幅を取得
 	useEffect(() => {
-		//'itmar/design-checkbox'を除外
-		const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox');
+		//'itmar/design-checkbox''itmar/design-button'を除外
+		const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
 		const maxNum = filteredBlocks.reduce((max, block) => {
 			//必須項目の表示を設定
 			const dispLabel = block.attributes.required.flg ? `${block.attributes.labelContent}(${block.attributes.required.display})` : block.attributes.labelContent;
@@ -146,13 +147,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<PanelBody title="送信フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__(" Background Color Setting", 'form-send-blocks')}
+						title={__(" Background Color Setting", 'itmar_form_send_blocks')}
 						settings={[
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Background color", 'form-send-blocks'),
+								label: __("Choose Background color", 'itmar_form_send_blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
 								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
 							},
@@ -198,7 +199,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			<div {...blockProps}>
 				<form onSubmit={handleSubmit}>
 					<div {...innerBlocksProps}></div>
-					<input type="submit" value="確認画面へ" />
 				</form>
 			</div >
 

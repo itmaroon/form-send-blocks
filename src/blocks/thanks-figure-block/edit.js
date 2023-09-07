@@ -94,8 +94,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//インナーブロックの制御
 	const TEMPLATE = [
-		['itmar/design-title', {}],
-		['core/paragraph', { className: 'itmar_md_block' }]
+		['itmar/design-title', { headingContent: __("Thank you for your inquiry.", 'itmar_form_send_blocks') }],
+		['core/paragraph', { className: 'itmar_md_block', content: __("The sending results set in the sidebar will be entered here. Please set only the design.", 'itmar_form_send_blocks') }],
+		['itmar/design-button', { buttonType: 'submit', labelContent: __("Go to home screen", 'itmar_form_send_blocks') }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
@@ -139,8 +140,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			/>
 		);
 	});
-
-
 
 	//ルート要素にスタイルとクラスを付加	
 	const blockProps = useBlockProps({
@@ -197,13 +196,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<PanelBody title="完了フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__(" Background Color Setting", 'form-send-blocks')}
+						title={__(" Background Color Setting", 'itmar_form_send_blocks')}
 						settings={[
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Background color", 'form-send-blocks'),
+								label: __("Choose Background color", 'itmar_form_send_blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
 								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
 							},
@@ -249,7 +248,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			<div {...blockProps}>
 				<form onSubmit={handleSubmit}>
 					<div {...innerBlocksProps}></div>
-					<input type="submit" value="ホーム画面へ" />
 				</form>
 			</div >
 

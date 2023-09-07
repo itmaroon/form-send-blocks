@@ -33,7 +33,6 @@ export default function save({ attributes }) {
 		<div {...blockProps}>
 			<form id="to_confirm_form">
 				<InnerBlocks.Content />
-				<input type="submit" value="確認画面へ" />
 			</form>
 		</div>
 	);

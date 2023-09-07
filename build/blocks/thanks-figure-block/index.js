@@ -259,8 +259,14 @@ function Edit({
   };
 
   //インナーブロックの制御
-  const TEMPLATE = [['itmar/design-title', {}], ['core/paragraph', {
-    className: 'itmar_md_block'
+  const TEMPLATE = [['itmar/design-title', {
+    headingContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Thank you for your inquiry.", 'itmar_form_send_blocks')
+  }], ['core/paragraph', {
+    className: 'itmar_md_block',
+    content: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("The sending results set in the sidebar will be entered here. Please set only the design.", 'itmar_form_send_blocks')
+  }], ['itmar/design-button', {
+    buttonType: 'submit',
+    labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Go to home screen", 'itmar_form_send_blocks')
   }]];
   const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useInnerBlocksProps)({}, {
     template: TEMPLATE,
@@ -371,11 +377,11 @@ function Edit({
     initialOpen: true,
     className: "form_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.__experimentalPanelColorGradientSettings, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'form-send-blocks'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'itmar_form_send_blocks'),
     settings: [{
       colorValue: bgColor_form,
       gradientValue: bgGradient_form,
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'form-send-blocks'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'itmar_form_send_blocks'),
       onColorChange: newValue => setAttributes({
         bgColor_form: newValue
       }),
@@ -430,9 +436,6 @@ function Edit({
     onSubmit: handleSubmit
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...innerBlocksProps
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u30DB\u30FC\u30E0\u753B\u9762\u3078"
   }))));
 }
 
@@ -536,10 +539,7 @@ function save({
     "data-ret_mail_success": retmail_success,
     "data-ret_mail_error": retmail_faile,
     "data-selected_page": selectedPageUrl
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u30DB\u30FC\u30E0\u753B\u9762\u3078"
-  })));
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)));
 }
 
 /***/ }),

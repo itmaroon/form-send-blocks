@@ -125,12 +125,16 @@ function Edit({
     border_form,
     margin_form,
     padding_form,
+    send_id,
+    cancel_id,
     stage_info
   } = attributes;
 
   // セル要素を生成する関数
   const cellObjects = inputInnerBlocks => {
-    return inputInnerBlocks.map(input_elm => ({
+    //'itmar/design-checkbox''itmar/design-button'を除外
+    const filteredBlocks = inputInnerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
+    return filteredBlocks.map(input_elm => ({
       cells: [{
         content: input_elm.attributes.labelContent,
         tag: 'th'
@@ -190,22 +194,61 @@ function Edit({
     return inputInnerBlocks; // 監視対象のstateを返す
   }, [clientId]); // clientIdが変わるたびに監視対象のstateを更新する
 
+  //Nestされたブロックの情報取得
+  function getAllNestedBlocks(clientId) {
+    const block = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.select)('core/block-editor').getBlock(clientId);
+    if (!block) {
+      return [];
+    }
+    const children = block.innerBlocks.map(innerBlock => getAllNestedBlocks(innerBlock.clientId));
+    return [block, ...children.flat()];
+  }
+
   //タイトル属性の監視（最初のitmar/design-title）
   const titleBlockAttributes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
     const blocks = select('core/block-editor').getBlocks(clientId);
+    //タイトル属性の取得・初期化
     const titleBlock = blocks.find(block => block.name === 'itmar/design-title');
-    return titleBlock ? titleBlock.attributes : {};
+    return titleBlock ? titleBlock.attributes : {
+      headingContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Please check your entries", 'itmar_form_send_blocks')
+    };
+  }, [clientId]);
+  //ボタン属性の監視（２つのitmar/design-button）
+  const buttonBlockAttributes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(() => {
+    //ネストされたブロックも取得
+    const blocks = getAllNestedBlocks(clientId);
+    const buttonBlocks = blocks.filter(block => block.name === 'itmar/design-button');
+    //ボタン属性の取得・初期化
+    const buttonAttributes = buttonBlocks.length ? buttonBlocks.map(block => block.attributes) : [{
+      buttonType: 'submit',
+      buttonId: 'btn_id_send',
+      labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Send", 'itmar_form_send_blocks')
+    }, {
+      buttonType: 'submit',
+      buttonId: 'btn_id_cancel',
+      labelContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Return to send screen", 'itmar_form_send_blocks')
+    }];
+    return buttonAttributes;
   }, [clientId]);
 
   //インナーブロックのテンプレートを初期化
-  const orgTemplate = [['itmar/design-title', {}], ['core/table', {}]];
+  const orgTemplate = [];
 
   //インナーブロックのひな型を作る
   const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.useInnerBlocksProps)({}, {
     //allowedBlocks: ['itmar/input-figure-block'],
     template: orgTemplate,
-    templateLock: false
+    templateLock: true
   });
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    //ボタンのID属性をブロック属性に保存
+    setAttributes({
+      send_id: buttonBlockAttributes[0].buttonId
+    });
+    setAttributes({
+      cancel_id: buttonBlockAttributes[1].buttonId
+    });
+  }, [buttonBlockAttributes]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     //テーブルボディを初期化
     const tableHead = [];
@@ -218,27 +261,31 @@ function Edit({
       body: tableBody,
       foot: tablefoot
     };
+    const button1 = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__.createBlock)('itmar/design-button', {
+      ...buttonBlockAttributes[0]
+    });
+    const button2 = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__.createBlock)('itmar/design-button', {
+      ...buttonBlockAttributes[1]
+    });
+    const groupBlock = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__.createBlock)('core/group', {}, [button1, button2]);
     const newInnerBlocks = [(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__.createBlock)('itmar/design-title', {
       ...titleBlockAttributes
     }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_6__.createBlock)('core/table', {
       ...tableAttributes
-    })];
+    }), groupBlock];
     replaceInnerBlocks(clientId, newInnerBlocks, false);
   }, [inputFigureBlocks]);
 
   //Submitによるプロセス変更
-  const [submitBtn, setSubmitBtn] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
-  const handleClick = btn => {
-    setSubmitBtn(btn);
-  };
   const handleSubmit = e => {
     e.preventDefault();
+    const click_id = e.nativeEvent.submitter.id;
     // 親ブロックのstate_process属性を更新
-    if (submitBtn === 'exec') {
+    if (click_id === send_id) {
       updateBlockAttributes(parentClientId, {
         state_process: 'thanks'
       });
-    } else if (submitBtn === 'cancel') {
+    } else if (click_id === cancel_id) {
       updateBlockAttributes(parentClientId, {
         state_process: 'input'
       });
@@ -270,11 +317,11 @@ function Edit({
     initialOpen: true,
     className: "form_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.__experimentalPanelColorGradientSettings, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'form-send-blocks'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'itmar_form_send_blocks'),
     settings: [{
       colorValue: bgColor_form,
       gradientValue: bgGradient_form,
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'form-send-blocks'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'itmar_form_send_blocks'),
       onColorChange: newValue => setAttributes({
         bgColor_form: newValue
       }),
@@ -329,14 +376,6 @@ function Edit({
     onSubmit: handleSubmit
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...innerBlocksProps
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u9001\u4FE1\u5B9F\u884C",
-    onClick: () => handleClick('exec')
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u5165\u529B\u753B\u9762\u306B\u623B\u308B",
-    onClick: () => handleClick('cancel')
   }))));
 }
 
@@ -404,7 +443,9 @@ function save({
     radius_form,
     border_form,
     margin_form,
-    padding_form
+    padding_form,
+    send_id,
+    cancel_id
   } = attributes;
 
   //単色かグラデーションかの選択
@@ -429,16 +470,10 @@ function save({
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
-    id: "send_exec"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u9001\u4FE1\u5B9F\u884C",
-    id: "send_exec_btn"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "submit",
-    value: "\u5165\u529B\u753B\u9762\u306B\u623B\u308B",
-    id: "send_cancel_btn"
-  })));
+    id: "itmar_send_exec",
+    "data-send_id": send_id,
+    "data-cancel_id": cancel_id
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)));
 }
 
 /***/ }),
@@ -628,7 +663,7 @@ module.exports = window["wp"]["i18n"];
   \****************************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/confirm-figure-block","version":"0.1.0","title":"Comfirm Figure","category":"design","description":"フォームに入力された内容を確認するために表示されるブロックです","supports":{"html":false},"attributes":{"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"stage_info":{"type":"string","default":"確認"}},"usesContext":["itmar/state_process"],"textdomain":"confirm-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/confirm-figure-block","version":"0.1.0","title":"Comfirm Figure","category":"design","description":"フォームに入力された内容を確認するために表示されるブロックです","supports":{"html":false},"attributes":{"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"stage_info":{"type":"string","default":"確認"},"send_id":{"type":"string"},"cancel_id":{"type":"string"}},"usesContext":["itmar/state_process"],"textdomain":"confirm-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 
