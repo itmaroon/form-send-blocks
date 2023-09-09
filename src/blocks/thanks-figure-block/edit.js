@@ -30,6 +30,7 @@ import './editor.scss';
 import { useEffect, useState } from '@wordpress/element';
 import { useSelect, useDispatch, withSelect } from '@wordpress/data';
 import { borderProperty, radiusProperty, marginProperty, paddingProperty } from '../styleProperty';
+import ShadowStyle from '../ShadowStyle';
 
 //スペースのリセットバリュー
 const padding_resetValues = {
@@ -59,16 +60,20 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		infomail_faile,
 		retmail_success,
 		retmail_faile,
+		bgColor,
 		bgColor_form,
 		bgGradient_form,
 		radius_form,
 		border_form,
 		margin_form,
 		padding_form,
-		stage_info
+		stage_info,
+		shadow_element,
+		shadow_result,
+		is_shadow
 	} = attributes;
 	//単色かグラデーションかの選択
-	const bgColor = bgColor_form || bgGradient_form;
+	const bgFormColor = bgColor_form || bgGradient_form;
 
 
 	//ブロックのスタイル設定
@@ -76,7 +81,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const padding_obj = paddingProperty(padding_form);
 	const radius_obj = radiusProperty(radius_form);
 	const border_obj = borderProperty(border_form);
-	const blockStyle = { background: bgColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj };
+	const blockStyle = { background: bgColor };
+	const formStyle = { background: bgFormColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj }
 
 	//ブロック情報取得ツールの取得
 	const { getBlockRootClientId } = useSelect((select) => select('core/block-editor'), [clientId]);
@@ -150,39 +156,39 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title="完了フォーム情報設定" initialOpen={true} className="form_setteing_ctrl">
+				<PanelBody title={__("Completion form information settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_setteing_ctrl">
 					<TextControl
-						label="ステージの情報"
+						label={__("Stage information", 'itmar_form_send_blocks')}
 						value={stage_info}
-						help="プロセスエリアに表示するステージの情報を入力して下さい。"
+						help={__("Please enter the stage information to be displayed in the process area.", 'itmar_form_send_blocks')}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
 					<TextareaControl
-						label="通知メール送信奏功表示"
+						label={__("Notification email sending success display", 'itmar_form_send_blocks')}
 						value={infomail_success}
 						onChange={(newVal) => setAttributes({ infomail_success: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label="通知メール送信エラー表示"
+						label={__("Notification email sending error display", 'itmar_form_send_blocks')}
 						value={infomail_faile}
 						onChange={(newVal) => setAttributes({ infomail_faile: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label="応答メール送信奏功表示"
+						label={__("Response email sending success display", 'itmar_form_send_blocks')}
 						value={retmail_success}
 						onChange={(newVal) => setAttributes({ retmail_success: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label="応答メール送信エラー表示"
+						label={__("Response email sending error display", 'itmar_form_send_blocks')}
 						value={retmail_faile}
 						onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
 						rows="3"
 					/>
 
-					<PanelBody title="終了時のリダイレクト先選択">
+					<PanelBody title={__("Select redirect destination when exiting", 'itmar_form_send_blocks')}>
 						<RedirectSelectControl
 							attributes={attributes}
 							setAttributes={setAttributes}
@@ -193,11 +199,16 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title="完了フォームスタイル設定" initialOpen={true} className="form_design_ctrl">
+				<PanelBody title={__("Global settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
 						title={__(" Background Color Setting", 'itmar_form_send_blocks')}
 						settings={[
+							{
+								colorValue: bgColor,
+								label: __("Choose Block Background color", 'itmar_form_send_blocks'),
+								onColorChange: (newValue) => setAttributes({ bgColor: newValue }),
+							},
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
@@ -208,7 +219,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 							},
 						]}
 					/>
-					<PanelBody title="ボーダー設定" initialOpen={false} className="border_design_ctrl">
+					<PanelBody title={__("Border Settings", 'itmar_form_send_blocks')} initialOpen={false} className="border_design_ctrl">
 						<BorderBoxControl
 
 							onChange={(newValue) => setAttributes({ border_form: newValue })}
@@ -223,7 +234,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						/>
 					</PanelBody>
 					<BoxControl
-						label="マージン設定"
+						label={__("Margin Setting", 'itmar_form_send_blocks')}
 						values={margin_form}
 						onChange={value => setAttributes({ margin_form: value })}
 						units={units}	// 許可する単位
@@ -232,7 +243,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 					/>
 					<BoxControl
-						label="パティング設定"
+						label={__("Padding settings", 'itmar_form_send_blocks')}
 						values={padding_form}
 						onChange={value => setAttributes({ padding_form: value })}
 						units={units}	// 許可する単位
@@ -240,15 +251,35 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						resetValues={padding_resetValues}	// リセット時の値
 
 					/>
-
+					<ToggleControl
+						label={__('Is Shadow', 'itmar_form_send_blocks')}
+						checked={is_shadow}
+						onChange={(newVal) => {
+							setAttributes({ is_shadow: newVal })
+						}}
+					/>
 				</PanelBody>
 
 			</InspectorControls>
 
 			<div {...blockProps}>
-				<form onSubmit={handleSubmit}>
-					<div {...innerBlocksProps}></div>
-				</form>
+				{is_shadow ? (
+					<ShadowStyle
+						shadowStyle={{ ...shadow_element, backgroundColor: bgColor }}
+						onChange={(newStyle, newState) => {
+							setAttributes({ shadow_result: newStyle.style });
+							setAttributes({ shadow_element: newState })
+						}}
+					>
+						<form onSubmit={handleSubmit} style={{ ...formStyle, ...shadow_result }}>
+							<div {...innerBlocksProps}></div>
+						</form>
+					</ShadowStyle>
+				) : (
+					<form onSubmit={handleSubmit} style={formStyle}>
+						<div {...innerBlocksProps}></div>
+					</form>
+				)}
 			</div >
 
 		</>

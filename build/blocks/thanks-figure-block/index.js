@@ -61,6 +61,618 @@ var SvgThanks = function SvgThanks(props) {
 
 /***/ }),
 
+/***/ "./src/blocks/ShadowStyle.js":
+/*!***********************************!*\
+  !*** ./src/blocks/ShadowStyle.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ShadowElm: () => (/* binding */ ShadowElm),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _hslToRgb__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./hslToRgb */ "./src/blocks/hslToRgb.js");
+
+
+
+
+
+
+
+//方向と距離
+const dirctionDigit = (direction, distance) => {
+  let destTopLeft, destTopRight, destBottomLeft, destBottomRight;
+  switch (direction) {
+    case "top_left":
+      destTopLeft = distance;
+      destTopRight = distance;
+      destBottomLeft = distance * -1;
+      destBottomRight = distance * -1;
+      break;
+    case "top_right":
+      destTopLeft = distance * -1;
+      destTopRight = distance;
+      destBottomLeft = distance;
+      destBottomRight = distance * -1;
+      break;
+    case "bottom_left":
+      destTopLeft = distance;
+      destTopRight = distance * -1;
+      destBottomLeft = distance * -1;
+      destBottomRight = distance;
+      break;
+    case "bottom_right":
+      destTopLeft = distance * -1;
+      destTopRight = distance * -1;
+      destBottomLeft = distance;
+      destBottomRight = distance;
+      break;
+    case "right_bottom":
+      destTopLeft = distance;
+      destTopRight = distance * -1;
+      destBottomLeft = distance * -1;
+      destBottomRight = distance;
+      break;
+    case "top":
+      destTopLeft = 0;
+      destTopRight = 0;
+      destBottomLeft = distance * -1;
+      destBottomRight = distance;
+      break;
+  }
+  return {
+    topLeft: destTopLeft,
+    topRight: destTopRight,
+    bottomLeft: destBottomLeft,
+    bottmRight: destBottomRight
+  };
+};
+const ShadowElm = shadowState => {
+  const {
+    shadowType,
+    spread,
+    lateral,
+    longitude,
+    nomalBlur,
+    shadowColor,
+    blur,
+    intensity,
+    distance,
+    newDirection,
+    clayDirection,
+    embos,
+    opacity,
+    depth,
+    bdBlur,
+    expand,
+    glassblur,
+    glassopa,
+    hasOutline,
+    backgroundColor
+  } = shadowState;
+  //ノーマル
+  if (shadowType === 'nomal') {
+    //boxshadowの生成
+    const ShadowStyle = embos === 'dent' ? {
+      style: {
+        boxShadow: `${lateral}px ${longitude}px ${nomalBlur}px ${spread}px transparent, inset ${lateral}px ${longitude}px ${nomalBlur}px ${spread}px ${shadowColor}`
+      }
+    } : {
+      style: {
+        boxShadow: `${lateral}px ${longitude}px ${nomalBlur}px ${spread}px ${shadowColor}, inset ${lateral}px ${longitude}px ${nomalBlur}px ${spread}px transparent`
+      }
+    };
+    //Shadowのスタイルを返す
+    return ShadowStyle;
+  }
+  //ニューモフィズム
+  else if (shadowType === 'newmor') {
+    const baseColor = backgroundColor || "#ffffff";
+    //ボタン背景色のHSL値
+    const hslValue = (0,_hslToRgb__WEBPACK_IMPORTED_MODULE_4__.rgb16ToHsl)(baseColor);
+    //影の明るさを変更
+    const lightVal = hslValue.lightness + intensity < 100 ? hslValue.lightness + intensity : 100;
+    const darkVal = hslValue.lightness - intensity > 0 ? hslValue.lightness - intensity : 0;
+    const lightValue = (0,_hslToRgb__WEBPACK_IMPORTED_MODULE_4__.hslToRgb16)(hslValue.hue, hslValue.saturation, lightVal);
+    const darkValue = (0,_hslToRgb__WEBPACK_IMPORTED_MODULE_4__.hslToRgb16)(hslValue.hue, hslValue.saturation, darkVal);
+    //boxshadowの生成
+    //立体の方向
+    const dircObj = dirctionDigit(newDirection, distance);
+    const baseStyle = {
+      style: {
+        border: 'none',
+        background: baseColor
+      }
+    };
+    const newmorStyle = embos === 'swell' ? {
+      ...baseStyle,
+      style: {
+        ...baseStyle.style,
+        boxShadow: `${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px ${darkValue}, ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px ${lightValue}, inset ${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px transparent, inset ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px transparent`
+      }
+    } : {
+      ...baseStyle,
+      style: {
+        ...baseStyle.style,
+        boxShadow: `${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px transparent, ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px transparent, inset ${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px ${darkValue}, inset ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px ${lightValue}`
+      }
+    };
+
+    //Shadowのスタイルを返す
+    return newmorStyle;
+  }
+
+  //クレイモーフィズム
+  else if (shadowType === 'claymor') {
+    const baseColor = backgroundColor || "#C0C0C0";
+    const rgbValue = (0,_hslToRgb__WEBPACK_IMPORTED_MODULE_4__.HexToRGB)(baseColor);
+    const outsetObj = dirctionDigit(clayDirection, expand);
+    const insetObj = dirctionDigit(clayDirection, depth);
+    const baseStyle = {
+      style: {
+        background: `rgba(255, 255, 255, ${opacity})`,
+        backdropFilter: `blur(${bdBlur}px)`,
+        border: 'none'
+      }
+    };
+    const claymorStyle = embos === 'swell' ? {
+      ...baseStyle,
+      style: {
+        ...baseStyle.style,
+        boxShadow: `${outsetObj.topLeft}px ${outsetObj.bottmRight}px ${expand * 2}px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.5), inset ${insetObj.topRight}px ${insetObj.bottomLeft}px 16px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.6), inset 0px 11px 28px 0px rgb(255, 255, 255)`
+      }
+    } : {
+      ...baseStyle,
+      style: {
+        ...baseStyle.style,
+        boxShadow: `${outsetObj.topLeft}px ${outsetObj.bottmRight}px ${expand * 2}px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.5), inset ${insetObj.topRight}px ${insetObj.bottomLeft}px 16px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.6), 0px 11px 28px 0px rgb(255, 255, 255)`
+      }
+    };
+    //attributesに保存
+    return claymorStyle;
+  }
+
+  //グラスモーフィズム
+  else if (shadowType === 'glassmor') {
+    //const baseColor = backgroundColor || "#C0C0C0";
+    //const rgbValue = HexToRGB(baseColor)
+    const baseStyle = {
+      style: {
+        backgroundColor: `rgba(255, 255, 255, ${glassopa})`,
+        border: `1px solid rgba(255, 255, 255, 0.4)`,
+        borderRightColor: `rgba(255, 255, 255, 0.2)`,
+        borderBottomColor: `rgba(255, 255, 255, 0.2)`,
+        backdropFilter: `blur( ${glassblur}px )`
+      }
+    };
+    const glassmorStyle = embos === 'swell' ? {
+      ...baseStyle,
+      style: {
+        ...baseStyle.style,
+        boxShadow: `0 8px 12px 0 rgba( 31, 38, 135, 0.37 ), inset 0 8px 12px 0 transparent`
+      }
+    } : {
+      ...baseStyle,
+      style: {
+        ...baseStyle.style,
+        boxShadow: `0 8px 12px 0 transparent, inset 0 8px 12px 0 rgba( 31, 38, 135, 0.37 )`
+      }
+    };
+
+    //attributesに保存
+    return glassmorStyle;
+  }
+};
+const ShadowStyle = ({
+  shadowStyle,
+  onChange,
+  children
+}) => {
+  const [shadowState, setShadowState] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(shadowStyle);
+  const {
+    shadowType,
+    spread,
+    lateral,
+    longitude,
+    nomalBlur,
+    shadowColor,
+    blur,
+    intensity,
+    distance,
+    newDirection,
+    clayDirection,
+    embos,
+    opacity,
+    depth,
+    bdBlur,
+    expand,
+    glassblur,
+    glassopa,
+    hasOutline,
+    backgroundColor
+  } = shadowState;
+
+  // shadowStyle backgroundColor の変更を検知する
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (shadowStyle.backgroundColor !== backgroundColor) {
+      setShadowState(shadowStyle);
+    }
+  }, [shadowStyle]);
+
+  //シャドーのスタイル変更に伴う親コンポーネントの変更
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const shadowElm = ShadowElm(shadowState);
+    onChange(shadowElm, shadowState);
+  }, [shadowState]);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.InspectorControls, {
+    group: "styles"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Shadow Type", 'itmar_block_collections'),
+    initialOpen: true
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "itmar_shadow_type"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RadioControl, {
+    selected: shadowType,
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Nomal", 'itmar_block_collections'),
+      value: 'nomal'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Neumorphism", 'itmar_block_collections'),
+      value: 'newmor'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Claymorphism ", 'itmar_block_collections'),
+      value: 'claymor'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Grassmophism", 'itmar_block_collections'),
+      value: 'glassmor'
+    }],
+    onChange: changeOption => setShadowState({
+      ...shadowState,
+      shadowType: changeOption
+    })
+  }))), shadowType === 'nomal' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Nomal settings", 'itmar_block_collections'),
+    initialOpen: false
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: spread,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Spread", 'itmar_block_collections'),
+    max: 50,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      spread: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: lateral,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Lateral direction", 'itmar_block_collections'),
+    max: 50,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      lateral: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: longitude,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Longitudinal direction", 'itmar_block_collections'),
+    max: 50,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      longitude: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: nomalBlur,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Blur", 'itmar_block_collections'),
+    max: 20,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      nomalBlur: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.__experimentalPanelColorGradientSettings, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Shadow Color Setting", 'itmar_block_collections'),
+    settings: [{
+      colorValue: shadowColor,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Shadow color", 'itmar_block_collections'),
+      onColorChange: newValue => setShadowState({
+        ...shadowState,
+        shadowColor: newValue
+      })
+    }]
+  })), shadowType === 'newmor' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Neumorphism settings", 'itmar_block_collections'),
+    initialOpen: false
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: distance,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Distance", 'itmar_block_collections'),
+    max: 50,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      distance: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: intensity,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Intensity", 'itmar_block_collections'),
+    max: 100,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      intensity: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: blur,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Blur", 'itmar_block_collections'),
+    max: 20,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      blur: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelRow, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "light_direction"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RadioControl, {
+    selected: newDirection,
+    options: [{
+      value: 'top_left'
+    }, {
+      value: 'top_right'
+    }, {
+      value: 'bottom_left'
+    }, {
+      value: 'bottom_right'
+    }],
+    onChange: changeOption => setShadowState({
+      ...shadowState,
+      newDirection: changeOption
+    })
+  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "embos"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RadioControl, {
+    selected: embos,
+    options: [{
+      value: 'swell'
+    }, {
+      value: 'dent'
+    }],
+    onChange: changeOption => setShadowState({
+      ...shadowState,
+      embos: changeOption
+    })
+  })))), shadowType === 'claymor' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Claymorphism settings", 'itmar_block_collections'),
+    initialOpen: false
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: opacity,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Opacity", 'itmar_block_collections'),
+    max: 1,
+    min: 0,
+    step: .1,
+    onChange: val => setShadowState({
+      ...shadowState,
+      opacity: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: depth,
+    label: "Depth",
+    max: 20,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      depth: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: expand,
+    label: "Expand",
+    max: 50,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      expand: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: bdBlur,
+    label: "Background Blur",
+    max: 10,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      bdBlur: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "light_direction claymor"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RadioControl, {
+    selected: clayDirection,
+    options: [{
+      value: 'right_bottom'
+    }, {
+      value: 'top_right'
+    }, {
+      value: 'top'
+    }],
+    onChange: changeOption => setShadowState({
+      ...shadowState,
+      clayDirection: changeOption
+    })
+  }))), shadowType === 'glassmor' && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Grassmophism settings", 'itmar_block_collections'),
+    initialOpen: false
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: glassblur,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Glass blur", 'itmar_block_collections'),
+    max: 20,
+    min: 0,
+    onChange: val => setShadowState({
+      ...shadowState,
+      glassblur: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.RangeControl, {
+    value: glassopa,
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Glass Opacity", 'itmar_block_collections'),
+    max: 1,
+    min: 0,
+    step: .1,
+    onChange: val => setShadowState({
+      ...shadowState,
+      glassopa: val
+    }),
+    withInputField: false
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Show outline", 'itmar_block_collections'),
+    checked: hasOutline,
+    onChange: () => setShadowState({
+      ...shadowState,
+      hasOutline: !hasOutline
+    })
+  })))), children);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ShadowStyle);
+
+/***/ }),
+
+/***/ "./src/blocks/hslToRgb.js":
+/*!********************************!*\
+  !*** ./src/blocks/hslToRgb.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   HexToRGB: () => (/* binding */ HexToRGB),
+/* harmony export */   hslToRgb16: () => (/* binding */ hslToRgb16),
+/* harmony export */   rgb16ToHsl: () => (/* binding */ rgb16ToHsl)
+/* harmony export */ });
+function hslToRgb16(hue, saturation, lightness) {
+  var result = false;
+  if ((hue || hue === 0) && hue <= 360 && (saturation || saturation === 0) && saturation <= 100 && (lightness || lightness === 0) && lightness <= 100) {
+    var red = 0,
+      green = 0,
+      blue = 0,
+      q = 0,
+      p = 0,
+      hueToRgb;
+    hue = Number(hue) / 360;
+    saturation = Number(saturation) / 100;
+    lightness = Number(lightness) / 100;
+    if (saturation === 0) {
+      red = lightness;
+      green = lightness;
+      blue = lightness;
+    } else {
+      hueToRgb = function (p, q, t) {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) {
+          p += (q - p) * 6 * t;
+        } else if (t < 1 / 2) {
+          p = q;
+        } else if (t < 2 / 3) {
+          p += (q - p) * (2 / 3 - t) * 6;
+        }
+        return p;
+      };
+      if (lightness < 0.5) {
+        q = lightness * (1 + saturation);
+      } else {
+        q = lightness + saturation - lightness * saturation;
+      }
+      p = 2 * lightness - q;
+      red = hueToRgb(p, q, hue + 1 / 3);
+      green = hueToRgb(p, q, hue);
+      blue = hueToRgb(p, q, hue - 1 / 3);
+    }
+    result = `#${Math.round(red * 255).toString(16).padStart(2, '0')}${Math.round(green * 255).toString(16).padStart(2, '0')}${Math.round(blue * 255).toString(16).padStart(2, '0')}`;
+  }
+  return result;
+}
+;
+function rgb16ToHsl(strRgb16) {
+  let rgb = strRgb16.match(/\#([a-fA-F0-9]{2})([a-fA-Z0-9]{2})([a-fA-F0-9]{2})/);
+  let red = rgb[1];
+  let green = rgb[2];
+  let blue = rgb[3];
+  let result = false;
+  if ((red || red === 0) && String(red).match(/^[0-9a-f]{2}$/i) && (green || green === 0) && String(green).match(/^[0-9a-f]{2}$/i) && (blue || blue === 0) && String(blue).match(/^[0-9a-f]{2}$/i)) {
+    let hue = 0,
+      saturation = 0,
+      lightness = 0,
+      max = 0,
+      min = 0,
+      diff = 0;
+    red = parseInt(red, 16) / 255;
+    green = parseInt(green, 16) / 255;
+    blue = parseInt(blue, 16) / 255;
+    max = Math.max(red, green, blue);
+    min = Math.min(red, green, blue);
+    lightness = (max + min) / 2;
+    if (max !== min) {
+      diff = max - min;
+      if (lightness > 0.5) {
+        saturation = diff / (2 - max - min);
+      } else {
+        saturation = diff / (max + min);
+      }
+      if (max === red) {
+        hue = (green - blue) / diff;
+      } else if (max === green) {
+        hue = 2 + (blue - red) / diff;
+      } else {
+        hue = 4 + (red - green) / diff;
+      }
+      hue /= 6;
+    }
+    result = {
+      hue: Math.round(hue * 360),
+      saturation: Math.round(saturation * 100),
+      lightness: Math.round(lightness * 100)
+    };
+  }
+  return result;
+}
+;
+function HexToRGB(strRgb16) {
+  let rgb = strRgb16.match(/\#([a-fA-F0-9]{2})([a-fA-Z0-9]{2})([a-fA-F0-9]{2})/);
+  let red = rgb[1];
+  let green = rgb[2];
+  let blue = rgb[3];
+  let result = false;
+  if ((red || red === 0) && String(red).match(/^[0-9a-f]{2}$/i) && (green || green === 0) && String(green).match(/^[0-9a-f]{2}$/i) && (blue || blue === 0) && String(blue).match(/^[0-9a-f]{2}$/i)) {
+    red = parseInt(red, 16);
+    green = parseInt(green, 16);
+    blue = parseInt(blue, 16);
+    result = {
+      red: Math.round(red),
+      green: Math.round(green),
+      blue: Math.round(blue)
+    };
+  }
+  return result;
+}
+;
+
+/***/ }),
+
 /***/ "./src/blocks/styleProperty.js":
 /*!*************************************!*\
   !*** ./src/blocks/styleProperty.js ***!
@@ -168,6 +780,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
+/* harmony import */ var _ShadowStyle__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ShadowStyle */ "./src/blocks/ShadowStyle.js");
+
 
 
 
@@ -214,16 +828,20 @@ function Edit({
     infomail_faile,
     retmail_success,
     retmail_faile,
+    bgColor,
     bgColor_form,
     bgGradient_form,
     radius_form,
     border_form,
     margin_form,
     padding_form,
-    stage_info
+    stage_info,
+    shadow_element,
+    shadow_result,
+    is_shadow
   } = attributes;
   //単色かグラデーションかの選択
-  const bgColor = bgColor_form || bgGradient_form;
+  const bgFormColor = bgColor_form || bgGradient_form;
 
   //ブロックのスタイル設定
   const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.marginProperty)(margin_form);
@@ -231,7 +849,10 @@ function Edit({
   const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.radiusProperty)(radius_form);
   const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_6__.borderProperty)(border_form);
   const blockStyle = {
-    background: bgColor,
+    background: bgColor
+  };
+  const formStyle = {
+    background: bgFormColor,
     ...margin_obj,
     ...padding_obj,
     ...radius_obj,
@@ -327,58 +948,64 @@ function Edit({
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
     group: "settings"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-    title: "\u5B8C\u4E86\u30D5\u30A9\u30FC\u30E0\u60C5\u5831\u8A2D\u5B9A",
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Completion form information settings", 'itmar_form_send_blocks'),
     initialOpen: true,
     className: "form_setteing_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
-    label: "\u30B9\u30C6\u30FC\u30B8\u306E\u60C5\u5831",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Stage information", 'itmar_form_send_blocks'),
     value: stage_info,
-    help: "\u30D7\u30ED\u30BB\u30B9\u30A8\u30EA\u30A2\u306B\u8868\u793A\u3059\u308B\u30B9\u30C6\u30FC\u30B8\u306E\u60C5\u5831\u3092\u5165\u529B\u3057\u3066\u4E0B\u3055\u3044\u3002",
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Please enter the stage information to be displayed in the process area.", 'itmar_form_send_blocks'),
     onChange: newVal => setAttributes({
       stage_info: newVal
     })
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
-    label: "\u901A\u77E5\u30E1\u30FC\u30EB\u9001\u4FE1\u594F\u529F\u8868\u793A",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Notification email sending success display", 'itmar_form_send_blocks'),
     value: infomail_success,
     onChange: newVal => setAttributes({
       infomail_success: newVal
     }),
     rows: "3"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
-    label: "\u901A\u77E5\u30E1\u30FC\u30EB\u9001\u4FE1\u30A8\u30E9\u30FC\u8868\u793A",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Notification email sending error display", 'itmar_form_send_blocks'),
     value: infomail_faile,
     onChange: newVal => setAttributes({
       infomail_faile: newVal
     }),
     rows: "3"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
-    label: "\u5FDC\u7B54\u30E1\u30FC\u30EB\u9001\u4FE1\u594F\u529F\u8868\u793A",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Response email sending success display", 'itmar_form_send_blocks'),
     value: retmail_success,
     onChange: newVal => setAttributes({
       retmail_success: newVal
     }),
     rows: "3"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextareaControl, {
-    label: "\u5FDC\u7B54\u30E1\u30FC\u30EB\u9001\u4FE1\u30A8\u30E9\u30FC\u8868\u793A",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Response email sending error display", 'itmar_form_send_blocks'),
     value: retmail_faile,
     onChange: newVal => setAttributes({
       retmail_faile: newVal
     }),
     rows: "3"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-    title: "\u7D42\u4E86\u6642\u306E\u30EA\u30C0\u30A4\u30EC\u30AF\u30C8\u5148\u9078\u629E"
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Select redirect destination when exiting", 'itmar_form_send_blocks')
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RedirectSelectControl, {
     attributes: attributes,
     setAttributes: setAttributes
   })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
     group: "styles"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-    title: "\u5B8C\u4E86\u30D5\u30A9\u30FC\u30E0\u30B9\u30BF\u30A4\u30EB\u8A2D\u5B9A",
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Global settings", 'itmar_form_send_blocks'),
     initialOpen: true,
     className: "form_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.__experimentalPanelColorGradientSettings, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'itmar_form_send_blocks'),
     settings: [{
+      colorValue: bgColor,
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Block Background color", 'itmar_form_send_blocks'),
+      onColorChange: newValue => setAttributes({
+        bgColor: newValue
+      })
+    }, {
       colorValue: bgColor_form,
       gradientValue: bgGradient_form,
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Background color", 'itmar_form_send_blocks'),
@@ -390,7 +1017,7 @@ function Edit({
       })
     }]
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-    title: "\u30DC\u30FC\u30C0\u30FC\u8A2D\u5B9A",
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Border Settings", 'itmar_form_send_blocks'),
     initialOpen: false,
     className: "border_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalBorderBoxControl, {
@@ -409,7 +1036,7 @@ function Edit({
       } : newBrVal
     })
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalBoxControl, {
-    label: "\u30DE\u30FC\u30B8\u30F3\u8A2D\u5B9A",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Margin Setting", 'itmar_form_send_blocks'),
     values: margin_form,
     onChange: value => setAttributes({
       margin_form: value
@@ -420,7 +1047,7 @@ function Edit({
     ,
     resetValues: padding_resetValues // リセット時の値
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalBoxControl, {
-    label: "\u30D1\u30C6\u30A3\u30F3\u30B0\u8A2D\u5B9A",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Padding settings", 'itmar_form_send_blocks'),
     values: padding_form,
     onChange: value => setAttributes({
       padding_form: value
@@ -430,10 +1057,40 @@ function Edit({
     allowReset: true // リセットの可否
     ,
     resetValues: padding_resetValues // リセット時の値
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Is Shadow', 'itmar_form_send_blocks'),
+    checked: is_shadow,
+    onChange: newVal => {
+      setAttributes({
+        is_shadow: newVal
+      });
+    }
   }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
+  }, is_shadow ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ShadowStyle__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    shadowStyle: {
+      ...shadow_element,
+      backgroundColor: bgColor
+    },
+    onChange: (newStyle, newState) => {
+      setAttributes({
+        shadow_result: newStyle.style
+      });
+      setAttributes({
+        shadow_element: newState
+      });
+    }
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit,
+    style: {
+      ...formStyle,
+      ...shadow_result
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ...innerBlocksProps
+  }))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    onSubmit: handleSubmit,
+    style: formStyle
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...innerBlocksProps
   }))));
@@ -450,13 +1107,16 @@ function Edit({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.scss */ "./src/blocks/thanks-figure-block/style.scss");
-/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./edit */ "./src/blocks/thanks-figure-block/edit.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./save */ "./src/blocks/thanks-figure-block/save.js");
-/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./block.json */ "./src/blocks/thanks-figure-block/block.json");
-/* harmony import */ var _thanks_svg__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./thanks.svg */ "./src/blocks/thanks-figure-block/thanks.svg");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.scss */ "./src/blocks/thanks-figure-block/style.scss");
+/* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./edit */ "./src/blocks/thanks-figure-block/edit.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./save */ "./src/blocks/thanks-figure-block/save.js");
+/* harmony import */ var _block_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./block.json */ "./src/blocks/thanks-figure-block/block.json");
+/* harmony import */ var _thanks_svg__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./thanks.svg */ "./src/blocks/thanks-figure-block/thanks.svg");
+
 
 
 
@@ -468,10 +1128,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_5__.name, {
-  icon: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_thanks_svg__WEBPACK_IMPORTED_MODULE_6__.ReactComponent, null),
-  edit: _edit__WEBPACK_IMPORTED_MODULE_3__["default"],
-  save: _save__WEBPACK_IMPORTED_MODULE_4__["default"]
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__.registerBlockType)(_block_json__WEBPACK_IMPORTED_MODULE_6__.name, {
+  description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("It is a block that displays to convey gratitude when processing is completed", 'itmar_form_send_blocks'),
+  attributes: {
+    ..._block_json__WEBPACK_IMPORTED_MODULE_6__.attributes,
+    stage_info: {
+      type: "string",
+      default: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Processing completed', 'itmar_form_send_blocks')
+    }
+  },
+  icon: (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_thanks_svg__WEBPACK_IMPORTED_MODULE_7__.ReactComponent, null),
+  edit: _edit__WEBPACK_IMPORTED_MODULE_4__["default"],
+  save: _save__WEBPACK_IMPORTED_MODULE_5__["default"]
 });
 
 /***/ }),
@@ -503,16 +1171,19 @@ function save({
     retmail_success,
     retmail_faile,
     selectedPageUrl,
+    bgColor,
     bgColor_form,
     bgGradient_form,
     radius_form,
     border_form,
     margin_form,
-    padding_form
+    padding_form,
+    shadow_result,
+    is_shadow
   } = attributes;
 
   //単色かグラデーションかの選択
-  const bgColor = bgColor_form || bgGradient_form;
+  const bgFormColor = bgColor_form || bgGradient_form;
 
   //ブロックのスタイル設定
   const margin_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_2__.marginProperty)(margin_form);
@@ -520,7 +1191,11 @@ function save({
   const radius_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_2__.radiusProperty)(radius_form);
   const border_obj = (0,_styleProperty__WEBPACK_IMPORTED_MODULE_2__.borderProperty)(border_form);
   const blockStyle = {
-    background: bgColor,
+    overflow: 'hidden',
+    background: bgColor
+  };
+  const formStyle = {
+    background: bgFormColor,
     ...margin_obj,
     ...padding_obj,
     ...radius_obj,
@@ -532,13 +1207,25 @@ function save({
   });
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...blockProps
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+  }, is_shadow ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
     id: "to_home",
     "data-info_mail_success": infomail_success,
     "data-info_mail_error": infomail_faile,
     "data-ret_mail_success": retmail_success,
     "data-ret_mail_error": retmail_faile,
-    "data-selected_page": selectedPageUrl
+    "data-selected_page": selectedPageUrl,
+    style: {
+      ...formStyle,
+      ...shadow_result
+    }
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+    id: "to_home",
+    "data-info_mail_success": infomail_success,
+    "data-info_mail_error": infomail_faile,
+    "data-ret_mail_success": retmail_success,
+    "data-ret_mail_error": retmail_faile,
+    "data-selected_page": selectedPageUrl,
+    style: formStyle
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)));
 }
 
@@ -644,7 +1331,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/thanks-figure-block","version":"0.1.0","title":"Thanks Figure","category":"design","description":"処理が完了したときに感謝を伝えるための表示をするブロックです","supports":{"html":false},"attributes":{"infomail_success":{"type":"string","default":"担当者にお問合せ内容が通知されました。回答までしばらくお待ちください。"},"infomail_faile":{"type":"string","default":"担当者へのメール通知に失敗しました"},"retmail_success":{"type":"string","default":"貴殿に対し自動応答メールを送信しましたので、ご確認ください。"},"retmail_faile":{"type":"string","default":"貴殿に対する自動応答メールの送信に失敗しました。"},"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"stage_info":{"type":"string","default":"処理完了"},"selectedPageId":{"type":"number","default":-1},"selectedPageUrl":{"type":"string","default":"/"}},"usesContext":["itmar/state_process"],"textdomain":"thanks-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/thanks-figure-block","version":"0.1.0","title":"Thanks Figure","category":"design","supports":{"html":false},"attributes":{"infomail_success":{"type":"string","default":""},"infomail_faile":{"type":"string","default":""},"retmail_success":{"type":"string","default":""},"retmail_faile":{"type":"string","default":""},"bgColor":{"type":"string","default":"#ffffff"},"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"shadow_element":{"type":"object","default":{"shadowType":"nomal","spread":2,"lateral":2,"longitude":2,"nomalBlur":3,"shadowColor":"#9F9F9F","distance":5,"intensity":5,"opacity":0.5,"depth":5,"blur":5,"bdBlur":5,"expand":5,"glassblur":5,"glassopa":0.5,"newDirection":"top_left","clayDirection":"top","embos":"swell","hasOutline":true}},"shadow_result":{"type":"object"},"is_shadow":{"type":"boolean","default":false},"selectedPageId":{"type":"number","default":-1},"selectedPageUrl":{"type":"string","default":"/"}},"usesContext":["itmar/state_process"],"textdomain":"thanks-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

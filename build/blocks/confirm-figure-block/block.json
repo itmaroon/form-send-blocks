@@ -5,11 +5,14 @@
   "version": "0.1.0",
   "title": "Comfirm Figure",
   "category": "design",
-  "description": "フォームに入力された内容を確認するために表示されるブロックです",
   "supports": {
     "html": false
   },
   "attributes": {
+    "bgColor": {
+      "type": "string",
+      "default": "#ffffff"
+    },
     "bgColor_form": {
       "type": "string"
     },
@@ -47,9 +50,36 @@
         "right": "2em"
       }
     },
-    "stage_info": {
-      "type": "string",
-      "default": "確認"
+    "shadow_element": {
+      "type": "object",
+      "default": {
+        "shadowType": "nomal",
+        "spread": 2,
+        "lateral": 2,
+        "longitude": 2,
+        "nomalBlur": 3,
+        "shadowColor": "#9F9F9F",
+        "distance": 5,
+        "intensity": 5,
+        "opacity": 0.5,
+        "depth": 5,
+        "blur": 5,
+        "bdBlur": 5,
+        "expand": 5,
+        "glassblur": 5,
+        "glassopa": 0.5,
+        "newDirection": "top_left",
+        "clayDirection": "top",
+        "embos": "swell",
+        "hasOutline": true
+      }
+    },
+    "shadow_result": {
+      "type": "object"
+    },
+    "is_shadow": {
+      "type": "boolean",
+      "default": false
     },
     "send_id": {
       "type": "string"
