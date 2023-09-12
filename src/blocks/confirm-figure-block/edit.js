@@ -237,7 +237,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<PanelBody title={__("Global settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__(" Background Color Setting", 'itmar_form_send_blocks')}
+						title={__("Background Color Setting", 'itmar_form_send_blocks')}
 						settings={[
 							{
 								colorValue: bgColor,

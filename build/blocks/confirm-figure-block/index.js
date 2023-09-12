@@ -816,7 +816,7 @@ function Edit({
     initialOpen: true,
     className: "form_design_ctrl"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.__experimentalPanelColorGradientSettings, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(" Background Color Setting", 'itmar_form_send_blocks'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Background Color Setting", 'itmar_form_send_blocks'),
     settings: [{
       colorValue: bgColor,
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Choose Block Background color", 'itmar_form_send_blocks'),
@@ -1347,7 +1347,7 @@ module.exports = window["wp"]["i18n"];
   \****************************************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/confirm-figure-block","version":"0.1.0","title":"Comfirm Figure","category":"design","supports":{"html":false},"attributes":{"bgColor":{"type":"string","default":"#ffffff"},"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"shadow_element":{"type":"object","default":{"shadowType":"nomal","spread":2,"lateral":2,"longitude":2,"nomalBlur":3,"shadowColor":"#9F9F9F","distance":5,"intensity":5,"opacity":0.5,"depth":5,"blur":5,"bdBlur":5,"expand":5,"glassblur":5,"glassopa":0.5,"newDirection":"top_left","clayDirection":"top","embos":"swell","hasOutline":true}},"shadow_result":{"type":"object"},"is_shadow":{"type":"boolean","default":false},"send_id":{"type":"string"},"cancel_id":{"type":"string"}},"usesContext":["itmar/state_process"],"textdomain":"confirm-figure-block","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"itmar/confirm-figure-block","version":"0.1.0","title":"Comfirm Figure","category":"design","supports":{"html":false},"attributes":{"bgColor":{"type":"string","default":"#ffffff"},"bgColor_form":{"type":"string"},"bgGradient_form":{"type":"string"},"radius_form":{"type":"object","default":{"topLeft":"0px","topRight":"0px","bottomRight":"0px","bottomLeft":"0px","value":"0px"}},"border_form":{"type":"object"},"margin_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"padding_form":{"type":"object","default":{"top":"1em","left":"2em","bottom":"1em","right":"2em"}},"shadow_element":{"type":"object","default":{"shadowType":"nomal","spread":2,"lateral":2,"longitude":2,"nomalBlur":3,"shadowColor":"#9F9F9F","distance":5,"intensity":5,"opacity":0.5,"depth":5,"blur":5,"bdBlur":5,"expand":5,"glassblur":5,"glassopa":0.5,"newDirection":"top_left","clayDirection":"top","embos":"swell","hasOutline":true}},"shadow_result":{"type":"object"},"is_shadow":{"type":"boolean","default":false},"send_id":{"type":"string"},"cancel_id":{"type":"string"}},"usesContext":["itmar/state_process"],"textdomain":"itmar_form_send_blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

@@ -2,11 +2,11 @@
 /**
  * Plugin Name:       Form Send Blocks
  * Plugin URI:        https://itmaroon.net
- * Description:       フォーム送信するときの表示画面をまとめたブロックです
+ * Description:       This is a block that summarizes the display screen when submitting a form.
  * Requires at least: 6.1
  * Requires PHP:      7.0
  * Version:           0.1.0
- * Author:            WebクリエイターITmaroon
+ * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       itmar_form_send_blocks
