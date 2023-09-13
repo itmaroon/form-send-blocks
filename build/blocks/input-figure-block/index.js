@@ -326,7 +326,7 @@ const ShadowStyle = ({
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Neumorphism", 'itmar_block_collections'),
       value: 'newmor'
     }, {
-      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Claymorphism ", 'itmar_block_collections'),
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Claymorphism", 'itmar_block_collections'),
       value: 'claymor'
     }, {
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Grassmophism", 'itmar_block_collections'),

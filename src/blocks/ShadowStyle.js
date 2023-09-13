@@ -259,7 +259,7 @@ const ShadowStyle = ({ shadowStyle, onChange, children }) => {
               options={[
                 { label: __("Nomal", 'itmar_block_collections'), value: 'nomal' },
                 { label: __("Neumorphism", 'itmar_block_collections'), value: 'newmor' },
-                { label: __("Claymorphism ", 'itmar_block_collections'), value: 'claymor' },
+                { label: __("Claymorphism", 'itmar_block_collections'), value: 'claymor' },
                 { label: __("Grassmophism", 'itmar_block_collections'), value: 'glassmor' },
               ]}
               onChange={(changeOption) => setShadowState({ ...shadowState, shadowType: changeOption })}
