@@ -101,7 +101,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//インナーブロックの制御
 	const TEMPLATE = [
 		['itmar/design-title', { headingContent: __("Thank you for your inquiry.", 'itmar_form_send_blocks') }],
-		['core/paragraph', { className: 'itmar_md_block', content: __("The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid.", 'itmar_form_send_blocks') }],
+		['core/paragraph', { className: 'itmar_ex_block', content: __("The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid.", 'itmar_form_send_blocks') }],
 		['itmar/design-button', { buttonType: 'submit', labelContent: __("Go to home screen", 'itmar_form_send_blocks') }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(

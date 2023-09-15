@@ -712,6 +712,13 @@ function Edit({
       headingContent: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Please check your entries", 'itmar_form_send_blocks')
     };
   }, [clientId]);
+  //テーブル属性の監視（core/table）
+  const tableAttributes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const blocks = select('core/block-editor').getBlocks(clientId);
+    //タイトル属性の取得・初期化
+    const tableBlock = blocks.find(block => block.name === 'core/table');
+    return tableBlock ? tableBlock.attributes : null;
+  }, [clientId]);
   //ボタン属性の監視（２つのitmar/design-button）
   const buttonBlockAttributes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(() => {
     //ネストされたブロックも取得
@@ -750,15 +757,12 @@ function Edit({
   }, [buttonBlockAttributes]);
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     //テーブルボディを初期化
-    const tableHead = [];
     const tableBody = cellObjects(inputFigureBlocks);
-    const tablefoot = [];
-    const tableAttributes = {
-      className: 'itmar_md_block',
-      hasFixedLayout: true,
-      head: tableHead,
-      body: tableBody,
-      foot: tablefoot
+    let updatedClassName = tableAttributes.className ? `${tableAttributes.className} itmar_ex_block` : 'itmar_ex_block';
+    const newtableAttributes = {
+      ...tableAttributes,
+      className: updatedClassName,
+      body: tableBody
     };
     const button1 = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-button', {
       ...buttonBlockAttributes[0]
@@ -770,8 +774,8 @@ function Edit({
     const newInnerBlocks = [(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-title', {
       ...titleBlockAttributes
     }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('core/table', {
-      ...tableAttributes
-    }), groupBlock];
+      ...newtableAttributes
+    }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-table', {}), groupBlock];
     replaceInnerBlocks(clientId, newInnerBlocks, false);
   }, [inputFigureBlocks]);
 
