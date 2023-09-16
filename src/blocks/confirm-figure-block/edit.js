@@ -74,23 +74,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		is_shadow
 	} = attributes;
 
-	// セル要素を生成する関数
-	const cellObjects = (inputInnerBlocks) => {
-		//'itmar/design-checkbox''itmar/design-button'を除外
-		const filteredBlocks = inputInnerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
-		return filteredBlocks.map((input_elm) => ({
-			cells: [
-				{
-					content: input_elm.attributes.labelContent,
-					tag: 'th'
-				},
-				{
-					content: input_elm.attributes.inputValue,
-					tag: 'td'
-				}
-			]
-		}));
-	}
 
 	//単色かグラデーションかの選択
 	const bgFormColor = bgColor_form || bgGradient_form;
@@ -146,13 +129,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		const titleBlock = blocks.find(block => block.name === 'itmar/design-title');
 		return titleBlock ? titleBlock.attributes : { headingContent: __("Please check your entries", 'itmar_form_send_blocks') };
 	}, [clientId]);
-	//テーブル属性の監視（core/table）
-	const tableAttributes = useSelect((select) => {
-		const blocks = select('core/block-editor').getBlocks(clientId);
-		//タイトル属性の取得・初期化
-		const tableBlock = blocks.find(block => block.name === 'core/table');
-		return tableBlock ? tableBlock.attributes : null;
-	}, [clientId]);
+
 	//ボタン属性の監視（２つのitmar/design-button）
 	const buttonBlockAttributes = useSelect(() => {
 		//ネストされたブロックも取得
@@ -188,20 +165,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	}, [buttonBlockAttributes]);
 
 	useEffect(() => {
-		//テーブルボディを初期化
-		const tableBody = cellObjects(inputFigureBlocks);
-		let updatedClassName = tableAttributes.className
-			? `${tableAttributes.className} itmar_ex_block`
-			: 'itmar_ex_block';
-
-		const newtableAttributes = { ...tableAttributes, className: updatedClassName, body: tableBody };
-
 		const button1 = createBlock('itmar/design-button', { ...buttonBlockAttributes[0] });
 		const button2 = createBlock('itmar/design-button', { ...buttonBlockAttributes[1] });
 		const groupBlock = createBlock('core/group', {}, [button1, button2]);
 		const newInnerBlocks = [
 			createBlock('itmar/design-title', { ...titleBlockAttributes }),
-			createBlock('core/table', { ...newtableAttributes }),
 			createBlock('itmar/design-table', {}),
 			groupBlock
 		];
