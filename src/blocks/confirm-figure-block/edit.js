@@ -130,6 +130,14 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		return titleBlock ? titleBlock.attributes : { headingContent: __("Please check your entries", 'itmar_form_send_blocks') };
 	}, [clientId]);
 
+	//テーブル属性の監視（最初のitmar/design-table）
+	const tableBlockAttributes = useSelect((select) => {
+		const blocks = select('core/block-editor').getBlocks(clientId);
+		//タイトル属性の取得・初期化
+		const tableBlock = blocks.find(block => block.name === 'itmar/design-table');
+		return tableBlock ? tableBlock.attributes : {};
+	}, [clientId]);
+
 	//ボタン属性の監視（２つのitmar/design-button）
 	const buttonBlockAttributes = useSelect(() => {
 		//ネストされたブロックも取得
@@ -170,7 +178,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		const groupBlock = createBlock('core/group', {}, [button1, button2]);
 		const newInnerBlocks = [
 			createBlock('itmar/design-title', { ...titleBlockAttributes }),
-			createBlock('itmar/design-table', {}),
+			createBlock('itmar/design-table', { ...tableBlockAttributes }),
 			groupBlock
 		];
 

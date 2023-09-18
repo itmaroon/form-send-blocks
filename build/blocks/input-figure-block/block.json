@@ -9,6 +9,9 @@
     "html": false
   },
   "attributes": {
+    "form_name": {
+      "type": "string"
+    },
     "label_width": {
       "type": "string",
       "default": "100px"

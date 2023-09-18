@@ -698,6 +698,14 @@ function Edit({
     };
   }, [clientId]);
 
+  //テーブル属性の監視（最初のitmar/design-table）
+  const tableBlockAttributes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const blocks = select('core/block-editor').getBlocks(clientId);
+    //タイトル属性の取得・初期化
+    const tableBlock = blocks.find(block => block.name === 'itmar/design-table');
+    return tableBlock ? tableBlock.attributes : {};
+  }, [clientId]);
+
   //ボタン属性の監視（２つのitmar/design-button）
   const buttonBlockAttributes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(() => {
     //ネストされたブロックも取得
@@ -744,7 +752,9 @@ function Edit({
     const groupBlock = (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('core/group', {}, [button1, button2]);
     const newInnerBlocks = [(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-title', {
       ...titleBlockAttributes
-    }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-table', {}), groupBlock];
+    }), (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-table', {
+      ...tableBlockAttributes
+    }), groupBlock];
     replaceInnerBlocks(clientId, newInnerBlocks, false);
   }, [inputFigureBlocks]);
 

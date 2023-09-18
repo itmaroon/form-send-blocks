@@ -58,6 +58,7 @@ const measureTextWidth = (text, fontSize, fontFamily) => {
 
 export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const {
+		form_name,
 		bgColor,
 		bgColor_form,
 		bgGradient_form,
@@ -135,12 +136,19 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const blockProps = useBlockProps({
 		style: blockStyle,
 		className: `figure_fieldset ${context['itmar/state_process'] === 'input' ? 'appear' : ""}`,
+		name: form_name
 	});
 
 	return (
 		<>
 			<InspectorControls group="settings">
 				<PanelBody title={__("Transmission form information setting", 'itmar_form_send_blocks')} initialOpen={true} className="form_setteing_ctrl">
+					<TextControl
+						label={__("Form Name", 'itmar_form_send_blocks')}
+						value={form_name}
+						help={__("This is the name used to identify it as a data source.", 'itmar_form_send_blocks')}
+						onChange={(newVal) => setAttributes({ form_name: newVal })}
+					/>
 					<TextControl
 						label={__("Stage information", 'itmar_form_send_blocks')}
 						value={stage_info}

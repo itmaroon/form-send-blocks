@@ -5,6 +5,7 @@ import { borderProperty, radiusProperty, marginProperty, paddingProperty } from 
 
 export default function save({ attributes }) {
 	const {
+		form_name,
 		bgColor,
 		bgColor_form,
 		bgGradient_form,
@@ -30,7 +31,8 @@ export default function save({ attributes }) {
 
 	const blockProps = useBlockProps.save({
 		style: blockStyle,
-		className: 'figure_fieldset appear first_appear'
+		className: 'figure_fieldset appear first_appear',
+		name: form_name
 	});
 
 	return (
