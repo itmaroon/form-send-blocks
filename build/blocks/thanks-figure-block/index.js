@@ -781,6 +781,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _styleProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../styleProperty */ "./src/blocks/styleProperty.js");
 /* harmony import */ var _ShadowStyle__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ShadowStyle */ "./src/blocks/ShadowStyle.js");
+/* harmony import */ var _wordpressApi__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../wordpressApi */ "./src/blocks/wordpressApi.js");
+
 
 
 
@@ -894,52 +896,6 @@ function Edit({
     templateLock: true
   });
 
-  //終了時のリダイレクト先を固定ページから選択
-  const RedirectSelectControl = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.withSelect)(select => {
-    const pages = select('core').getEntityRecords('postType', 'page');
-    if (pages && !pages.some(page => page.id === -1)) {
-      // ホームページ用の選択肢を追加します。
-      pages.unshift({
-        id: -1,
-        title: {
-          rendered: 'ホーム'
-        },
-        link: '/'
-      });
-    }
-    return {
-      pages
-    };
-  })(function ({
-    pages,
-    setAttributes,
-    attributes
-  }) {
-    const {
-      selectedPageId,
-      selectedPageUrl
-    } = attributes;
-    // 選択肢が選択されたときの処理です。
-    const handleChange = selectedId => {
-      const selectedPage = pages.find(page => page.id === selectedId);
-      setAttributes({
-        selectedPageId: selectedId,
-        selectedPageUrl: selectedPage ? selectedPage.link : '/'
-      });
-    };
-    // 選択肢を作成します。
-    const options = pages ? pages.map(page => ({
-      value: page.id,
-      label: page.title.rendered
-    })) : [];
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.ComboboxControl, {
-      label: "\u30EA\u30C0\u30A4\u30EC\u30AF\u30C8\u5148\u3092\u9078\u629E",
-      options: options,
-      value: selectedPageId,
-      onChange: handleChange
-    });
-  });
-
   //ルート要素にスタイルとクラスを付加	
   const blockProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)({
     style: blockStyle,
@@ -988,7 +944,7 @@ function Edit({
     rows: "3"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Select redirect destination when exiting", 'itmar_form_send_blocks')
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(RedirectSelectControl, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpressApi__WEBPACK_IMPORTED_MODULE_8__.RedirectSelectControl, {
     attributes: attributes,
     setAttributes: setAttributes
   })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
@@ -1228,6 +1184,72 @@ function save({
     style: formStyle
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InnerBlocks.Content, null)));
 }
+
+/***/ }),
+
+/***/ "./src/blocks/wordpressApi.js":
+/*!************************************!*\
+  !*** ./src/blocks/wordpressApi.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   RedirectSelectControl: () => (/* binding */ RedirectSelectControl)
+/* harmony export */ });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+const RedirectSelectControl = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.withSelect)(select => {
+  const pages = select('core').getEntityRecords('postType', 'page');
+  if (pages && !pages.some(page => page.id === -1)) {
+    // ホームページ用の選択肢を追加します。
+    pages.unshift({
+      id: -1,
+      title: {
+        rendered: 'ホーム'
+      },
+      link: '/'
+    });
+  }
+  return {
+    pages
+  };
+})(function ({
+  pages,
+  setAttributes,
+  attributes
+}) {
+  const {
+    selectedPageId,
+    selectedPageUrl
+  } = attributes;
+  // 選択肢が選択されたときの処理です。
+  const handleChange = selectedId => {
+    const selectedPage = pages.find(page => page.id === selectedId);
+    setAttributes({
+      selectedPageId: selectedId,
+      selectedPageUrl: selectedPage ? selectedPage.link : '/'
+    });
+  };
+  // 選択肢を作成します。
+  const options = pages ? pages.map(page => ({
+    value: page.id,
+    label: page.title.rendered
+  })) : [];
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ComboboxControl, {
+    label: "\u30EA\u30C0\u30A4\u30EC\u30AF\u30C8\u5148\u3092\u9078\u629E",
+    options: options,
+    value: selectedPageId,
+    onChange: handleChange
+  });
+});
 
 /***/ }),
 
