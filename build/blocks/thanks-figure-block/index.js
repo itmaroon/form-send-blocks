@@ -944,7 +944,7 @@ function Edit({
     rows: "3"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Select redirect destination when exiting", 'itmar_form_send_blocks')
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpressApi__WEBPACK_IMPORTED_MODULE_8__.RedirectSelectControl, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpressApi__WEBPACK_IMPORTED_MODULE_8__.PageSelectControl, {
     attributes: attributes,
     setAttributes: setAttributes
   })))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
@@ -1195,21 +1195,63 @@ function save({
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   RedirectSelectControl: () => (/* binding */ RedirectSelectControl)
+/* harmony export */   ArchiveSelectControl: () => (/* binding */ ArchiveSelectControl),
+/* harmony export */   PageSelectControl: () => (/* binding */ PageSelectControl),
+/* harmony export */   fetchArchiveOptions: () => (/* binding */ fetchArchiveOptions),
+/* harmony export */   fetchPagesOptions: () => (/* binding */ fetchPagesOptions)
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
-const RedirectSelectControl = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.withSelect)(select => {
-  const pages = select('core').getEntityRecords('postType', 'page');
+
+
+//コントロールのレンダリング関数
+const SelectControl = ({
+  setAttributes,
+  attributes,
+  label,
+  fetchOptions
+}) => {
+  const {
+    selectedPageId
+  } = attributes;
+  const [options, setOptions] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedOptions = await fetchOptions();
+        setOptions(fetchedOptions);
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
+    };
+    fetchData();
+  }, [fetchOptions]);
+  const handleChange = selectedId => {
+    const selectedPage = options.find(page => page.value === selectedId);
+    setAttributes({
+      selectedPageId: selectedId,
+      selectedPageUrl: selectedPage ? selectedPage.link : '/'
+    });
+  };
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ComboboxControl, {
+    label: label,
+    options: options,
+    value: selectedPageId,
+    onChange: handleChange
+  });
+};
+const fetchPagesOptions = async () => {
+  const pages = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2___default()({
+    path: '/wp/v2/pages'
+  });
   if (pages && !pages.some(page => page.id === -1)) {
-    // ホームページ用の選択肢を追加します。
     pages.unshift({
       id: -1,
       title: {
@@ -1218,37 +1260,42 @@ const RedirectSelectControl = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_1__.wi
       link: '/'
     });
   }
-  return {
-    pages
-  };
-})(function ({
-  pages,
-  setAttributes,
-  attributes
-}) {
-  const {
-    selectedPageId,
-    selectedPageUrl
-  } = attributes;
-  // 選択肢が選択されたときの処理です。
-  const handleChange = selectedId => {
-    const selectedPage = pages.find(page => page.id === selectedId);
-    setAttributes({
-      selectedPageId: selectedId,
-      selectedPageUrl: selectedPage ? selectedPage.link : '/'
-    });
-  };
-  // 選択肢を作成します。
-  const options = pages ? pages.map(page => ({
+  return pages ? pages.map(page => ({
     value: page.id,
-    label: page.title.rendered
+    label: page.title.rendered,
+    link: page.link
   })) : [];
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ComboboxControl, {
-    label: "\u30EA\u30C0\u30A4\u30EC\u30AF\u30C8\u5148\u3092\u9078\u629E",
-    options: options,
-    value: selectedPageId,
-    onChange: handleChange
+};
+const fetchArchiveOptions = async () => {
+  const response = await _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2___default()({
+    path: '/wp/v2/types'
   });
+  let idCounter = 0;
+  return Object.keys(response).reduce((acc, key) => {
+    const postType = response[key];
+    if (postType.has_archive === true) {
+      acc.push({
+        value: idCounter++,
+        link: `/${postType.slug}`,
+        label: postType.name
+      });
+    } else if (typeof postType.has_archive === 'string') {
+      acc.push({
+        value: idCounter++,
+        link: `/${postType.has_archive}`,
+        label: postType.name
+      });
+    }
+    return acc;
+  }, []);
+};
+const PageSelectControl = props => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+  ...props,
+  fetchOptions: fetchPagesOptions
+});
+const ArchiveSelectControl = props => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(SelectControl, {
+  ...props,
+  fetchOptions: fetchArchiveOptions
 });
 
 /***/ }),
@@ -1284,6 +1331,16 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 module.exports = window["React"];
+
+/***/ }),
+
+/***/ "@wordpress/api-fetch":
+/*!**********************************!*\
+  !*** external ["wp","apiFetch"] ***!
+  \**********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["apiFetch"];
 
 /***/ }),
 

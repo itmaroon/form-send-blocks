@@ -31,7 +31,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { borderProperty, radiusProperty, marginProperty, paddingProperty } from '../styleProperty';
 import ShadowStyle from '../ShadowStyle';
-import { RedirectSelectControl } from '../wordpressApi'
+import { PageSelectControl } from '../wordpressApi'
 
 //スペースのリセットバリュー
 const padding_resetValues = {
@@ -156,7 +156,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					/>
 
 					<PanelBody title={__("Select redirect destination when exiting", 'itmar_form_send_blocks')}>
-						<RedirectSelectControl
+						<PageSelectControl
 							attributes={attributes}
 							setAttributes={setAttributes}
 						/>

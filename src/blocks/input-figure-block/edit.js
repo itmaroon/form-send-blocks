@@ -72,10 +72,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		is_shadow
 	} = attributes;
 
-
 	//単色かグラデーションかの選択
 	const bgFormColor = bgColor_form || bgGradient_form;
-
 
 	//ブロックのスタイル設定
 	const margin_obj = marginProperty(margin_form);
