@@ -14,7 +14,8 @@
  * @package           itmar
  */
 
-
+ if ( ! defined( 'ABSPATH' ) ) exit;
+ 
 function itmar_form_send_blocks_block_init() {
 	foreach (glob(plugin_dir_path(__FILE__) . 'build/blocks/*') as $block) {
 		$block_name = basename($block);
