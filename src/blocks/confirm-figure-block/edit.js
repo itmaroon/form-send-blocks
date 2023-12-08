@@ -175,7 +175,12 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	useEffect(() => {
 		const button1 = createBlock('itmar/design-button', { ...buttonBlockAttributes[0] });
 		const button2 = createBlock('itmar/design-button', { ...buttonBlockAttributes[1] });
-		const groupBlock = createBlock('core/group', {}, [button1, button2]);
+		const groupBlock = createBlock('itmar/design-group', {
+			default_pos: {
+				direction: "horizen",
+				inner_align: "center", outer_align: "center"
+			}
+		}, [button1, button2]);
 		const newInnerBlocks = [
 			createBlock('itmar/design-title', { ...titleBlockAttributes }),
 			createBlock('itmar/design-table', { ...tableBlockAttributes }),

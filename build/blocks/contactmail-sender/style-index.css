@@ -1,3 +1,6 @@
+/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/contactmail-sender/style.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************/
 @charset "UTF-8";
 /**
  * The following styles get applied both on the front of your site
@@ -57,20 +60,11 @@
   transform: translateX(-50%);
   box-shadow: 0 -30px 0 #eee, 21px -21px 0 #ddd, 30px 0 0 #ccc, 21px 21px 0 #bbb, 0 30px 0 #aaa, -21px 21px 0 #999, -30px 0 0 #666, -21px -21px 0 #000;
   /* 左上 */
-  -webkit-animation: load_rotate 1s steps(8) 0s infinite;
-          animation: load_rotate 1s steps(8) 0s infinite;
+  animation: load_rotate 1s steps(8) 0s infinite;
 }
 
 /* keyframes
 ===================================== */
-@-webkit-keyframes load_rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 @keyframes load_rotate {
   0% {
     transform: rotate(0deg);
@@ -79,4 +73,5 @@
     transform: rotate(360deg);
   }
 }
-/*# sourceMappingURL=style.css.map */
+
+/*# sourceMappingURL=style-index.css.map*/

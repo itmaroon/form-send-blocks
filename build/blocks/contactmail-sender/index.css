@@ -1,0 +1,24 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/blocks/contactmail-sender/editor.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.mailinfo_ctrl .components-notice {
+  padding-right: 0;
+}
+.mailinfo_ctrl .components-notice .components-notice__content {
+  margin: 0;
+}
+.mailinfo_ctrl .components-notice .components-notice__content .components-button {
+  margin: 0;
+  box-shadow: none;
+}
+
+.wp-block-itmar-contactmail-sender {
+  border: 1px dotted #f00;
+}
+
+/*# sourceMappingURL=index.css.map*/

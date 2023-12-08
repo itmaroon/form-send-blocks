@@ -104,7 +104,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'itmar_form_send_blocks'), inputType: 'email', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter your e-mail address", 'itmar_form_send_blocks') }],
 		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'itmar_form_send_blocks'), inputType: 'textarea', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter inquiry", 'itmar_form_send_blocks') }],
 		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'itmar_form_send_blocks') }],
-		['itmar/design-button', { buttonType: 'submit', labelContent: __("To confirmation screen", 'itmar_form_send_blocks') }]
+		['itmar/design-button', { buttonType: 'submit', labelContent: __("To confirmation screen", 'itmar_form_send_blocks'), align: 'center' }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},

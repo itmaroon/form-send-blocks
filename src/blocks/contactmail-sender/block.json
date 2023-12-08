@@ -1,0 +1,75 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "itmar/contactmail-sender",
+	"version": "0.1.0",
+	"title": "Contact Mail Sender",
+	"category": "media",
+	"supports": {
+		"multiple": false,
+		"html": false
+	},
+	"attributes": {
+		"default_pos": {
+			"type": "object",
+			"default": {
+				"margin_value": {
+					"top": "1em",
+					"left": "2em",
+					"bottom": "1em",
+					"right": "2em"
+				},
+				"padding_value": {
+					"top": "1em",
+					"left": "2em",
+					"bottom": "1em",
+					"right": "2em"
+				}
+			}
+		},
+		"mobile_pos": {
+			"type": "object",
+			"default": {
+				"margin_value": {
+					"top": "1em",
+					"left": "0",
+					"bottom": "1em",
+					"right": "0"
+				},
+				"padding_value": {
+					"top": "0",
+					"left": "0",
+					"bottom": "0",
+					"right": "0"
+				}
+			}
+		},
+		"master_mail": {
+			"type": "string",
+			"default": "master@sample.com"
+		},
+		"ret_mail": {
+			"type": "string",
+			"default": ""
+		},
+		"is_retmail": {
+			"type": "boolean",
+			"default": true
+		},
+		"is_dataSave": {
+			"type": "boolean",
+			"default": true
+		},
+		"state_process": {
+			"type": "string",
+			"default": "input"
+		}
+	},
+	"providesContext": {
+		"itmar/state_process": "state_process"
+	},
+	"textdomain": "itmar_form_send_blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}
