@@ -834,7 +834,7 @@ function Edit({
     align: 'center'
   }]];
   const innerBlocksProps = (0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useInnerBlocksProps)({}, {
-    allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox', 'itmar/design-button'],
+    allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox', 'itmar/design-button', 'itmar/design-select'],
     template: TEMPLATE,
     templateLock: false
   });
@@ -844,8 +844,8 @@ function Edit({
 
   //インナーブロックのラベル幅を取得
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    //'itmar/design-checkbox''itmar/design-button'を除外
-    const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
+    //'itmar/design-checkbox''itmar/design-button''itmar/design-select'を除外
+    const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button' && block.name !== 'itmar/design-select');
     const maxNum = filteredBlocks.reduce((max, block) => {
       //必須項目の表示を設定
       const dispLabel = block.attributes.required.flg ? `${block.attributes.labelContent}(${block.attributes.required.display})` : block.attributes.labelContent;

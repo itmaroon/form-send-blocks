@@ -109,7 +109,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
 		{
-			allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox', 'itmar/design-button'],
+			allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox', 'itmar/design-button', 'itmar/design-select'],
 			template: TEMPLATE,
 			templateLock: false
 		}
@@ -120,8 +120,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//インナーブロックのラベル幅を取得
 	useEffect(() => {
-		//'itmar/design-checkbox''itmar/design-button'を除外
-		const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
+		//'itmar/design-checkbox''itmar/design-button''itmar/design-select'を除外
+		const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button' && block.name !== 'itmar/design-select');
 		const maxNum = filteredBlocks.reduce((max, block) => {
 			//必須項目の表示を設定
 			const dispLabel = block.attributes.required.flg ? `${block.attributes.labelContent}(${block.attributes.required.display})` : block.attributes.labelContent;
