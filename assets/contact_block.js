@@ -166,15 +166,15 @@ jQuery(function ($) {
 
     let err_flg = false;//エラーフラグをセット
     //バリデーションチェック
-    $(this).find('label').each(function () {
+    $(this).find('.wp-block-itmar-design-text-ctrl').each(function () {
       let required = $(this).data('required');
       if (required) {
-        if ($(this).prev().val().length == 0) {
+        if ($(this).find('input, textarea').val().length == 0) {
           let err_msg_elm = $('<div class="err_msg">入力必須の項目です</div>')
-          $(this).parent().append(err_msg_elm);
+          $(this).find('> div').append(err_msg_elm);
           err_flg = true;
         } else {
-          $(this).parent().find('.err_msg').remove()
+          $(this).find('.err_msg').remove()
         }
       }
     })
