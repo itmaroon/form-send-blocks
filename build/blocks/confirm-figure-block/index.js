@@ -754,6 +754,11 @@ function Edit({
         direction: "horizen",
         inner_align: "center",
         outer_align: "center"
+      },
+      mobile_pos: {
+        direction: "horizen",
+        inner_align: "center",
+        outer_align: "center"
       }
     }, [button1, button2]);
     const newInnerBlocks = [(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_7__.createBlock)('itmar/design-title', {

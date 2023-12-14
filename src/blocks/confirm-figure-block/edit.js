@@ -179,6 +179,10 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			default_pos: {
 				direction: "horizen",
 				inner_align: "center", outer_align: "center"
+			},
+			mobile_pos: {
+				direction: "horizen",
+				inner_align: "center", outer_align: "center"
 			}
 		}, [button1, button2]);
 		const newInnerBlocks = [

@@ -10,7 +10,7 @@
 .wp-block-itmar-input-figure-block #guest_contact_form .err_msg {
   position: absolute;
   font-size: 0.8em;
-  color: rgb(209, 6, 6);
+  color: var(--wp--preset--color--err-message);
   top: 90%;
   left: 15%;
 }

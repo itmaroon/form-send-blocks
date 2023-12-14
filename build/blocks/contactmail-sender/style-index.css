@@ -23,7 +23,7 @@
 .wp-block-itmar-contactmail-sender #to_confirm_form .err_msg {
   position: absolute;
   font-size: 0.8em;
-  color: rgb(209, 6, 6);
+  color: var(--wp--preset--color--err-message);
   top: 90%;
   left: 10%;
 }
