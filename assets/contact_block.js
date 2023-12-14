@@ -70,7 +70,21 @@ jQuery(function ($) {
     const matches = message.match(/\[(.*?)\]/g);
     if (matches) {
       matches.forEach(match => {
-        let rep_word = $(`[name="${match.slice(1, -1)}"]`).val()
+        let rep_elm = $(`[name="${match.slice(1, -1)}"]`);
+        let elm_tag = rep_elm.prop('tagName').toLowerCase();
+
+        let rep_word = '';
+        if (elm_tag === 'input' || elm_tag === 'textarea') {//input要素かtextarea要素の場合
+          rep_word = rep_elm.val()
+        } else if (elm_tag === 'select') {//select要素の場合
+          let selectedTexts = [];
+          rep_elm.find('option:selected').each(function () {
+            // 選択されたoptionのテキストを配列に追加
+            selectedTexts.push($(this).text());
+          });
+          rep_word = selectedTexts.join(',');
+        }
+
         message = message.replace(match, rep_word);
       });
     }
@@ -166,16 +180,30 @@ jQuery(function ($) {
 
     let err_flg = false;//エラーフラグをセット
     //バリデーションチェック
-    $(this).find('.wp-block-itmar-design-text-ctrl').each(function () {
+    $(this).find('.wp-block-itmar-design-text-ctrl, .wp-block-itmar-design-select').each(function () {
       let required = $(this).data('required');
       if (required) {
-        if ($(this).find('input, textarea').val().length == 0) {
-          let err_msg_elm = $('<div class="err_msg">入力必須の項目です</div>')
+        let input_elm = $(this).find('input, textarea').length !== 0 ? $(this).find('input, textarea') : undefined;
+        let select_elm = $(this).find('select').length !== 0 ? $(this).find('select') : undefined;
+        //セレクトが選択肢を持っているかどうかの判定（単数選択・複数選択）
+        let select_flg = select_elm?.attr('multiple') ? select_elm?.val().length == 0 : select_elm?.val();
+        let required_err = false;
+        if (input_elm) {
+          required_err = (input_elm.val().length == 0);
+        }
+        if (select_elm) {
+          required_err = (select_flg == true || select_flg == null || select_flg === '');
+        }
+
+        if (required_err) {
+          const { __ } = wp.i18n;
+          let err_msg_elm = $(`<div class="err_msg">${__('This is a required field.', 'itmar_form_send_blocks')}</div>`)
           $(this).find('> div').append(err_msg_elm);
           err_flg = true;
         } else {
           $(this).find('.err_msg').remove()
         }
+
       }
     })
     if (err_flg) {
@@ -194,9 +222,21 @@ jQuery(function ($) {
     let disp_table = $('.wp-block-itmar-design-table');
     let source_name = disp_table.data('source');
     let source_elm = $(`*[name="${source_name}"]`);
-    let input_elm = source_elm.find('input:not([type="submit"]):not([type="checkbox"]), textarea');
+    let input_elm = source_elm.find('input:not([type="submit"]):not([type="checkbox"]), textarea, select');
     input_elm.each(function (index) {
-      let input_val = $(this).val();
+      let tagName = $(this).prop('tagName').toLowerCase();
+      let input_val = '';
+      if (tagName === 'input' || tagName === 'textarea') {
+        input_val = $(this).val();
+      }
+      if (tagName === 'select') {
+        let selectedTexts = [];
+        $(this).find('option:selected').each(function () {
+          // 選択されたoptionのテキストを配列に追加
+          selectedTexts.push($(this).text());
+        });
+        input_val = selectedTexts.join(',');
+      }
       $('#itmar_send_exec').find('tbody tr').eq(index).find('td').text(input_val);
     });
   });
@@ -237,7 +277,7 @@ jQuery(function ($) {
     message_info = message_rebuild(message_info);
     //ローディングマークを出す
     const { __ } = wp.i18n;
-    dispLoading(__("sending...", 'itmar_guest_contact_block'), $('#itmar_send_exec'));
+    dispLoading(__("sending...", 'itmar_form_send_blocks'), $('#itmar_send_exec'));
     //通知メールの送信
     promises.push(sendMail_ajax(master_email, subject_info, message_info, master_email, false, false));
     //自動応答メール
