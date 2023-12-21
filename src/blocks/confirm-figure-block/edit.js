@@ -2,13 +2,13 @@
 import { __ } from '@wordpress/i18n';
 import './editor.scss';
 import { useSelect, useDispatch, select } from '@wordpress/data';
-import { useEffect, useState } from '@wordpress/element';
-import ShadowStyle from '../ShadowStyle';
-
+import { useEffect, useRef } from '@wordpress/element';
+import { StyleComp } from './StyleConfirmFigure';
+import { useStyleIframe } from '../iframeFooks';
+import ShadowStyle, { ShadowElm } from '../ShadowStyle';
+import { useElementBackgroundColor, useIsIframeMobile } from '../CustomFooks';
 import {
 	useBlockProps,
-	InnerBlocks,
-	RichText,
 	useInnerBlocksProps,
 	InspectorControls,
 	__experimentalPanelColorGradientSettings as PanelColorGradientSettings,
@@ -16,23 +16,13 @@ import {
 } from '@wordpress/block-editor';
 
 import {
-	Button,
-	Panel,
 	PanelBody,
-	PanelRow,
 	ToggleControl,
-	TextareaControl,
-	Notice,
-	RangeControl,
-	RadioControl,
 	TextControl,
 	__experimentalBoxControl as BoxControl,
-	__experimentalUnitControl as UnitControl,
 	__experimentalBorderBoxControl as BorderBoxControl
 } from '@wordpress/components';
 import { createBlock } from '@wordpress/blocks';
-
-import { borderProperty, radiusProperty, marginProperty, paddingProperty } from '../styleProperty';
 
 //スペースのリセットバリュー
 const padding_resetValues = {
@@ -64,8 +54,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		bgGradient_form,
 		radius_form,
 		border_form,
-		margin_form,
-		padding_form,
+		default_pos,
+		mobile_pos,
 		send_id,
 		cancel_id,
 		stage_info,
@@ -75,17 +65,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	} = attributes;
 
 
-	//単色かグラデーションかの選択
-	const bgFormColor = bgColor_form || bgGradient_form;
-
-
-	//ブロックのスタイル設定
-	const margin_obj = marginProperty(margin_form);
-	const padding_obj = paddingProperty(padding_form);
-	const radius_obj = radiusProperty(radius_form);
-	const border_obj = borderProperty(border_form);
+	//ブロックの背景色
 	const blockStyle = { background: bgColor };
-	const formStyle = { background: bgFormColor, ...margin_obj, ...padding_obj, ...radius_obj, ...border_obj }
 
 	// dispatch関数を取得
 	const { updateBlockAttributes, replaceInnerBlocks } = useDispatch('core/block-editor');
@@ -127,7 +108,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		const blocks = select('core/block-editor').getBlocks(clientId);
 		//タイトル属性の取得・初期化
 		const titleBlock = blocks.find(block => block.name === 'itmar/design-title');
-		return titleBlock ? titleBlock.attributes : { headingContent: __("Please check your entries", 'itmar_form_send_blocks') };
+		return titleBlock ? titleBlock.attributes : { headingContent: __("Please check your entries", 'itmar_form_send_blocks'), headingType: 'H3' };
 	}, [clientId]);
 
 	//テーブル属性の監視（最初のitmar/design-table）
@@ -207,12 +188,33 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		}
 	};
 
+
+	//モバイルの判定
+	const isMobile = useIsIframeMobile();
+
+	//ブロックの参照
+	const blockRef = useRef(null);
 	//ルート要素にスタイルとクラスを付加	
 	const blockProps = useBlockProps({
+		ref: blockRef,// ここで参照を blockProps に渡しています
 		style: blockStyle,
 		className: `figure_fieldset ${context['itmar/state_process'] === 'confirm' ? 'appear' : ""}`,
 	});
 
+	//背景色の取得
+	const baseColor = useElementBackgroundColor(blockRef, blockProps.style);
+
+	//背景色変更によるシャドー属性の書き換え
+	useEffect(() => {
+		if (baseColor) {
+			setAttributes({ shadow_element: { ...shadow_element, baseColor: baseColor } });
+			const new_shadow = ShadowElm({ ...shadow_element, baseColor: baseColor });
+			if (new_shadow) { setAttributes({ shadow_result: new_shadow.style }); }
+		}
+	}, [baseColor]);
+
+	//サイトエディタの場合はiframeにスタイルをわたす。
+	useStyleIframe(StyleComp, attributes);
 
 	return (
 		<>
@@ -264,18 +266,36 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						/>
 					</PanelBody>
 					<BoxControl
-						label={__("Margin Setting", 'itmar_form_send_blocks')}
-						values={margin_form}
-						onChange={value => setAttributes({ margin_form: value })}
+						label={!isMobile ?
+							__("Margin settings(desk top)", 'itmar_block_collections')
+							: __("Margin settings(mobile)", 'itmar_block_collections')
+						}
+						values={!isMobile ? default_pos.margin_form : mobile_pos.margin_form}
+						onChange={value => {
+							if (!isMobile) {
+								setAttributes({ default_pos: { ...default_pos, margin_form: value } });
+							} else {
+								setAttributes({ mobile_pos: { ...mobile_pos, margin_form: value } });
+							}
+						}}
 						units={units}	// 許可する単位
 						allowReset={true}	// リセットの可否
 						resetValues={padding_resetValues}	// リセット時の値
 
 					/>
 					<BoxControl
-						label={__("Padding settings", 'itmar_form_send_blocks')}
-						values={padding_form}
-						onChange={value => setAttributes({ padding_form: value })}
+						label={!isMobile ?
+							__("Padding settings(desk top)", 'itmar_block_collections')
+							: __("Padding settings(mobile)", 'itmar_block_collections')
+						}
+						values={!isMobile ? default_pos.padding_form : mobile_pos.padding_form}
+						onChange={value => {
+							if (!isMobile) {
+								setAttributes({ default_pos: { ...default_pos, padding_form: value } })
+							} else {
+								setAttributes({ mobile_pos: { ...mobile_pos, padding_form: value } })
+							}
+						}}
 						units={units}	// 許可する単位
 						allowReset={true}	// リセットの可否
 						resetValues={padding_resetValues}	// リセット時の値
@@ -288,27 +308,24 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 							setAttributes({ is_shadow: newVal })
 						}}
 					/>
+					{is_shadow &&
+						<ShadowStyle
+							shadowStyle={{ ...shadow_element }}
+							onChange={(newStyle, newState) => {
+								setAttributes({ shadow_result: newStyle.style });
+								setAttributes({ shadow_element: newState })
+							}}
+						/>
+					}
 				</PanelBody>
 
 			</InspectorControls>
 			<div {...blockProps} >
-				{is_shadow ? (
-					<ShadowStyle
-						shadowStyle={{ ...shadow_element, backgroundColor: bgColor }}
-						onChange={(newStyle, newState) => {
-							setAttributes({ shadow_result: newStyle.style });
-							setAttributes({ shadow_element: newState })
-						}}
-					>
-						<form onSubmit={handleSubmit} style={{ ...formStyle, ...shadow_result }}>
-							<div {...innerBlocksProps}></div>
-						</form>
-					</ShadowStyle>
-				) : (
-					<form onSubmit={handleSubmit} style={formStyle}>
+				<StyleComp attributes={attributes}>
+					<form onSubmit={handleSubmit} >
 						<div {...innerBlocksProps}></div>
 					</form>
-				)}
+				</StyleComp>
 			</div>
 		</>
 

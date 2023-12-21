@@ -7,7 +7,13 @@
   "category": "media",
   "supports": {
     "multiple": false,
-    "html": false
+    "html": false,
+    "color": {
+      "background": true,
+      "text": false,
+      "gradients": true,
+      "custom": true
+    }
   },
   "attributes": {
     "default_pos": {
@@ -43,6 +49,38 @@
           "right": "0"
         }
       }
+    },
+    "shadow_element": {
+      "type": "object",
+      "default": {
+        "shadowType": "nomal",
+        "spread": 2,
+        "lateral": 2,
+        "longitude": 2,
+        "nomalBlur": 3,
+        "shadowColor": "#9F9F9F",
+        "distance": 5,
+        "intensity": 5,
+        "opacity": 0.5,
+        "depth": 5,
+        "blur": 5,
+        "bdBlur": 5,
+        "expand": 5,
+        "glassblur": 5,
+        "glassopa": 0.5,
+        "newDirection": "top_left",
+        "clayDirection": "top",
+        "embos": "swell",
+        "hasOutline": true,
+        "baseColor": "#ffffff"
+      }
+    },
+    "shadow_result": {
+      "type": "object"
+    },
+    "is_shadow": {
+      "type": "boolean",
+      "default": false
     },
     "master_mail": {
       "type": "string",

@@ -1,7 +1,6 @@
 
 import { __ } from '@wordpress/i18n';
 import {
-  InspectorControls,
   __experimentalPanelColorGradientSettings as PanelColorGradientSettings,
 } from '@wordpress/block-editor';
 import {
@@ -12,7 +11,7 @@ import {
   RadioControl
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
-
+import { dispatch } from '@wordpress/data';
 import { hslToRgb16, HexToRGB, rgb16ToHsl } from './hslToRgb';
 
 //方向と距離
@@ -66,7 +65,15 @@ const dirctionDigit = (direction, distance) => {
   )
 }
 
+// グラデーションの色値は通常'linear-gradient'または'radial-gradient'で始まるので、
+// これらのキーワードを探すことでグラデーションかどうかを判断します。
+function isGradient(colorValue) {
+  return colorValue.includes('linear-gradient') || colorValue.includes('radial-gradient');
+}
+
+
 export const ShadowElm = (shadowState) => {
+  //let baseColor;
   const {
     shadowType,
     spread,
@@ -87,8 +94,9 @@ export const ShadowElm = (shadowState) => {
     glassblur,
     glassopa,
     hasOutline,
-    backgroundColor
+    baseColor
   } = shadowState;
+
   //ノーマル
   if (shadowType === 'nomal') {
     //boxshadowの生成
@@ -106,7 +114,16 @@ export const ShadowElm = (shadowState) => {
   }
   //ニューモフィズム
   else if (shadowType === 'newmor') {
-    const baseColor = backgroundColor || "#ffffff";
+
+    //背景がグラデーションのときはセットしない
+    if (isGradient(baseColor)) {
+      dispatch('core/notices').createNotice(
+        'error',
+        __('Neumorphism cannot be set when the background color is a gradient. ', 'itmar_guest_contact_block'),
+        { type: 'snackbar', isDismissible: true, }
+      );
+      return null;
+    }
     //ボタン背景色のHSL値
     const hslValue = rgb16ToHsl(baseColor);
     //影の明るさを変更
@@ -126,13 +143,11 @@ export const ShadowElm = (shadowState) => {
     }
 
     const newmorStyle = embos === 'swell' ? {
-      ...baseStyle,
       style: {
         ...baseStyle.style,
         boxShadow: `${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px ${darkValue}, ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px ${lightValue}, inset ${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px transparent, inset ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px transparent`
       }
     } : {
-      ...baseStyle,
       style: {
         ...baseStyle.style,
         boxShadow: `${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px transparent, ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px transparent, inset ${dircObj.topLeft}px ${dircObj.topRight}px ${blur}px ${darkValue}, inset ${dircObj.bottomLeft}px ${dircObj.bottmRight}px ${blur}px ${lightValue}`
@@ -145,7 +160,15 @@ export const ShadowElm = (shadowState) => {
 
   //クレイモーフィズム
   else if (shadowType === 'claymor') {
-    const baseColor = backgroundColor || "#C0C0C0";
+    //背景がグラデーションのときはセットしない
+    if (isGradient(baseColor)) {
+      dispatch('core/notices').createNotice(
+        'error',
+        __('claymorphism cannot be set when the background color is a gradient. ', 'itmar_guest_contact_block'),
+        { type: 'snackbar', isDismissible: true, }
+      );
+      return null;
+    }
     const rgbValue = HexToRGB(baseColor)
     const outsetObj = dirctionDigit(clayDirection, expand)
     const insetObj = dirctionDigit(clayDirection, depth)
@@ -156,20 +179,11 @@ export const ShadowElm = (shadowState) => {
         border: 'none',
       }
     }
-    const claymorStyle = embos === 'swell' ? {
+    const claymorStyle = {
       ...baseStyle,
       style: {
         ...baseStyle.style,
         boxShadow: `${outsetObj.topLeft}px ${outsetObj.bottmRight}px ${expand * 2}px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.5), inset ${insetObj.topRight}px ${insetObj.bottomLeft}px 16px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.6), inset 0px 11px 28px 0px rgb(255, 255, 255)`,
-
-
-      }
-    } : {
-      ...baseStyle,
-      style: {
-        ...baseStyle.style,
-        boxShadow: `${outsetObj.topLeft}px ${outsetObj.bottmRight}px ${expand * 2}px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.5), inset ${insetObj.topRight}px ${insetObj.bottomLeft}px 16px 0px rgba(${rgbValue.red}, ${rgbValue.green}, ${rgbValue.blue}, 0.6), 0px 11px 28px 0px rgb(255, 255, 255)`,
-
       }
     }
     //attributesに保存
@@ -178,12 +192,11 @@ export const ShadowElm = (shadowState) => {
 
   //グラスモーフィズム
   else if (shadowType === 'glassmor') {
-    //const baseColor = backgroundColor || "#C0C0C0";
-    //const rgbValue = HexToRGB(baseColor)
+
     const baseStyle = {
       style: {
         backgroundColor: `rgba(255, 255, 255, ${glassopa})`,
-        border: `1px solid rgba(255, 255, 255, 0.4)`,
+        ...hasOutline ? { border: `1px solid rgba(255, 255, 255, 0.4)` } : {},
         borderRightColor: `rgba(255, 255, 255, 0.2)`,
         borderBottomColor: `rgba(255, 255, 255, 0.2)`,
         backdropFilter: `blur( ${glassblur}px )`
@@ -209,8 +222,9 @@ export const ShadowElm = (shadowState) => {
   }
 }
 
-const ShadowStyle = ({ shadowStyle, onChange, children }) => {
+const ShadowStyle = ({ shadowStyle, onChange }) => {
   const [shadowState, setShadowState] = useState(shadowStyle);
+
   const {
     shadowType,
     spread,
@@ -230,229 +244,217 @@ const ShadowStyle = ({ shadowStyle, onChange, children }) => {
     expand,
     glassblur,
     glassopa,
-    hasOutline,
-    backgroundColor
+    hasOutline
   } = shadowState;
 
-
-  // shadowStyle backgroundColor の変更を検知する
-  useEffect(() => {
-    if (shadowStyle.backgroundColor !== backgroundColor) {
-      setShadowState(shadowStyle);
-    }
-  }, [shadowStyle]);
-
-
-  //シャドーのスタイル変更に伴う親コンポーネントの変更
+  //シャドーのスタイル変更と背景色変更に伴う親コンポーネントの変更
   useEffect(() => {
     const shadowElm = ShadowElm(shadowState);
-    onChange(shadowElm, shadowState)
+    if (shadowElm) onChange(shadowElm, shadowState)
   }, [shadowState]);
 
   return (
     <>
-      <InspectorControls group='styles'>
-        <PanelBody title={__("Shadow Type", 'itmar_block_collections')} initialOpen={true}>
-          <div className="itmar_shadow_type">
+      <PanelBody title={__("Shadow Type", 'itmar_block_collections')} initialOpen={true}>
+        <div className="itmar_shadow_type">
+          <RadioControl
+            selected={shadowType}
+            options={[
+              { label: __("Nomal", 'itmar_block_collections'), value: 'nomal' },
+              { label: __("Neumorphism", 'itmar_block_collections'), value: 'newmor' },
+              { label: __("Claymorphism", 'itmar_block_collections'), value: 'claymor' },
+              { label: __("Grassmophism", 'itmar_block_collections'), value: 'glassmor' },
+            ]}
+            onChange={(changeOption) => setShadowState({ ...shadowState, shadowType: changeOption })}
+          />
+        </div>
+        {(shadowType !== 'claymor') &&
+          <div className="embos">
             <RadioControl
-              selected={shadowType}
+              label={__("unevenness", 'itmar_block_collections')}
+              selected={embos}
               options={[
-                { label: __("Nomal", 'itmar_block_collections'), value: 'nomal' },
-                { label: __("Neumorphism", 'itmar_block_collections'), value: 'newmor' },
-                { label: __("Claymorphism", 'itmar_block_collections'), value: 'claymor' },
-                { label: __("Grassmophism", 'itmar_block_collections'), value: 'glassmor' },
+                { value: 'swell' },
+                { value: 'dent' },
+
               ]}
-              onChange={(changeOption) => setShadowState({ ...shadowState, shadowType: changeOption })}
+              onChange={(changeOption) => setShadowState({ ...shadowState, embos: changeOption })}
+            />
+          </div>
+        }
+      </PanelBody>
+
+      {shadowType === 'nomal' &&
+        <PanelBody title={__("Nomal settings", 'itmar_block_collections')} initialOpen={false}>
+          <RangeControl
+            value={spread}
+            label={__("Spread", 'itmar_block_collections')}
+            max={50}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, spread: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={lateral}
+            label={__("Lateral direction", 'itmar_block_collections')}
+            max={50}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, lateral: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={longitude}
+            label={__("Longitudinal direction", 'itmar_block_collections')}
+            max={50}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, longitude: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={nomalBlur}
+            label={__("Blur", 'itmar_block_collections')}
+            max={20}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, nomalBlur: val })}
+            withInputField={false}
+          />
+          <PanelColorGradientSettings
+            title={__("Shadow Color Setting", 'itmar_block_collections')}
+            settings={[
+              {
+                colorValue: shadowColor,
+                label: __("Choose Shadow color", 'itmar_block_collections'),
+                onColorChange: (newValue) => setShadowState({ ...shadowState, shadowColor: newValue }),
+              },
+            ]}
+          />
+
+        </PanelBody>
+      }
+
+      {shadowType === 'newmor' &&
+        <PanelBody title={__("Neumorphism settings", 'itmar_block_collections')} initialOpen={false}>
+          <RangeControl
+            value={distance}
+            label={__("Distance", 'itmar_block_collections')}
+            max={50}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, distance: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={intensity}
+            label={__("Intensity", 'itmar_block_collections')}
+            max={100}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, intensity: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={blur}
+            label={__("Blur", 'itmar_block_collections')}
+            max={20}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, blur: val })}
+            withInputField={false}
+          />
+          <PanelRow>
+            <div className="light_direction">
+              <RadioControl
+                selected={newDirection}
+                options={[
+                  { value: 'top_left' },
+                  { value: 'top_right' },
+                  { value: 'bottom_left' },
+                  { value: 'bottom_right' },
+                ]}
+                onChange={(changeOption) => setShadowState({ ...shadowState, newDirection: changeOption })}
+              />
+            </div>
+
+          </PanelRow>
+
+        </PanelBody>
+
+      }
+      {shadowType === 'claymor' &&
+
+        <PanelBody title={__("Claymorphism settings", 'itmar_block_collections')} initialOpen={false}>
+          <RangeControl
+            value={opacity}
+            label={__("Opacity", 'itmar_block_collections')}
+            max={1}
+            min={0}
+            step={.1}
+            onChange={(val) => setShadowState({ ...shadowState, opacity: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={depth}
+            label="Depth"
+            max={20}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, depth: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={expand}
+            label="Expand"
+            max={50}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, expand: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={bdBlur}
+            label="Background Blur"
+            max={10}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, bdBlur: val })}
+            withInputField={false}
+          />
+          <div className="light_direction claymor">
+            <RadioControl
+              selected={clayDirection}
+              options={[
+                { value: 'right_bottom' },
+                { value: 'top_right' },
+                { value: 'top' },
+              ]}
+              onChange={(changeOption) => setShadowState({ ...shadowState, clayDirection: changeOption })}
             />
           </div>
         </PanelBody>
+      }
 
-        {shadowType === 'nomal' &&
-          <PanelBody title={__("Nomal settings", 'itmar_block_collections')} initialOpen={false}>
-            <RangeControl
-              value={spread}
-              label={__("Spread", 'itmar_block_collections')}
-              max={50}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, spread: val })}
-              withInputField={false}
+      {shadowType === 'glassmor' &&
+        <PanelBody title={__("Grassmophism settings", 'itmar_block_collections')} initialOpen={false}>
+          <RangeControl
+            value={glassblur}
+            label={__("Glass blur", 'itmar_block_collections')}
+            max={20}
+            min={0}
+            onChange={(val) => setShadowState({ ...shadowState, glassblur: val })}
+            withInputField={false}
+          />
+          <RangeControl
+            value={glassopa}
+            label={__("Glass Opacity", 'itmar_block_collections')}
+            max={1}
+            min={0}
+            step={.1}
+            onChange={(val) => setShadowState({ ...shadowState, glassopa: val })}
+            withInputField={false}
+          />
+          <fieldset>
+            <ToggleControl
+              label={__("Show outline", 'itmar_block_collections')}
+              checked={hasOutline}
+              onChange={() => setShadowState({ ...shadowState, hasOutline: !hasOutline })}
             />
-            <RangeControl
-              value={lateral}
-              label={__("Lateral direction", 'itmar_block_collections')}
-              max={50}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, lateral: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={longitude}
-              label={__("Longitudinal direction", 'itmar_block_collections')}
-              max={50}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, longitude: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={nomalBlur}
-              label={__("Blur", 'itmar_block_collections')}
-              max={20}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, nomalBlur: val })}
-              withInputField={false}
-            />
-            <PanelColorGradientSettings
-              title={__("Shadow Color Setting", 'itmar_block_collections')}
-              settings={[
-                {
-                  colorValue: shadowColor,
-                  label: __("Choose Shadow color", 'itmar_block_collections'),
-                  onColorChange: (newValue) => setShadowState({ ...shadowState, shadowColor: newValue }),
-                },
-              ]}
-            />
-
-          </PanelBody>
-        }
-
-        {shadowType === 'newmor' &&
-          <PanelBody title={__("Neumorphism settings", 'itmar_block_collections')} initialOpen={false}>
-            <RangeControl
-              value={distance}
-              label={__("Distance", 'itmar_block_collections')}
-              max={50}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, distance: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={intensity}
-              label={__("Intensity", 'itmar_block_collections')}
-              max={100}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, intensity: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={blur}
-              label={__("Blur", 'itmar_block_collections')}
-              max={20}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, blur: val })}
-              withInputField={false}
-            />
-            <PanelRow>
-              <div className="light_direction">
-                <RadioControl
-                  selected={newDirection}
-                  options={[
-                    { value: 'top_left' },
-                    { value: 'top_right' },
-                    { value: 'bottom_left' },
-                    { value: 'bottom_right' },
-                  ]}
-                  onChange={(changeOption) => setShadowState({ ...shadowState, newDirection: changeOption })}
-                />
-              </div>
-              <div className="embos">
-                <RadioControl
-                  selected={embos}
-                  options={[
-                    { value: 'swell' },
-                    { value: 'dent' },
-
-                  ]}
-                  onChange={(changeOption) => setShadowState({ ...shadowState, embos: changeOption })}
-                />
-              </div>
-
-            </PanelRow>
-
-          </PanelBody>
-
-        }
-        {shadowType === 'claymor' &&
-
-          <PanelBody title={__("Claymorphism settings", 'itmar_block_collections')} initialOpen={false}>
-            <RangeControl
-              value={opacity}
-              label={__("Opacity", 'itmar_block_collections')}
-              max={1}
-              min={0}
-              step={.1}
-              onChange={(val) => setShadowState({ ...shadowState, opacity: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={depth}
-              label="Depth"
-              max={20}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, depth: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={expand}
-              label="Expand"
-              max={50}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, expand: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={bdBlur}
-              label="Background Blur"
-              max={10}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, bdBlur: val })}
-              withInputField={false}
-            />
-            <div className="light_direction claymor">
-              <RadioControl
-                selected={clayDirection}
-                options={[
-                  { value: 'right_bottom' },
-                  { value: 'top_right' },
-                  { value: 'top' },
-                ]}
-                onChange={(changeOption) => setShadowState({ ...shadowState, clayDirection: changeOption })}
-              />
-            </div>
-          </PanelBody>
-        }
-
-        {shadowType === 'glassmor' &&
-          <PanelBody title={__("Grassmophism settings", 'itmar_block_collections')} initialOpen={false}>
-            <RangeControl
-              value={glassblur}
-              label={__("Glass blur", 'itmar_block_collections')}
-              max={20}
-              min={0}
-              onChange={(val) => setShadowState({ ...shadowState, glassblur: val })}
-              withInputField={false}
-            />
-            <RangeControl
-              value={glassopa}
-              label={__("Glass Opacity", 'itmar_block_collections')}
-              max={1}
-              min={0}
-              step={.1}
-              onChange={(val) => setShadowState({ ...shadowState, glassopa: val })}
-              withInputField={false}
-            />
-            <fieldset>
-              <ToggleControl
-                label={__("Show outline", 'itmar_block_collections')}
-                checked={hasOutline}
-                onChange={() => setShadowState({ ...shadowState, hasOutline: !hasOutline })}
-              />
-            </fieldset>
-          </PanelBody>
-        }
-      </InspectorControls>
-
-      {children}
-
+          </fieldset>
+        </PanelBody>
+      }
     </>
 
   );

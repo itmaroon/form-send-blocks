@@ -6,6 +6,9 @@
  */
 
 .wp-block-itmar-thanks-figure-block {
-	color: #000;
+	box-sizing: border-box;
 
+	.error {
+		color: var(--wp--preset--color--err-message);
+	}
 }

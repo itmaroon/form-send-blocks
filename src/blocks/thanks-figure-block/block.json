@@ -48,22 +48,38 @@
 		"border_form": {
 			"type": "object"
 		},
-		"margin_form": {
+		"default_pos": {
 			"type": "object",
 			"default": {
-				"top": "0",
-				"left": "0",
-				"bottom": "0",
-				"right": "0"
+				"margin_form": {
+					"top": "1em",
+					"left": "1em",
+					"bottom": "1em",
+					"right": "1em"
+				},
+				"padding_form": {
+					"top": "1.5em",
+					"left": "1em",
+					"bottom": "1.5em",
+					"right": "1em"
+				}
 			}
 		},
-		"padding_form": {
+		"mobile_pos": {
 			"type": "object",
 			"default": {
-				"top": "1em",
-				"left": "2em",
-				"bottom": "1em",
-				"right": "2em"
+				"margin_form": {
+					"top": "1em",
+					"left": "0",
+					"bottom": "1em",
+					"right": "0"
+				},
+				"padding_form": {
+					"top": "1em",
+					"left": "0",
+					"bottom": "1em",
+					"right": "0"
+				}
 			}
 		},
 		"shadow_element": {
@@ -87,7 +103,8 @@
 				"newDirection": "top_left",
 				"clayDirection": "top",
 				"embos": "swell",
-				"hasOutline": true
+				"hasOutline": true,
+				"baseColor": "#ffffff"
 			}
 		},
 		"shadow_result": {

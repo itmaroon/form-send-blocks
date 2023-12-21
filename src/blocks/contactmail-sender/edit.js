@@ -1,5 +1,9 @@
 
 import { __ } from '@wordpress/i18n';
+import { StyleComp } from './StyleContactMail';
+import { useStyleIframe } from '../iframeFooks';
+import ShadowStyle, { ShadowElm } from '../ShadowStyle';
+import { useElementBackgroundColor, useIsIframeMobile } from '../CustomFooks';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
@@ -17,9 +21,8 @@ import {
 
 import './editor.scss';
 
-import { useState } from '@wordpress/element';
+import { useState, useRef, useEffect } from '@wordpress/element';
 import { useSelect, dispatch } from '@wordpress/data';
-import { marginProperty, paddingProperty } from '../styleProperty';
 
 //スペースのリセットバリュー
 const padding_resetValues = {
@@ -48,6 +51,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	const {
 		default_pos,
 		mobile_pos,
+		is_shadow,
+		shadow_element,
 		master_mail,
 		subject_info,
 		message_info,
@@ -58,15 +63,31 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		is_dataSave,
 	} = attributes;
 
-	//ブロックのスタイル設定
-	const margin_obj = marginProperty(default_pos.margin_value);
-	const padding_obj = paddingProperty(default_pos.margin_value);
-	const blockStyle = { ...margin_obj, ...padding_obj }
 
-	//ルート要素にスタイルを付加	
+	//モバイルの判定
+	const isMobile = useIsIframeMobile();
+
+	//ブロックの参照
+	const blockRef = useRef(null);
 	const blockProps = useBlockProps({
-		style: blockStyle
+		ref: blockRef,// ここで参照を blockProps に渡しています
 	});
+
+	//背景色の取得
+	const baseColor = useElementBackgroundColor(blockRef, blockProps.style);
+
+	//背景色変更によるシャドー属性の書き換え
+	useEffect(() => {
+		if (baseColor) {
+			setAttributes({ shadow_element: { ...shadow_element, baseColor: baseColor } });
+			const new_shadow = ShadowElm({ ...shadow_element, baseColor: baseColor });
+			if (new_shadow) { setAttributes({ shadow_result: new_shadow.style }); }
+		}
+	}, [baseColor]);
+
+	//サイトエディタの場合はiframeにスタイルをわたす。
+	useStyleIframe(StyleComp, attributes);
+
 
 	//インナーブロックの制御
 	const TEMPLATE = [//同一ブロックを２つ以上入れないこと（名称の文字列が重ならないこと）
@@ -305,20 +326,38 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			</InspectorControls>
 
 			<InspectorControls group="styles">
-				<PanelBody title={__("Global settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
+				<PanelBody title={__("Space settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
 					<BoxControl
-						label={__("Margin Setting", 'itmar_form_send_blocks')}
-						values={default_pos.margin_value}
-						onChange={value => setAttributes({ default_pos: { ...default_pos, margin_value: value } })}
+						label={!isMobile ?
+							__("Margin settings(desk top)", 'itmar_form_send_blocks')
+							: __("Margin settings(mobile)", 'itmar_form_send_blocks')
+						}
+						values={!isMobile ? default_pos.margin_value : mobile_pos.margin_value}
+						onChange={value => {
+							if (!isMobile) {
+								setAttributes({ default_pos: { ...default_pos, margin_value: value } });
+							} else {
+								setAttributes({ mobile_pos: { ...mobile_pos, margin_value: value } });
+							}
+						}}
 						units={units}	// 許可する単位
 						allowReset={true}	// リセットの可否
 						resetValues={padding_resetValues}	// リセット時の値
 
 					/>
 					<BoxControl
-						label={__("Padding settings", 'itmar_form_send_blocks')}
-						values={default_pos.padding_value}
-						onChange={value => setAttributes({ default_pos: { ...default_pos, padding_value: value } })}
+						label={!isMobile ?
+							__("Padding settings(desk top)", 'itmar_form_send_blocks')
+							: __("Padding settings(mobile)", 'itmar_form_send_blocks')
+						}
+						values={!isMobile ? default_pos.padding_value : mobile_pos.padding_value}
+						onChange={value => {
+							if (!isMobile) {
+								setAttributes({ default_pos: { ...default_pos, padding_value: value } })
+							} else {
+								setAttributes({ mobile_pos: { ...mobile_pos, padding_value: value } })
+							}
+						}}
 						units={units}	// 許可する単位
 						allowReset={true}	// リセットの可否
 						resetValues={padding_resetValues}	// リセット時の値
@@ -326,11 +365,31 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					/>
 
 				</PanelBody>
+				<PanelBody title={__("Shadow settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
+					<ToggleControl
+						label={__('Is Shadow', 'itmar_form_send_blocks')}
+						checked={is_shadow}
+						onChange={(newVal) => {
+							setAttributes({ is_shadow: newVal })
+						}}
+					/>
+					{is_shadow &&
+						<ShadowStyle
+							shadowStyle={{ ...shadow_element }}
+							onChange={(newStyle, newState) => {
+								setAttributes({ shadow_result: newStyle.style });
+								setAttributes({ shadow_element: newState })
+							}}
+						/>
+					}
+				</PanelBody>
 
 			</InspectorControls>
 
 			<div {...blockProps}>
-				<div {...innerBlocksProps}></div>
+				<StyleComp attributes={attributes}>
+					<div {...innerBlocksProps}></div>
+				</StyleComp>
 			</div>
 
 		</>

@@ -126,19 +126,21 @@ jQuery(function ($) {
   let fieldset_objs = $('.figure_fieldset');
   //プロセスエリアのセット
   let process_area = $('.wp-block-itmar-design-process');
+
   //プログレスバーの高さ
   let progress_height = process_area ? process_area.outerHeight(true) : 0;
+  let contactform_top_margin = $('.wp-block-itmar-contactmail-sender>div').css('margin-top');
 
   //スライドのアニメーション
-  const processAnimation = (current_fs, change_fs, top_margin, next) => {
+  const processAnimation = (current_fs, change_fs, next) => {
     //show the next fieldset
     change_fs.show();
     if (next) {
       change_fs.css({ 'position': 'absolute' });
+
     } else {
       current_fs.css({ 'position': 'absolute' });
     }
-
 
     let left, opacity, scale; //fieldset properties which we will animate
 
@@ -153,9 +155,9 @@ jQuery(function ($) {
         opacity = 1 - now;
         if (next) {
           current_fs.css({ 'transform': 'scale(' + scale + ')' });
-          change_fs.css({ 'top': top_margin, 'left': left, 'opacity': opacity });
+          change_fs.css({ 'top': progress_height, 'left': left, 'opacity': opacity });
         } else {
-          current_fs.css({ 'top': progress_height, 'left': left, });
+          current_fs.css({ 'top': `calc(${progress_height}px + ${contactform_top_margin} )`, 'left': left, });
           change_fs.css({ 'transform': 'scale(' + scale + ')', 'opacity': opacity });
         }
 
@@ -167,7 +169,7 @@ jQuery(function ($) {
         change_fs.css({ 'position': 'static' });
       },
       //this comes from the custom easing plugin
-      easing: 'easeInOutBack',
+      easing: 'easeInBack',
     });
   }
 
@@ -213,10 +215,9 @@ jQuery(function ($) {
 
     //次の画面に遷移
     //アニメーションの実行
-    processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(1), progress_height, true);
-
+    processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(1), true);
     //プログレスエリアの処理
-    process_change($(this).parent().next(), true);
+    process_change($(this).parent().parent().nextAll('.figure_fieldset').first(), true);
 
     //確認データの表示
     let disp_table = $('.wp-block-itmar-design-table');
@@ -257,9 +258,9 @@ jQuery(function ($) {
     //キャンセルボタンなら元に戻して終了
     if (click_id === $(this).data('cancel_id')) {
       //アニメーションの実行
-      processAnimation(fieldset_objs.eq(1), fieldset_objs.eq(0), progress_height, false);
+      processAnimation(fieldset_objs.eq(1), fieldset_objs.eq(0), false);
       //プログレスエリアの処理
-      process_change($(this).parent(), false);
+      process_change($(this).parent().parent(), false);
       return;
     }
 
@@ -330,9 +331,9 @@ jQuery(function ($) {
         //ローディングマーク消去
         removeLoading('', $('#itmar_send_exec'));
         //アニメーションの実行
-        processAnimation(fieldset_objs.eq(1), fieldset_objs.eq(2), progress_height, true);
+        processAnimation(fieldset_objs.eq(1), fieldset_objs.eq(2), true);
         //プログレスエリアの処理
-        process_change(figure_elm.next(), true);
+        process_change($(this).parent().parent().nextAll('.figure_fieldset').first(), true);
       });
 
   });
