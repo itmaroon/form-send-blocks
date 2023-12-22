@@ -199,6 +199,8 @@ jQuery(function ($) {
 
         if (required_err) {
           const { __ } = wp.i18n;
+          const msg = __('This is a required field.', 'itmar_form_send_blocks');
+          console.log(msg)
           let err_msg_elm = $(`<div class="err_msg">${__('This is a required field.', 'itmar_form_send_blocks')}</div>`)
           $(this).find('> div').append(err_msg_elm);
           err_flg = true;

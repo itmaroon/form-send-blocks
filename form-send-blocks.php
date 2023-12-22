@@ -63,6 +63,8 @@ function itmar_contact_block_add_js() {
 			'nonce' => wp_create_nonce('contact_send_nonce'),
 			'ajaxURL' => esc_url( admin_url( 'admin-ajax.php', __FILE__ ) ),
 		));
+		// スクリプトの翻訳をセット
+		wp_set_script_translations( 'contact_js_handle', 'itmar_form_send_blocks', plugin_dir_path( __FILE__ ) . 'languages' );
 	}
 	
 }
