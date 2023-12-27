@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-12-21T04:42:08+01:00\n"
+"POT-Creation-Date: 2023-12-27T09:19:10+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: itmar_form_send_blocks\n"
@@ -30,138 +30,177 @@ msgstr ""
 msgid "Web Creator ITmaroon"
 msgstr ""
 
-#: form-send-blocks.php:91
+#: form-send-blocks.php:33
+msgid "Required plugin is not active."
+msgstr ""
+
+#: form-send-blocks.php:33
+msgid "Activate Plugin"
+msgstr ""
+
+#: form-send-blocks.php:37
+msgid "Required plugin is not installed."
+msgstr ""
+
+#: form-send-blocks.php:37
+msgid "Install Plugin"
+msgstr ""
+
+#: form-send-blocks.php:50
+msgid "This plugin requires \"block collections\" plugins to be installed and active."
+msgstr ""
+
+#: form-send-blocks.php:54
+msgid "Return to Plugins Setting"
+msgstr ""
+
+#: form-send-blocks.php:145
 msgid "The server detected an error in the input item. Registration process was interrupted. "
 msgstr ""
 
-#: form-send-blocks.php:129
+#: form-send-blocks.php:183
 msgid "Your autoresponder email has been successfully sent."
 msgstr ""
 
-#: form-send-blocks.php:131
+#: form-send-blocks.php:185
 msgid "The site administrator has been successfully notified."
 msgstr ""
 
-#: form-send-blocks.php:135
+#: form-send-blocks.php:189
 msgid "Failed to send auto-response email."
 msgstr ""
 
-#: form-send-blocks.php:137
+#: form-send-blocks.php:191
 msgid "Failed to notify site administrator."
 msgstr ""
 
-#: form-send-blocks.php:142
+#: form-send-blocks.php:196
 msgid "Invalid request."
 msgstr ""
 
-#: form-send-blocks.php:156
+#: form-send-blocks.php:210
 msgid "Inquiry Data"
 msgstr ""
 
-#: form-send-blocks.php:169
+#: form-send-blocks.php:223
 msgid "Receipt processing completed successfully."
 msgstr ""
 
 #: assets/contact_block.js:202
+#: assets/contact_block.js:204
 msgid "This is a required field."
 msgstr ""
 
-#: assets/contact_block.js:281
+#: assets/contact_block.js:283
 msgid "sending..."
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
-#: src/blocks/confirm-figure-block/index.js:15
-msgid "This block is displayed to confirm the information entered in the form."
-msgstr ""
-
-#: build/blocks/confirm-figure-block/index.js:20
-#: src/blocks/confirm-figure-block/index.js:20
-msgid "confirmation"
-msgstr ""
-
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:111
+#: build/blocks/confirm-figure-block/index.js:876
 msgid "Please check your entries"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:130
+#: build/blocks/confirm-figure-block/index.js:895
 msgid "Send"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:131
+#: build/blocks/confirm-figure-block/index.js:896
 msgid "Return to send screen"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:222
+#: build/blocks/confirm-figure-block/index.js:987
 msgid "Confirmation form information setting"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:224
 #: src/blocks/input-figure-block/edit.js:165
 #: src/blocks/thanks-figure-block/edit.js:135
+#: build/blocks/confirm-figure-block/index.js:989
+#: build/blocks/input-figure-block/index.js:1250
+#: build/blocks/thanks-figure-block/index.js:1223
 msgid "Stage information"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:226
 #: src/blocks/input-figure-block/edit.js:167
 #: src/blocks/thanks-figure-block/edit.js:137
+#: build/blocks/confirm-figure-block/index.js:991
+#: build/blocks/input-figure-block/index.js:1252
+#: build/blocks/thanks-figure-block/index.js:1225
 msgid "Please enter the stage information to be displayed in the process area."
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:234
 #: src/blocks/input-figure-block/edit.js:175
 #: src/blocks/thanks-figure-block/edit.js:176
+#: build/blocks/confirm-figure-block/index.js:999
+#: build/blocks/input-figure-block/index.js:1260
+#: build/blocks/thanks-figure-block/index.js:1264
 msgid "Global settings"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:237
 #: src/blocks/input-figure-block/edit.js:178
 #: src/blocks/thanks-figure-block/edit.js:179
+#: build/blocks/confirm-figure-block/index.js:1002
+#: build/blocks/input-figure-block/index.js:1263
+#: build/blocks/thanks-figure-block/index.js:1267
 msgid "Background Color Setting"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:241
 #: src/blocks/input-figure-block/edit.js:182
 #: src/blocks/thanks-figure-block/edit.js:183
+#: build/blocks/confirm-figure-block/index.js:1006
+#: build/blocks/input-figure-block/index.js:1267
+#: build/blocks/thanks-figure-block/index.js:1271
 msgid "Choose Block Background color"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:248
 #: src/blocks/input-figure-block/edit.js:189
+#: build/blocks/confirm-figure-block/index.js:1013
+#: build/blocks/input-figure-block/index.js:1274
 msgid "Choose Form Background color"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:254
 #: src/blocks/input-figure-block/edit.js:195
 #: src/blocks/thanks-figure-block/edit.js:196
+#: build/blocks/confirm-figure-block/index.js:1019
+#: build/blocks/input-figure-block/index.js:1280
+#: build/blocks/thanks-figure-block/index.js:1284
 msgid "Border Settings"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
@@ -169,71 +208,70 @@ msgstr ""
 #: src/blocks/contactmail-sender/edit.js:370
 #: src/blocks/input-figure-block/edit.js:246
 #: src/blocks/thanks-figure-block/edit.js:247
+#: build/blocks/confirm-figure-block/index.js:1070
+#: build/blocks/contactmail-sender/index.js:1104
+#: build/blocks/input-figure-block/index.js:1331
+#: build/blocks/thanks-figure-block/index.js:1335
 msgid "Is Shadow"
 msgstr ""
 
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:16
-msgid "This is a block for setting up an inquiry form."
+#: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:15
+#: build/blocks/confirm-figure-block/index.js:1114
+msgid "This block is displayed to confirm the information entered in the form."
 msgstr ""
 
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:21
-msgid "We have received an inquiry."
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:25
-msgid "We have received an inquiry regarding the following information."
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:29
-msgid "Thank you for contacting us."
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:33
-msgid "We have received your inquiry with the following details."
+#: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:1119
+msgid "confirmation"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:98
+#: build/blocks/contactmail-sender/index.js:832
 msgid "The person in charge has been notified of your inquiry. Please wait for a while until we reply."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:99
+#: build/blocks/contactmail-sender/index.js:833
 msgid "Email notification to the person in charge failed."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:100
+#: build/blocks/contactmail-sender/index.js:834
 msgid "We have sent an automatic response email to you, so please check it."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:101
+#: build/blocks/contactmail-sender/index.js:835
 msgid "Failed to send automatic response email to you."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:130
+#: build/blocks/contactmail-sender/index.js:864
 msgid "Inquiry information notification email"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:133
+#: build/blocks/contactmail-sender/index.js:867
 msgid "Notification email address (sender)"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:141
+#: build/blocks/contactmail-sender/index.js:875
 msgid "The notification email address is blank or has an invalid format. "
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:155
+#: build/blocks/contactmail-sender/index.js:889
 msgid "Notification email subject"
 msgstr ""
 
@@ -241,217 +279,292 @@ msgstr ""
 #: src/blocks/contactmail-sender/edit.js:162
 #: src/blocks/contactmail-sender/edit.js:261
 #: src/blocks/contactmail-sender/edit.js:282
+#: build/blocks/contactmail-sender/index.js:896
+#: build/blocks/contactmail-sender/index.js:995
+#: build/blocks/contactmail-sender/index.js:1016
 msgid "Do not leave the subject of the notification email blank. "
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:176
+#: build/blocks/contactmail-sender/index.js:910
 msgid "Notification email body"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:183
+#: build/blocks/contactmail-sender/index.js:917
 msgid "Do not leave the body of the notification email blank. "
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:194
+#: build/blocks/contactmail-sender/index.js:928
 msgid "Click the input item displayed below to quote it in the text."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:215
+#: build/blocks/contactmail-sender/index.js:949
 msgid "Automatic response email"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:218
+#: build/blocks/contactmail-sender/index.js:952
 msgid "Send automatic response email"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:228
+#: build/blocks/contactmail-sender/index.js:962
 msgid "Reply to email address"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:232
+#: build/blocks/contactmail-sender/index.js:966
 msgid "Click on the email address displayed below to set the response destination."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:254
+#: build/blocks/contactmail-sender/index.js:988
 msgid "Automatic response email title"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:275
+#: build/blocks/contactmail-sender/index.js:1009
 msgid "Automatic response email body"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:293
+#: build/blocks/contactmail-sender/index.js:1027
 msgid "Click on the input field below to quote it in the text."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:316
+#: build/blocks/contactmail-sender/index.js:1050
 msgid "Save response contents to DB"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:329
+#: build/blocks/contactmail-sender/index.js:1063
 msgid "Space settings"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:333
+#: build/blocks/contactmail-sender/index.js:1067
 msgid "Margin settings(mobile)"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:332
+#: build/blocks/contactmail-sender/index.js:1066
 msgid "Margin settings(desk top)"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:351
+#: build/blocks/contactmail-sender/index.js:1085
 msgid "Padding settings(mobile)"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:350
+#: build/blocks/contactmail-sender/index.js:1084
 msgid "Padding settings(desk top)"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:368
+#: build/blocks/contactmail-sender/index.js:1102
 msgid "Shadow settings"
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:20
-#: src/blocks/input-figure-block/index.js:15
-msgid "This is a block for collecting and displaying input elements in a form."
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:16
+#: build/blocks/contactmail-sender/index.js:1148
+msgid "This is a block for setting up an inquiry form."
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:20
-#: src/blocks/input-figure-block/index.js:20
-msgid "Information input"
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:21
+#: build/blocks/contactmail-sender/index.js:1153
+msgid "We have received an inquiry."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:25
+#: build/blocks/contactmail-sender/index.js:1157
+msgid "We have received an inquiry regarding the following information."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:29
+#: build/blocks/contactmail-sender/index.js:1161
+msgid "Thank you for contacting us."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:33
+#: build/blocks/contactmail-sender/index.js:1165
+msgid "We have received your inquiry with the following details."
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:96
+#: build/blocks/input-figure-block/index.js:1181
 msgid "Name"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:96
+#: build/blocks/input-figure-block/index.js:1181
 msgid "Please enter your name"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:97
+#: build/blocks/input-figure-block/index.js:1182
 msgid "E-mail Address"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:97
+#: build/blocks/input-figure-block/index.js:1182
 msgid "Please enter your e-mail address"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:98
+#: build/blocks/input-figure-block/index.js:1183
 msgid "Inquiry details"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:98
+#: build/blocks/input-figure-block/index.js:1183
 msgid "Please enter inquiry"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:99
+#: build/blocks/input-figure-block/index.js:1184
 msgid "Agree to the privacy policy and send."
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:100
+#: build/blocks/input-figure-block/index.js:1185
 msgid "To confirmation screen"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:157
+#: build/blocks/input-figure-block/index.js:1242
 msgid "Transmission form information setting"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:159
+#: build/blocks/input-figure-block/index.js:1244
 msgid "Form Name"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:161
+#: build/blocks/input-figure-block/index.js:1246
 msgid "This is the name used to identify it as a data source."
 msgstr ""
 
-#: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/index.js:14
-msgid "It is a block that displays to convey gratitude when processing is completed"
+#: build/blocks/input-figure-block/index.js:20
+#: src/blocks/input-figure-block/index.js:15
+#: build/blocks/input-figure-block/index.js:1376
+msgid "This is a block for collecting and displaying input elements in a form."
 msgstr ""
 
-#: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/index.js:19
-msgid "Processing completed"
+#: build/blocks/input-figure-block/index.js:20
+#: src/blocks/input-figure-block/index.js:20
+#: build/blocks/input-figure-block/index.js:1381
+msgid "Information input"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:91
+#: build/blocks/thanks-figure-block/index.js:1179
 msgid "Thank you for your inquiry."
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:92
+#: build/blocks/thanks-figure-block/index.js:1180
 msgid "The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid."
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:93
+#: build/blocks/thanks-figure-block/index.js:1181
 msgid "Go to home screen"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:133
+#: build/blocks/thanks-figure-block/index.js:1221
 msgid "Completion form information settings"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:141
+#: build/blocks/thanks-figure-block/index.js:1229
 msgid "Notification email sending success display"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:147
+#: build/blocks/thanks-figure-block/index.js:1235
 msgid "Notification email sending error display"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:153
+#: build/blocks/thanks-figure-block/index.js:1241
 msgid "Response email sending success display"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:159
+#: build/blocks/thanks-figure-block/index.js:1247
 msgid "Response email sending error display"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:165
+#: build/blocks/thanks-figure-block/index.js:1253
 msgid "Select redirect destination when exiting"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/thanks-figure-block/edit.js:190
+#: build/blocks/thanks-figure-block/index.js:1278
 msgid "Choose Background color"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:20
+#: src/blocks/thanks-figure-block/index.js:14
+#: build/blocks/thanks-figure-block/index.js:1380
+msgid "It is a block that displays to convey gratitude when processing is completed"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:20
+#: src/blocks/thanks-figure-block/index.js:19
+#: build/blocks/thanks-figure-block/index.js:1385
+msgid "Processing completed"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/block.json

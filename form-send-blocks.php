@@ -15,7 +15,62 @@
  */
 
  if ( ! defined( 'ABSPATH' ) ) exit;
- 
+
+// 依存関係のチェック関数
+function itmar_check_form_send_dependencies() {
+	include_once(ABSPATH . 'wp-admin/includes/plugin.php');//is_plugin_active() 関数の使用
+
+	$required_plugins = ['block-collections']; // 依存するプラグインのスラッグ
+	$ret_notice = null;//インストールされているかの通知文字列
+
+	foreach ($required_plugins as $plugin) {
+		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin;
+		if (!is_plugin_active($plugin . '/' . $plugin . '.php')) {
+			if (file_exists($plugin_path)) {
+				// プラグインはインストールされているが有効化されていない
+				$plugin_file = $plugin . '/' . $plugin . '.php';
+				$activate_url = wp_nonce_url(admin_url('plugins.php?action=activate&plugin=' . $plugin_file), 'activate-plugin_' . $plugin_file);
+				$ret_notice = '<div class="error"><p>Form Send Blocks: ' . __("Required plugin is not active.","itmar_form_send_blocks") . '<a href="' . $activate_url . '">' . __("Activate Plugin","itmar_form_send_blocks") . '</a></p></div>';
+			} else {
+					// プラグインがインストールされていない
+					$install_url = admin_url('plugin-install.php?s=' . $plugin . '&tab=search&type=term');
+					$ret_notice = '<div class="error"><p>Form Send Blocks: ' . __("Required plugin is not installed.","itmar_form_send_blocks") . '<a href="' . $install_url . '">' . __("Install Plugin","itmar_form_send_blocks") . '</a></p></div>';
+			}
+			return $ret_notice;
+		}
+	}
+	return $ret_notice;
+}
+
+// アクティベーションフック
+register_activation_hook(__FILE__, 'itmar_block_collections_activation_check');
+function itmar_block_collections_activation_check() {
+	//PHP用のテキストドメインの読込（国際化）
+	load_plugin_textdomain( 'itmar_form_send_blocks', false, basename( dirname( __FILE__ ) ) . '/languages' );
+	
+	if (!is_null(itmar_check_form_send_dependencies())) {
+		// エラーメッセージ
+		$message = 'Form Send Blocks:' . __('This plugin requires "block collections" plugins to be installed and active.','itmar_form_send_blocks');
+
+		// プラグインへの戻るリンク
+		$return_link = admin_url('plugins.php');
+		$message .= '<br><br><a href="' . esc_url($return_link) . '">' . __("Return to Plugins Setting","itmar_form_send_blocks") . '</a>';
+
+		// wp_die関数でカスタムメッセージとリンクを表示
+		wp_die($message);
+	}
+}
+
+// 管理画面での通知
+add_action('admin_notices', 'itmar_show_admin_dependency_notices');
+function itmar_show_admin_dependency_notices() {
+	$notice = itmar_check_form_send_dependencies();
+	if (!is_null($notice)) {
+		echo $notice;
+	}
+}
+
+//ブロックの登録 
 function itmar_form_send_blocks_block_init() {
 	foreach (glob(plugin_dir_path(__FILE__) . 'build/blocks/*') as $block) {
 		$block_name = basename($block);
