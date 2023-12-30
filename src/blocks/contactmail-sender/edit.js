@@ -161,7 +161,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								if (master_name_editing.length == 0) {
 									dispatch('core/notices').createNotice(
 										'error',
-										__('Do not leave the administrator name blank. ', 'itmar_form_send_blocks'),
+										__('Do not leave the master name blank. ', 'itmar_form_send_blocks'),
 										{ type: 'snackbar', isDismissible: true, }
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
