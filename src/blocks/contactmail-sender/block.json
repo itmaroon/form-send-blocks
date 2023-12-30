@@ -86,6 +86,10 @@
 			"type": "string",
 			"default": "master@sample.com"
 		},
+		"master_name": {
+			"type": "string",
+			"default": "Contact Mail Sender"
+		},
 		"ret_mail": {
 			"type": "string",
 			"default": ""

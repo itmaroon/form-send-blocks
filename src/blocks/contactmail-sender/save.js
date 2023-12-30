@@ -7,6 +7,7 @@ import { StyleComp } from './StyleContactMail';
 export default function save({ attributes }) {
 	const {
 		master_mail,
+		master_name,
 		subject_info,
 		message_info,
 		ret_mail,
@@ -32,6 +33,7 @@ export default function save({ attributes }) {
 		<>
 			<div {...blockProps}
 				data-master_mail={master_mail}
+				data-master_name={master_name}
 				data-subject_info={subject_info}
 				data-message_info={message_info}
 				data-ret_mail={ret_mail}

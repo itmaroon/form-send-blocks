@@ -30,7 +30,7 @@ jQuery(function ($) {
   });
 
   //メール送信関数
-  const sendMail_ajax = (send_email, subject_mail, message_mail, master_email, is_dataSave, is_retMail) => {
+  const sendMail_ajax = (send_email, subject_mail, message_mail, master_email, master_name, is_dataSave, is_retMail) => {
     //noceの取得
     const nonce = itmar_option.nonce;
 
@@ -48,6 +48,7 @@ jQuery(function ($) {
           'subject': subject_mail,
           'message': message_mail,
           'reply_address': master_email,
+          'reply_name': master_name,
           'is_dataSave': is_dataSave,
           'is_retMail': is_retMail,
         }
@@ -273,6 +274,7 @@ jQuery(function ($) {
     let parent_block = $(this).parents('.wp-block-itmar-contactmail-sender');
 
     let master_email = parent_block.data('master_mail');
+    let master_name = parent_block.data('master_name');
     let subject_info = parent_block.data('subject_info');
     let message_info = parent_block.data('message_info');
     let is_dataSave = parent_block.data('is_datasave');
@@ -282,7 +284,7 @@ jQuery(function ($) {
     const { __ } = wp.i18n;
     dispLoading(__("sending...", 'itmar_form_send_blocks'), $('#itmar_send_exec'));
     //通知メールの送信
-    promises.push(sendMail_ajax(master_email, subject_info, message_info, master_email, false, false));
+    promises.push(sendMail_ajax(master_email, subject_info, message_info, master_email, master_name, false, false));
     //自動応答メール
     let is_retmail = parent_block.data('is_retmail');
     if (is_retmail) {
@@ -294,7 +296,7 @@ jQuery(function ($) {
       //message_retの再構築
       message_ret = message_rebuild(message_ret);
       //自動応答メールの送信
-      promises.push(sendMail_ajax(ret_email, subject_ret, message_ret, master_email, is_dataSave, true));
+      promises.push(sendMail_ajax(ret_email, subject_ret, message_ret, master_email, master_name, is_dataSave, true));
     }
 
     let figure_elm = $(this).parent();

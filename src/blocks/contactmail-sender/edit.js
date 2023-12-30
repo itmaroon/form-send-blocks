@@ -54,6 +54,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		is_shadow,
 		shadow_element,
 		master_mail,
+		master_name,
 		subject_info,
 		message_info,
 		ret_mail,
@@ -119,6 +120,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 	//編集中の値を確保するための状態変数
 	const [master_mail_editing, setMasterMailValue] = useState(master_mail);
+	const [master_name_editing, setMasterNameValue] = useState(master_name);
 	const [subject_info_editing, setSubjectInfoValue] = useState(subject_info);
 	const [message_info_editing, setMessageInfoValue] = useState(message_info);
 	const [subject_ret_editing, setSubjectRetValue] = useState(subject_ret);
@@ -130,7 +132,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				<PanelBody title={__("Inquiry information notification email", 'itmar_form_send_blocks')} initialOpen={true} className="mailinfo_ctrl">
 					<PanelRow>
 						<TextControl
-							label={__("Notification email address (sender)", 'itmar_form_send_blocks')}
+							label={__("Notification email address (Master)", 'itmar_form_send_blocks')}
 							value={master_mail_editing}
 							onChange={(newVal) => setMasterMailValue(newVal)}// 一時的な編集値として保存する
 							onBlur={() => {
@@ -146,6 +148,27 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								} else {
 									// バリデーションが成功した場合、編集値を確定する
 									setAttributes({ master_mail: master_mail_editing });
+								}
+							}}
+						/>
+					</PanelRow>
+					<PanelRow>
+						<TextControl
+							label={__("Master Name", 'itmar_form_send_blocks')}
+							value={master_name_editing}
+							onChange={(newVal) => setMasterNameValue(newVal)}// 一時的な編集値として保存する
+							onBlur={() => {
+								if (master_name_editing.length == 0) {
+									dispatch('core/notices').createNotice(
+										'error',
+										__('Do not leave the administrator name blank. ', 'itmar_form_send_blocks'),
+										{ type: 'snackbar', isDismissible: true, }
+									);
+									// バリデーションエラーがある場合、編集値を元の値にリセットする
+									setMasterNameValue(master_name);
+								} else {
+									// バリデーションが成功した場合、編集値を確定する
+									setAttributes({ master_name: master_name_editing });
 								}
 							}}
 						/>
