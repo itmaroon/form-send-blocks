@@ -117,10 +117,6 @@
 		"selectedPageId": {
 			"type": "number",
 			"default": -1
-		},
-		"selectedPageUrl": {
-			"type": "string",
-			"default": "/"
 		}
 	},
 	"usesContext": [

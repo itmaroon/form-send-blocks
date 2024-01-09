@@ -1,47 +1,71 @@
-=== Form Send ===
-Contributors:      WebクリエイターITmaroon
-Tags:              block
-Tested up to:      6.1
+=== Form Send Blocks===
+Contributors:      itmaroon
+Tags:              block, Gutenberg, custom, form, e-mail, contact
+Requires at least: 6.3
+Tested up to:      6.4.2
 Stable tag:        0.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+Requires PHP: 8.0.22
 
-入力欄をフォームにまとめたブロックです
+This is a block that summarizes the display screen when submitting a form.
+
+== Related Links ==
+
+* [Github](https://github.com/itmaroon/form-send-blocks)
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+An overview of the features is below.
+- Provides three blocks: a form that houses a custom block for input, a form that confirms the input content, and a form that displays the results when the form is submitted.
+- We provide a block that sends the content entered from the input block as a notification email to the set administrator and as an automatic response email to the user who entered it.
+- It has a function to store the entered contents in the WordPress database.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+Below is an overview of the functions of each block.
+1.Input figure
+This block is a block that stores Design Text Control, Design CheckBox, Design Select, and Design Button of BLOCK COLLECTIONS as an inner block and generates a submission form.
+Blocks other than these cannot be stored, but there are no particular restrictions on the number.
+
+2. Confirm figure
+This block checks the contents entered in the Input Figure and generates a form for sending. Display your entries in a table for confirmation. Then click the submit button to submit the form.
+
+3.Thanks Figure
+This is a block that generates a form to display the submission results.
+You can set the text of the transmission result and display its contents. You can set a fixed redirect page for the placed button.
+
+4. Contact Mail Sender
+This block stores the Design Process of Input Figure, Confirm Figure, Thanks Figure, and BLOCK COLLECTIONS as an inner block and generates an inquiry page by email.
+We will send an email notifying you of the inquiry from the web page where this block is placed, as well as an automatic response email to the web page viewer who made the inquiry.
+This content can be stored in the WordPress database, but the current version does not have the ability to display this content. This is a feature for future version upgrades.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+1. From the WP admin panel, click “Plugins” -> “Add new”.
+2. In the browser input box, type “Block Collections”.
+3. Select the “Block Collections” plugin and click “Install”.
+4. Activate the plugin.
 
-e.g.
+OR…
 
-1. Upload the plugin files to the `/wp-content/plugins/form-send-blocks` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-
+1. Download the plugin from this page.
+2. Save the .zip file to a location on your computer.
+3. Open the WP admin panel, and click “Plugins” -> “Add new”.
+4. Click “upload”.. then browse to the .zip file downloaded from this page.
+5. Click “Install”.. and then “Activate plugin”.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
 
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Input form (before input)
+2. Input form (after input)
+3. Confirmation form
+4. Transmission result display form
+5. Input form (mobile)
+6. Confirmation form (mobile)
+7. Transmission result display form (mobile)
 
 == Changelog ==
 
@@ -50,6 +74,10 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Arbitrary section ==
 
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+1. Style settings that may require responsive support can be set separately for desktop mode (displayed on devices with a width of 768px or more) and mobile mode (displayed on devices with a width of 767px or less). To tell which setting is set, when you switch the display mode in the block editor or site editor, "(Desktop)" and "(Mobile)" will be displayed in the side menu display.
+Please note that responsiveness for tablet display is not supported.
+2. This plugin depends on the [BLOCK COLLECTIONS plugin](https://ja.wordpress.org/plugins/block-collections/). This plugin requires installation and activation in order to use it.
+3. Regarding the display of text, etc., settings are made using WordPress's internationalization function, so it is possible to display text in multiple national languages. Currently, English and Japanese notation is possible.
+4. The Contact Mail Sender block uses jquery.easing for screen transition animation. Therefore, when using this block, please comply with the following terms of use.
+[jquery.easing/LICENSE-BSD-3-Clause.txt](https://github.com/gdsmith/jquery.easing/blob/master/LICENSE-BSD-3-Clause.txt)
+5. We use wp_mail for email sending. Therefore, when sending emails from a local environment, it is necessary to install a plugin that provides an SMTP environment such as [WP Mail SMTP by WPForms](https://ja.wordpress.org/plugins/wp-mail-smtp/). Is required.

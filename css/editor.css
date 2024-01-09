@@ -5,9 +5,12 @@
  */
 .mailinfo_ctrl .components-notice {
   padding-right: 0;
+  background-color: #dbf5f1;
 }
 .mailinfo_ctrl .components-notice .components-notice__content {
   margin: 0;
+  display: flex;
+  justify-content: space-between;
 }
 .mailinfo_ctrl .components-notice .components-notice__content .components-button {
   margin: 0;

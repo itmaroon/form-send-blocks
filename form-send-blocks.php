@@ -81,12 +81,14 @@ function itmar_form_send_blocks_block_init() {
 	foreach (glob(plugin_dir_path(__FILE__) . 'build/blocks/*') as $block) {
 		$block_name = basename($block);
 		$script_handle = 'form-handle-' . $block_name;
+		$script_file = plugin_dir_path( __FILE__ ) . 'build/blocks/'.$block_name.'/index.js';
 		
 		// スクリプトの登録
 		wp_register_script(
 			$script_handle,
 			plugins_url( 'build/blocks/'.$block_name.'/index.js', __FILE__ ),
-			array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-block-editor' )
+			array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-block-editor' ),
+			filemtime($script_file)
 		);
 		// Static block
 		register_block_type(
@@ -97,6 +99,10 @@ function itmar_form_send_blocks_block_init() {
 		);
 		// その後、このハンドルを使用してスクリプトの翻訳をセット
 		wp_set_script_translations( $script_handle, 'itmar_form_send_blocks', plugin_dir_path( __FILE__ ) . 'languages' );
+		//jsで使えるようにhome_urlをローカライズ
+		wp_localize_script($script_handle, 'itmar_form_send_option', array(
+			'home_url' => home_url()
+		));
 	}
 	//PHP用のテキストドメインの読込（国際化）
 	load_plugin_textdomain( 'itmar_form_send_blocks', false, basename( dirname( __FILE__ ) ) . '/languages' );
@@ -108,6 +114,7 @@ function itmar_contact_block_add_js() {
 	if (!wp_script_is('itmar_jquery_easing', 'enqueued')) {
 		wp_enqueue_script( 'itmar_jquery_easing', plugins_url('assets/jquery.easing.min.js', __FILE__ ), array('jquery' ), true );
 	}
+	
 	//管理画面以外（フロントエンド側でのみ読み込む）
 	if (!is_admin()) {
 		$script_path = plugin_dir_path(__FILE__) . 'assets/contact_block.js';
@@ -118,17 +125,19 @@ function itmar_contact_block_add_js() {
 			filemtime($script_path),
 			true
 		);
-
-		//nonceの生成
-		wp_localize_script( 'contact_js_handle', 'itmar_option', array(
+		
+		//jsで使えるようにnonceとadmin_urlをローカライズ
+		wp_localize_script( 'contact_js_handle', 'itmar_form_send_option', array(
 			'nonce' => wp_create_nonce('contact_send_nonce'),
 			'ajaxURL' => esc_url( admin_url( 'admin-ajax.php', __FILE__ ) ),
+			'home_url' => home_url()
 		));
+
 		// スクリプトの翻訳をセット
 		wp_set_script_translations( 'contact_js_handle', 'itmar_form_send_blocks', plugin_dir_path( __FILE__ ) . 'languages' );
-	}
-	
+	}	
 }
+	
 
 add_action('enqueue_block_assets', 'itmar_contact_block_add_js');
 

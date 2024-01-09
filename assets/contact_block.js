@@ -32,10 +32,10 @@ jQuery(function ($) {
   //メール送信関数
   const sendMail_ajax = (send_email, subject_mail, message_mail, master_email, master_name, is_dataSave, is_retMail) => {
     //noceの取得
-    const nonce = itmar_option.nonce;
+    const nonce = itmar_form_send_option.nonce;
 
     //ajaxの送り先
-    const ajaxUrl = itmar_option.ajaxURL;
+    const ajaxUrl = itmar_form_send_option.ajaxURL;
     return new Promise((resolve, reject) => {//Promiseを返す
       $.ajax({
         type: 'POST',
@@ -346,6 +346,7 @@ jQuery(function ($) {
   $('#to_home').on('submit', function (e) {
     e.preventDefault();
     let redirectUrl = $(this).data('selected_page');
+    console.log(redirectUrl)
     //画面遷移
     // $(this).parent().removeClass('appear');
     // $(this).parent().siblings('.first_appear').addClass('appear');

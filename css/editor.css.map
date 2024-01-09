@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/blocks/contactmail-sender/editor.scss","editor.css"],"names":[],"mappings":"AAAA;;;;EAAA;AAMC;EACC,gBAAA;ACAF;ADEE;EACC,SAAA;ACAH;ADEG;EACC,SAAA;EACA,gBAAA;ACAJ;;ADOA;EACC,uBAAA;ACJD","file":"editor.css"}
+{"version":3,"sources":["../src/blocks/contactmail-sender/editor.scss","editor.css"],"names":[],"mappings":"AAAA;;;;EAAA;AAMC;EACC,gBAAA;EACA,yBAAA;ACAF;ADEE;EACC,SAAA;EACA,aAAA;EACA,8BAAA;ACAH;ADEG;EACC,SAAA;EACA,gBAAA;ACAJ;;ADQA;EACC,uBAAA;ACLD","file":"editor.css"}

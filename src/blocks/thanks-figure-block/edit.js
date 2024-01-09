@@ -166,6 +166,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						<PageSelectControl
 							attributes={attributes}
 							setAttributes={setAttributes}
+							homeUrl={itmar_form_send_option.home_url}
 						/>
 					</PanelBody>
 

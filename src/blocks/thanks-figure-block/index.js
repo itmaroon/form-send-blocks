@@ -17,6 +17,10 @@ registerBlockType(metadata.name, {
 		stage_info: {
 			type: "string",
 			default: __('Processing completed', 'itmar_form_send_blocks')
+		},
+		selectedPageUrl: {
+			type: "string",
+			default: itmar_form_send_option.home_url
 		}
 	},
 	icon: <Thanks />,
