@@ -114,13 +114,13 @@ export default function DraggableBox(props) {
             dragDirection="e"
             onChange={(value) => chagePosition(value, 'x')}
             label={__("Lateral direction", 'itmar_block_collections')}
-            value={position.x}
+            value={position?.x || 0}
           />
           <UnitControl
             dragDirection="e"
             onChange={(value) => chagePosition(value, 'y')}
             label={__("Longitudinal direction", 'itmar_block_collections')}
-            value={position.y}
+            value={position?.y || 0}
           />
         </PanelRow>
         <PanelRow
