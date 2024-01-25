@@ -110,7 +110,7 @@
   "providesContext": {
     "itmar/state_process": "state_process"
   },
-  "textdomain": "itmar_form_send_blocks",
+  "textdomain": "form-send-blocks",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css"

@@ -88,9 +88,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//インナーブロックの制御
 	const TEMPLATE = [
-		['itmar/design-title', { headingContent: __("Thank you for your inquiry.", 'itmar_form_send_blocks') }],
-		['core/paragraph', { className: 'itmar_ex_block', content: __("The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid.", 'itmar_form_send_blocks') }],
-		['itmar/design-button', { buttonType: 'submit', labelContent: __("Go to home screen", 'itmar_form_send_blocks'), align: 'center' }]
+		['itmar/design-title', { headingContent: __("Thank you for your inquiry.", 'form-send-blocks') }],
+		['core/paragraph', { className: 'itmar_ex_block', content: __("The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid.", 'form-send-blocks') }],
+		['itmar/design-button', { buttonType: 'submit', labelContent: __("Go to home screen", 'form-send-blocks'), align: 'center' }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
@@ -130,39 +130,39 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title={__("Completion form information settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_setteing_ctrl">
+				<PanelBody title={__("Completion form information settings", 'form-send-blocks')} initialOpen={true} className="form_setteing_ctrl">
 					<TextControl
-						label={__("Stage information", 'itmar_form_send_blocks')}
+						label={__("Stage information", 'form-send-blocks')}
 						value={stage_info}
-						help={__("Please enter the stage information to be displayed in the process area.", 'itmar_form_send_blocks')}
+						help={__("Please enter the stage information to be displayed in the process area.", 'form-send-blocks')}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
 					<TextareaControl
-						label={__("Notification email sending success display", 'itmar_form_send_blocks')}
+						label={__("Notification email sending success display", 'form-send-blocks')}
 						value={infomail_success}
 						onChange={(newVal) => setAttributes({ infomail_success: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label={__("Notification email sending error display", 'itmar_form_send_blocks')}
+						label={__("Notification email sending error display", 'form-send-blocks')}
 						value={infomail_faile}
 						onChange={(newVal) => setAttributes({ infomail_faile: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label={__("Response email sending success display", 'itmar_form_send_blocks')}
+						label={__("Response email sending success display", 'form-send-blocks')}
 						value={retmail_success}
 						onChange={(newVal) => setAttributes({ retmail_success: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label={__("Response email sending error display", 'itmar_form_send_blocks')}
+						label={__("Response email sending error display", 'form-send-blocks')}
 						value={retmail_faile}
 						onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
 						rows="3"
 					/>
 
-					<PanelBody title={__("Select redirect destination when exiting", 'itmar_form_send_blocks')}>
+					<PanelBody title={__("Select redirect destination when exiting", 'form-send-blocks')}>
 						<PageSelectControl
 							attributes={attributes}
 							setAttributes={setAttributes}
@@ -174,27 +174,27 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title={__("Global settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
+				<PanelBody title={__("Global settings", 'form-send-blocks')} initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__("Background Color Setting", 'itmar_form_send_blocks')}
+						title={__("Background Color Setting", 'form-send-blocks')}
 						settings={[
 							{
 								colorValue: bgColor,
-								label: __("Choose Block Background color", 'itmar_form_send_blocks'),
+								label: __("Choose Block Background color", 'form-send-blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor: newValue }),
 							},
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Background color", 'itmar_form_send_blocks'),
+								label: __("Choose Background color", 'form-send-blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
 								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
 							},
 						]}
 					/>
-					<PanelBody title={__("Border Settings", 'itmar_form_send_blocks')} initialOpen={false} className="border_design_ctrl">
+					<PanelBody title={__("Border Settings", 'form-send-blocks')} initialOpen={false} className="border_design_ctrl">
 						<BorderBoxControl
 
 							onChange={(newValue) => setAttributes({ border_form: newValue })}
@@ -245,7 +245,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 					/>
 					<ToggleControl
-						label={__('Is Shadow', 'itmar_form_send_blocks')}
+						label={__('Is Shadow', 'form-send-blocks')}
 						checked={is_shadow}
 						onChange={(newVal) => {
 							setAttributes({ is_shadow: newVal })

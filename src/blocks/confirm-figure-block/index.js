@@ -12,12 +12,12 @@ import { ReactComponent as Confirm } from './confirm.svg';
 
 registerBlockType(metadata.name, {
 	icon: <Confirm />,
-	description: __("This block is displayed to confirm the information entered in the form.", 'itmar_form_send_blocks'),
+	description: __("This block is displayed to confirm the information entered in the form.", 'form-send-blocks'),
 	attributes: {
 		...metadata.attributes,
 		stage_info: {
 			type: "string",
-			default: __('confirmation', 'itmar_form_send_blocks')
+			default: __('confirmation', 'form-send-blocks')
 		}
 	},
 	edit: Edit,

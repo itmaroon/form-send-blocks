@@ -11,12 +11,12 @@ import metadata from './block.json';
 import { ReactComponent as Thanks } from './thanks.svg';
 
 registerBlockType(metadata.name, {
-	description: __("It is a block that displays to convey gratitude when processing is completed", 'itmar_form_send_blocks'),
+	description: __("It is a block that displays to convey gratitude when processing is completed", 'form-send-blocks'),
 	attributes: {
 		...metadata.attributes,
 		stage_info: {
 			type: "string",
-			default: __('Processing completed', 'itmar_form_send_blocks')
+			default: __('Processing completed', 'form-send-blocks')
 		},
 		selectedPageUrl: {
 			type: "string",

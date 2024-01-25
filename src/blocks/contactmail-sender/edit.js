@@ -96,10 +96,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		['itmar/input-figure-block', { form_name: "inquiry_form" }],
 		['itmar/confirm-figure-block', {}],
 		['itmar/thanks-figure-block', {
-			infomail_success: __("The person in charge has been notified of your inquiry. Please wait for a while until we reply.", 'itmar_form_send_blocks'),
-			infomail_faile: __("Email notification to the person in charge failed.", 'itmar_form_send_blocks'),
-			retmail_success: __("We have sent an automatic response email to you, so please check it.", 'itmar_form_send_blocks'),
-			retmail_faile: __("Failed to send automatic response email to you.", 'itmar_form_send_blocks'),
+			infomail_success: __("The person in charge has been notified of your inquiry. Please wait for a while until we reply.", 'form-send-blocks'),
+			infomail_faile: __("Email notification to the person in charge failed.", 'form-send-blocks'),
+			retmail_success: __("We have sent an automatic response email to you, so please check it.", 'form-send-blocks'),
+			retmail_faile: __("Failed to send automatic response email to you.", 'form-send-blocks'),
 		}]
 	];
 	const innerBlocksProps = useInnerBlocksProps(
@@ -129,10 +129,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title={__("Inquiry information notification email", 'itmar_form_send_blocks')} initialOpen={true} className="mailinfo_ctrl">
+				<PanelBody title={__("Inquiry information notification email", 'form-send-blocks')} initialOpen={true} className="mailinfo_ctrl">
 					<PanelRow>
 						<TextControl
-							label={__("Notification email address (Master)", 'itmar_form_send_blocks')}
+							label={__("Notification email address (Master)", 'form-send-blocks')}
 							value={master_mail_editing}
 							onChange={(newVal) => setMasterMailValue(newVal)}// 一時的な編集値として保存する
 							onBlur={() => {
@@ -140,7 +140,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								if (master_mail_editing.length == 0 || !mail_pattern.test(master_mail_editing)) {
 									dispatch('core/notices').createNotice(
 										'error',
-										__('The notification email address is blank or has an invalid format. ', 'itmar_form_send_blocks'),
+										__('The notification email address is blank or has an invalid format. ', 'form-send-blocks'),
 										{ type: 'snackbar', isDismissible: true, }
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
@@ -154,14 +154,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					</PanelRow>
 					<PanelRow>
 						<TextControl
-							label={__("Master Name", 'itmar_form_send_blocks')}
+							label={__("Master Name", 'form-send-blocks')}
 							value={master_name_editing}
 							onChange={(newVal) => setMasterNameValue(newVal)}// 一時的な編集値として保存する
 							onBlur={() => {
 								if (master_name_editing.length == 0) {
 									dispatch('core/notices').createNotice(
 										'error',
-										__('Do not leave the master name blank. ', 'itmar_form_send_blocks'),
+										__('Do not leave the master name blank. ', 'form-send-blocks'),
 										{ type: 'snackbar', isDismissible: true, }
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
@@ -175,14 +175,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					</PanelRow>
 					<PanelRow>
 						<TextControl
-							label={__("Notification email subject", 'itmar_form_send_blocks')}
+							label={__("Notification email subject", 'form-send-blocks')}
 							value={subject_info_editing}
 							onChange={(newVal) => setSubjectInfoValue(newVal)}// 一時的な編集値として保存する
 							onBlur={() => {
 								if (subject_info_editing.length == 0) {
 									dispatch('core/notices').createNotice(
 										'error',
-										__('Do not leave the subject of the notification email blank. ', 'itmar_form_send_blocks'),
+										__('Do not leave the subject of the notification email blank. ', 'form-send-blocks'),
 										{ type: 'snackbar', isDismissible: true, }
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
@@ -196,14 +196,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					</PanelRow>
 					<PanelRow>
 						<TextareaControl
-							label={__("Notification email body", 'itmar_form_send_blocks')}
+							label={__("Notification email body", 'form-send-blocks')}
 							value={message_info_editing}
 							onChange={(newVal) => setMessageInfoValue(newVal)}// 一時的な編集値として保存する
 							onBlur={() => {
 								if (message_info_editing.length == 0) {
 									dispatch('core/notices').createNotice(
 										'error',
-										__('Do not leave the body of the notification email blank. ', 'itmar_form_send_blocks'),
+										__('Do not leave the body of the notification email blank. ', 'form-send-blocks'),
 										{ type: 'snackbar', isDismissible: true, }
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
@@ -214,7 +214,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								}
 							}}
 							rows="5"
-							help={__("Click the input item displayed below to quote it in the text.", 'itmar_form_send_blocks')}
+							help={__("Click the input item displayed below to quote it in the text.", 'form-send-blocks')}
 						/>
 					</PanelRow>
 					{inputInnerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button').map((input_elm, index) => {
@@ -235,10 +235,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						);
 					})}
 				</PanelBody>
-				<PanelBody title={__("Automatic response email", 'itmar_form_send_blocks')} initialOpen={true} className="mailinfo_ctrl">
+				<PanelBody title={__("Automatic response email", 'form-send-blocks')} initialOpen={true} className="mailinfo_ctrl">
 					<PanelRow>
 						<ToggleControl
-							label={__('Send automatic response email', 'itmar_form_send_blocks')}
+							label={__('Send automatic response email', 'form-send-blocks')}
 							checked={is_retmail}
 							onChange={(newVal) => setAttributes({ is_retmail: newVal })}
 						/>
@@ -248,11 +248,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						<>
 							<PanelRow>
 								<TextControl
-									label={__("Reply to email address", 'itmar_form_send_blocks')}
+									label={__("Reply to email address", 'form-send-blocks')}
 									value={ret_mail}
 									isPressEnterToChange
 									onChange={(newVal) => setAttributes({ ret_mail: newVal })}
-									help={__("Click on the email address displayed below to set the response destination.", 'itmar_form_send_blocks')}
+									help={__("Click on the email address displayed below to set the response destination.", 'form-send-blocks')}
 								/>
 							</PanelRow>
 							{inputInnerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button').map((input_elm, index) => {
@@ -274,14 +274,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							})}
 							<PanelRow>
 								<TextControl
-									label={__("Automatic response email title", 'itmar_form_send_blocks')}
+									label={__("Automatic response email title", 'form-send-blocks')}
 									value={subject_ret_editing}
 									onChange={(newVal) => setSubjectRetValue(newVal)}// 一時的な編集値として保存する
 									onBlur={() => {
 										if (subject_ret_editing.length == 0) {
 											dispatch('core/notices').createNotice(
 												'error',
-												__('Do not leave the subject of the notification email blank. ', 'itmar_form_send_blocks'),
+												__('Do not leave the subject of the notification email blank. ', 'form-send-blocks'),
 												{ type: 'snackbar', isDismissible: true, }
 											);
 											// バリデーションエラーがある場合、編集値を元の値にリセットする
@@ -295,14 +295,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							</PanelRow>
 							<PanelRow>
 								<TextareaControl
-									label={__("Automatic response email body", 'itmar_form_send_blocks')}
+									label={__("Automatic response email body", 'form-send-blocks')}
 									value={message_ret_editing}
 									onChange={(newVal) => setMessageRetValue(newVal)}// 一時的な編集値として保存する
 									onBlur={() => {
 										if (message_ret_editing.length == 0) {
 											dispatch('core/notices').createNotice(
 												'error',
-												__('Do not leave the subject of the notification email blank. ', 'itmar_form_send_blocks'),
+												__('Do not leave the subject of the notification email blank. ', 'form-send-blocks'),
 												{ type: 'snackbar', isDismissible: true, }
 											);
 											// バリデーションエラーがある場合、編集値を元の値にリセットする
@@ -313,7 +313,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 										}
 									}}
 									rows="5"
-									help={__("Click on the input field below to quote it in the text.", 'itmar_form_send_blocks')}
+									help={__("Click on the input field below to quote it in the text.", 'form-send-blocks')}
 								/>
 							</PanelRow>
 							{inputInnerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button').map((input_elm, index) => {
@@ -336,7 +336,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							})}
 							<PanelRow>
 								<ToggleControl
-									label={__('Save response contents to DB', 'itmar_form_send_blocks')}
+									label={__('Save response contents to DB', 'form-send-blocks')}
 									checked={is_dataSave}
 									onChange={(newVal) => setAttributes({ is_dataSave: newVal })}
 								/>
@@ -349,11 +349,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			</InspectorControls>
 
 			<InspectorControls group="styles">
-				<PanelBody title={__("Space settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
+				<PanelBody title={__("Space settings", 'form-send-blocks')} initialOpen={true} className="form_design_ctrl">
 					<BoxControl
 						label={!isMobile ?
-							__("Margin settings(desk top)", 'itmar_form_send_blocks')
-							: __("Margin settings(mobile)", 'itmar_form_send_blocks')
+							__("Margin settings(desk top)", 'form-send-blocks')
+							: __("Margin settings(mobile)", 'form-send-blocks')
 						}
 						values={!isMobile ? default_pos.margin_value : mobile_pos.margin_value}
 						onChange={value => {
@@ -370,8 +370,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					/>
 					<BoxControl
 						label={!isMobile ?
-							__("Padding settings(desk top)", 'itmar_form_send_blocks')
-							: __("Padding settings(mobile)", 'itmar_form_send_blocks')
+							__("Padding settings(desk top)", 'form-send-blocks')
+							: __("Padding settings(mobile)", 'form-send-blocks')
 						}
 						values={!isMobile ? default_pos.padding_value : mobile_pos.padding_value}
 						onChange={value => {
@@ -388,9 +388,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 					/>
 
 				</PanelBody>
-				<PanelBody title={__("Shadow settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
+				<PanelBody title={__("Shadow settings", 'form-send-blocks')} initialOpen={true} className="form_design_ctrl">
 					<ToggleControl
-						label={__('Is Shadow', 'itmar_form_send_blocks')}
+						label={__('Is Shadow', 'form-send-blocks')}
 						checked={is_shadow}
 						onChange={(newVal) => {
 							setAttributes({ is_shadow: newVal })

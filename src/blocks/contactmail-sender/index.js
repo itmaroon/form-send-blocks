@@ -13,24 +13,24 @@ import metadata from './block.json';
 
 registerBlockType(metadata.name, {
 	icon: <Contact />,
-	description: __('This is a block for setting up an inquiry form.', 'itmar_form_send_blocks'),
+	description: __('This is a block for setting up an inquiry form.', 'form-send-blocks'),
 	attributes: {
 		...metadata.attributes,
 		subject_info: {
 			type: "string",
-			default: __('We have received an inquiry.', 'itmar_form_send_blocks'),
+			default: __('We have received an inquiry.', 'form-send-blocks'),
 		},
 		message_info: {
 			type: "string",
-			default: __('We have received an inquiry regarding the following information.', 'itmar_form_send_blocks')
+			default: __('We have received an inquiry regarding the following information.', 'form-send-blocks')
 		},
 		subject_ret: {
 			type: "string",
-			default: __('Thank you for contacting us.', 'itmar_form_send_blocks'),
+			default: __('Thank you for contacting us.', 'form-send-blocks'),
 		},
 		message_ret: {
 			type: "string",
-			default: __('We have received your inquiry with the following details.', 'itmar_form_send_blocks'),
+			default: __('We have received your inquiry with the following details.', 'form-send-blocks'),
 		}
 	},
 	edit: Edit,

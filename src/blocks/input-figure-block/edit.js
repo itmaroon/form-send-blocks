@@ -93,11 +93,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//インナーブロックの制御
 
 	const TEMPLATE = [
-		['itmar/design-text-ctrl', { inputName: 'userName', labelContent: __("Name", 'itmar_form_send_blocks'), required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter your name", 'itmar_form_send_blocks') }],
-		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'itmar_form_send_blocks'), inputType: 'email', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter your e-mail address", 'itmar_form_send_blocks') }],
-		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'itmar_form_send_blocks'), inputType: 'textarea', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter inquiry", 'itmar_form_send_blocks') }],
-		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'itmar_form_send_blocks') }],
-		['itmar/design-button', { buttonType: 'submit', labelContent: __("To confirmation screen", 'itmar_form_send_blocks'), align: 'center' }]
+		['itmar/design-text-ctrl', { inputName: 'userName', labelContent: __("Name", 'form-send-blocks'), required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter your name", 'form-send-blocks') }],
+		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'form-send-blocks'), inputType: 'email', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter your e-mail address", 'form-send-blocks') }],
+		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter inquiry", 'form-send-blocks') }],
+		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'form-send-blocks') }],
+		['itmar/design-button', { buttonType: 'submit', labelContent: __("To confirmation screen", 'form-send-blocks'), align: 'center' }]
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
@@ -154,17 +154,17 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title={__("Transmission form information setting", 'itmar_form_send_blocks')} initialOpen={true} className="form_setteing_ctrl">
+				<PanelBody title={__("Transmission form information setting", 'form-send-blocks')} initialOpen={true} className="form_setteing_ctrl">
 					<TextControl
-						label={__("Form Name", 'itmar_form_send_blocks')}
+						label={__("Form Name", 'form-send-blocks')}
 						value={form_name}
-						help={__("This is the name used to identify it as a data source.", 'itmar_form_send_blocks')}
+						help={__("This is the name used to identify it as a data source.", 'form-send-blocks')}
 						onChange={(newVal) => setAttributes({ form_name: newVal })}
 					/>
 					<TextControl
-						label={__("Stage information", 'itmar_form_send_blocks')}
+						label={__("Stage information", 'form-send-blocks')}
 						value={stage_info}
-						help={__("Please enter the stage information to be displayed in the process area.", 'itmar_form_send_blocks')}
+						help={__("Please enter the stage information to be displayed in the process area.", 'form-send-blocks')}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
 
@@ -172,27 +172,27 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title={__("Global settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
+				<PanelBody title={__("Global settings", 'form-send-blocks')} initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__("Background Color Setting", 'itmar_form_send_blocks')}
+						title={__("Background Color Setting", 'form-send-blocks')}
 						settings={[
 							{
 								colorValue: bgColor,
-								label: __("Choose Block Background color", 'itmar_form_send_blocks'),
+								label: __("Choose Block Background color", 'form-send-blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor: newValue }),
 							},
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Form Background color", 'itmar_form_send_blocks'),
+								label: __("Choose Form Background color", 'form-send-blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
 								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
 							},
 						]}
 					/>
-					<PanelBody title={__("Border Settings", 'itmar_form_send_blocks')} initialOpen={false} className="border_design_ctrl">
+					<PanelBody title={__("Border Settings", 'form-send-blocks')} initialOpen={false} className="border_design_ctrl">
 						<BorderBoxControl
 
 							onChange={(newValue) => setAttributes({ border_form: newValue })}
@@ -243,7 +243,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 					/>
 					<ToggleControl
-						label={__('Is Shadow', 'itmar_form_send_blocks')}
+						label={__('Is Shadow', 'form-send-blocks')}
 						checked={is_shadow}
 						onChange={(newVal) => {
 							setAttributes({ is_shadow: newVal })

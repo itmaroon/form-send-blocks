@@ -12,12 +12,12 @@ import { ReactComponent as Input } from './input.svg';
 
 registerBlockType(metadata.name, {
 	icon: <Input />,
-	description: __("This is a block for collecting and displaying input elements in a form.", 'itmar_form_send_blocks'),
+	description: __("This is a block for collecting and displaying input elements in a form.", 'form-send-blocks'),
 	attributes: {
 		...metadata.attributes,
 		stage_info: {
 			type: "string",
-			default: __('Information input', 'itmar_form_send_blocks')
+			default: __('Information input', 'form-send-blocks')
 		}
 	},
 	edit: Edit,

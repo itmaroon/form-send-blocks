@@ -108,7 +108,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		const blocks = select('core/block-editor').getBlocks(clientId);
 		//タイトル属性の取得・初期化
 		const titleBlock = blocks.find(block => block.name === 'itmar/design-title');
-		return titleBlock ? titleBlock.attributes : { headingContent: __("Please check your entries", 'itmar_form_send_blocks'), headingType: 'H3' };
+		return titleBlock ? titleBlock.attributes : { headingContent: __("Please check your entries", 'form-send-blocks'), headingType: 'H3' };
 	}, [clientId]);
 
 	//テーブル属性の監視（最初のitmar/design-table）
@@ -127,8 +127,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		//ボタン属性の取得・初期化
 		const buttonAttributes = buttonBlocks.length ? buttonBlocks.map(block => block.attributes)
 			: [
-				{ buttonType: 'submit', buttonId: 'btn_id_send', labelContent: __("Send", 'itmar_form_send_blocks') },
-				{ buttonType: 'submit', buttonId: 'btn_id_cancel', labelContent: __("Return to send screen", 'itmar_form_send_blocks') }
+				{ buttonType: 'submit', buttonId: 'btn_id_send', labelContent: __("Send", 'form-send-blocks') },
+				{ buttonType: 'submit', buttonId: 'btn_id_cancel', labelContent: __("Return to send screen", 'form-send-blocks') }
 			];
 		return buttonAttributes;
 	}, [clientId]);
@@ -219,11 +219,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title={__("Confirmation form information setting", 'itmar_form_send_blocks')} initialOpen={true} className="form_setteing_ctrl">
+				<PanelBody title={__("Confirmation form information setting", 'form-send-blocks')} initialOpen={true} className="form_setteing_ctrl">
 					<TextControl
-						label={__("Stage information", 'itmar_form_send_blocks')}
+						label={__("Stage information", 'form-send-blocks')}
 						value={stage_info}
-						help={__("Please enter the stage information to be displayed in the process area.", 'itmar_form_send_blocks')}
+						help={__("Please enter the stage information to be displayed in the process area.", 'form-send-blocks')}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
 
@@ -231,27 +231,27 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title={__("Global settings", 'itmar_form_send_blocks')} initialOpen={true} className="form_design_ctrl">
+				<PanelBody title={__("Global settings", 'form-send-blocks')} initialOpen={true} className="form_design_ctrl">
 
 					<PanelColorGradientSettings
-						title={__("Background Color Setting", 'itmar_form_send_blocks')}
+						title={__("Background Color Setting", 'form-send-blocks')}
 						settings={[
 							{
 								colorValue: bgColor,
-								label: __("Choose Block Background color", 'itmar_form_send_blocks'),
+								label: __("Choose Block Background color", 'form-send-blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor: newValue }),
 							},
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Form Background color", 'itmar_form_send_blocks'),
+								label: __("Choose Form Background color", 'form-send-blocks'),
 								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
 								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
 							},
 						]}
 					/>
-					<PanelBody title={__("Border Settings", 'itmar_form_send_blocks')} initialOpen={false} className="border_design_ctrl">
+					<PanelBody title={__("Border Settings", 'form-send-blocks')} initialOpen={false} className="border_design_ctrl">
 						<BorderBoxControl
 
 							onChange={(newValue) => setAttributes({ border_form: newValue })}
@@ -302,7 +302,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 					/>
 					<ToggleControl
-						label={__('Is Shadow', 'itmar_form_send_blocks')}
+						label={__('Is Shadow', 'form-send-blocks')}
 						checked={is_shadow}
 						onChange={(newVal) => {
 							setAttributes({ is_shadow: newVal })
