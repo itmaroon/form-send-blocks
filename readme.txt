@@ -13,6 +13,7 @@ This is a block that summarizes the display screen when submitting a form.
 == Related Links ==
 
 * [Github](https://github.com/itmaroon/form-send-blocks)
+* [source code](https://github.com/itmaroon/form-send-blocks/tree/master/src/blocks)
 
 == Description ==
 

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Form Send Blocks 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
-"POT-Creation-Date: 2024-01-25T05:53:14+01:00\n"
-"PO-Revision-Date: 2024-01-25 13:58+0900\n"
+"POT-Creation-Date: 2024-01-25T06:37:01+01:00\n"
+"PO-Revision-Date: 2024-01-25 14:38+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -86,6 +86,14 @@ msgstr "お問合せ内容"
 #: form-send-blocks.php:241
 msgid "Receipt processing completed successfully."
 msgstr "受信処理が正常に完了しました。"
+
+#: assets/contact_block.js:203 assets/contact_block.js:205
+msgid "This is a required field."
+msgstr "入力必須項目です。"
+
+#: assets/contact_block.js:285
+msgid "sending..."
+msgstr "送信中..."
 
 #: build/blocks/confirm-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/index.js:15
@@ -515,12 +523,6 @@ msgstr ""
 msgctxt "block title"
 msgid "Thanks Figure"
 msgstr ""
-
-#~ msgid "This is a required field."
-#~ msgstr "入力必須項目です。"
-
-#~ msgid "sending..."
-#~ msgstr "送信中..."
 
 #~ msgid ""
 #~ "This plugin requires \"block collections\" plugins to be installed and "

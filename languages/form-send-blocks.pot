@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-01-25T05:53:14+01:00\n"
+"POT-Creation-Date: 2024-01-25T06:37:01+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: form-send-blocks\n"
@@ -80,6 +80,15 @@ msgstr ""
 
 #: form-send-blocks.php:241
 msgid "Receipt processing completed successfully."
+msgstr ""
+
+#: assets/contact_block.js:203
+#: assets/contact_block.js:205
+msgid "This is a required field."
+msgstr ""
+
+#: assets/contact_block.js:285
+msgid "sending..."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:20

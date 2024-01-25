@@ -200,9 +200,9 @@ jQuery(function ($) {
 
         if (required_err) {
           const { __ } = wp.i18n;
-          const msg = __('This is a required field.', 'itmar_form_send_blocks');
+          const msg = __('This is a required field.', 'form-send-blocks');
           console.log(msg)
-          let err_msg_elm = $(`<div class="err_msg">${__('This is a required field.', 'itmar_form_send_blocks')}</div>`)
+          let err_msg_elm = $(`<div class="err_msg">${__('This is a required field.', 'form-send-blocks')}</div>`)
           $(this).find('> div').append(err_msg_elm);
           err_flg = true;
         } else {
@@ -282,7 +282,7 @@ jQuery(function ($) {
     message_info = message_rebuild(message_info);
     //ローディングマークを出す
     const { __ } = wp.i18n;
-    dispLoading(__("sending...", 'itmar_form_send_blocks'), $('#itmar_send_exec'));
+    dispLoading(__("sending...", 'form-send-blocks'), $('#itmar_send_exec'));
     //通知メールの送信
     promises.push(sendMail_ajax(master_email, subject_info, message_info, master_email, master_name, false, false));
     //自動応答メール
