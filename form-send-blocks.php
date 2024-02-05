@@ -30,16 +30,16 @@ function itmar_check_form_send_dependencies() {
 				// プラグインはインストールされているが有効化されていない
 				$plugin_file = $plugin . '/' . $plugin . '.php';
 				$activate_url = wp_nonce_url(admin_url('plugins.php?action=activate&plugin=' . $plugin_file), 'activate-plugin_' . $plugin_file);
-				$link = '<a href="' . $activate_url . '">' . __("Activate Plugin","form-send-blocks") . '</a>';
+				$link = __("Activate Plugin","form-send-blocks");
 				$message = 'Form Send Blocks:' . __("Required plugin is not active.","form-send-blocks");
-				$ret_obj = array("message" => $message, "link" => $link);
+				$ret_obj = array("message" => $message, "link" => $link, "url" => $activate_url);
 				
 			} else {
 				// プラグインがインストールされていない
 				$install_url = admin_url('plugin-install.php?s=' . $plugin . '&tab=search&type=term');
-				$link = '<a href="' . $install_url . '">' . __("Install Plugin","form-send-blocks") . '</a>';
+				$link = __("Install Plugin","form-send-blocks");
 				$message = 'Form Send Blocks:' . __("Required plugin is not installed.","form-send-blocks");
-				$ret_obj = array("message" => $message, "link" => $link);
+				$ret_obj = array("message" => $message, "link" => $link, "url" => $install_url);
 			}
 			return $ret_obj;
 		}
@@ -71,8 +71,8 @@ add_action('admin_notices', 'itmar_show_admin_dependency_notices');
 function itmar_show_admin_dependency_notices() {
 	$notice = itmar_check_form_send_dependencies();
 	if (!is_null($notice)) {
-		$message = '<div class="error"><p>' . esc_html($notice["message"]) . esc_url($notice["link"]) .'</p></div>';
-		echo $message;
+		echo '<div class="error"><p>' . esc_html($notice["message"]);
+		echo '<a href="' . esc_url($notice["url"]) . '">' . esc_html($notice["link"]) . '</a></p></div>';
 	}
 }
 
