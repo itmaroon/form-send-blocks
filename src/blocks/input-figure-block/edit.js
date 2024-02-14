@@ -93,9 +93,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//インナーブロックの制御
 
 	const TEMPLATE = [
-		['itmar/design-text-ctrl', { inputName: 'userName', labelContent: __("Name", 'form-send-blocks'), required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter your name", 'form-send-blocks') }],
-		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'form-send-blocks'), inputType: 'email', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter your e-mail address", 'form-send-blocks') }],
-		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: __('Required', 'itmar_block_collections') }, placeFolder: __("Please enter inquiry", 'form-send-blocks') }],
+		['itmar/design-text-ctrl', { inputName: 'userName', labelContent: __("Name", 'form-send-blocks'), required: { flg: true, display: __('Required', 'form-send-blocks') }, placeFolder: __("Please enter your name", 'form-send-blocks') }],
+		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'form-send-blocks'), inputType: 'email', required: { flg: true, display: __('Required', 'form-send-blocks') }, placeFolder: __("Please enter your e-mail address", 'form-send-blocks') }],
+		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: __('Required', 'form-send-blocks') }, placeFolder: __("Please enter inquiry", 'form-send-blocks') }],
 		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'form-send-blocks') }],
 		['itmar/design-button', { buttonType: 'submit', labelContent: __("To confirmation screen", 'form-send-blocks'), align: 'center' }]
 	];

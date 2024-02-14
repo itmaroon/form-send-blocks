@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Form Send Blocks 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
-"POT-Creation-Date: 2024-01-25T06:37:01+01:00\n"
-"PO-Revision-Date: 2024-01-25 14:38+0900\n"
+"POT-Creation-Date: 2024-02-13T02:35:01+01:00\n"
+"PO-Revision-Date: 2024-02-13 10:36+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -382,6 +382,13 @@ msgstr "情報入力"
 #: src/blocks/input-figure-block/edit.js:96
 msgid "Name"
 msgstr "お名前"
+
+#: build/blocks/input-figure-block/index.js:20
+#: src/blocks/input-figure-block/edit.js:96
+#: src/blocks/input-figure-block/edit.js:97
+#: src/blocks/input-figure-block/edit.js:98
+msgid "Required"
+msgstr "必須"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:96
