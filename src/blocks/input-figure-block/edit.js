@@ -118,7 +118,10 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		const maxNum = filteredBlocks.reduce((max, block) => {
 			//必須項目の表示を設定
 			const dispLabel = block.attributes.required.flg ? `${block.attributes.labelContent}(${block.attributes.required.display})` : block.attributes.labelContent;
-			return Math.max(max, measureTextWidth(dispLabel, block.attributes.font_style_label.fontSize, block.attributes.font_style_label.fontFamily));
+			//フォントサイズを取得
+			const renderFontSize = !isMobile ? block.attributes.font_style_label.default_fontSize : block.attributes.font_style_label.mobile_fontSize;
+			//幅の計測
+			return Math.max(max, measureTextWidth(dispLabel, renderFontSize, block.attributes.font_style_label.fontFamily));
 		}, Number.MIN_SAFE_INTEGER);
 		setAttributes({ label_width: `${Math.round(maxNum)}px` })
 	}, [innerBlocks]);
