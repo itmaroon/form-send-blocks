@@ -1,0 +1,27 @@
+{
+    "name": "itmaroon/form-send-blocks",
+    "description": "Gutenberg block class package",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Itmaroon\\BlockClassPakage\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "itmaroon",
+            "email": "master@itmaroon.net"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/itmaroon/block-class-package"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "itmar/block-class-package": "^1.0"
+    }
+}

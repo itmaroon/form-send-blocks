@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:       Form Send Blocks
  * Plugin URI:        https://itmaroon.net
@@ -14,152 +15,185 @@
  * @package           itmar
  */
 
- if ( ! defined( 'ABSPATH' ) ) exit;
+if (!defined('ABSPATH')) exit;
 
-// 依存関係のチェック関数
-function itmar_check_form_send_dependencies() {
-	include_once(ABSPATH . 'wp-admin/includes/plugin.php');//is_plugin_active() 関数の使用
-
-	$required_plugins = ['block-collections']; // 依存するプラグインのスラッグ
-	$ret_obj = null;//インストールされているかの通知オブジェクト
-
-	foreach ($required_plugins as $plugin) {
-		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin;
-		if (!is_plugin_active($plugin . '/' . $plugin . '.php')) {
-			if (file_exists($plugin_path)) {
-				// プラグインはインストールされているが有効化されていない
-				$plugin_file = $plugin . '/' . $plugin . '.php';
-				$activate_url = wp_nonce_url(admin_url('plugins.php?action=activate&plugin=' . $plugin_file), 'activate-plugin_' . $plugin_file);
-				$link = __("Activate Plugin","form-send-blocks");
-				$message = 'Form Send Blocks:' . __("Required plugin is not active.","form-send-blocks");
-				$ret_obj = array("message" => $message, "link" => $link, "url" => $activate_url);
-				
-			} else {
-				// プラグインがインストールされていない
-				$install_url = admin_url('plugin-install.php?s=' . $plugin . '&tab=search&type=term');
-				$link = __("Install Plugin","form-send-blocks");
-				$message = 'Form Send Blocks:' . __("Required plugin is not installed.","form-send-blocks");
-				$ret_obj = array("message" => $message, "link" => $link, "url" => $install_url);
-			}
-			return $ret_obj;
-		}
-	}
-	return $ret_obj;
+// プラグイン情報取得に必要なファイルを読み込む
+if (!function_exists('get_plugin_data')) {
+	require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 }
 
-// アクティベーションフック
-register_activation_hook(__FILE__, 'itmar_block_collections_activation_check');
-function itmar_block_collections_activation_check() {
-	//PHP用のテキストドメインの読込（国際化）
-	load_plugin_textdomain( 'form-send-blocks', false, basename( dirname( __FILE__ ) ) . '/languages' );
+//composerによるリモートリポジトリからの読み込みを要求
+require_once __DIR__ . '/vendor/autoload.php';
 
-	$notice = itmar_check_form_send_dependencies();
+$block_entry = new \Itmar\BlockClassPakage\ItmarEntryClass();
 
-	if (!is_null($notice)) {
-		// エラーメッセージ
-		$message = $notice["message"] . $notice["link"];
-		// プラグインへの戻るリンク
-		$return_link = '<br><br><a href="' . esc_url(admin_url('plugins.php')) . '">' . __("Return to Plugins Setting","form-send-blocks") . '</a>';
+//ブロックの初期登録
+add_action('init', function () use ($block_entry) {
+	$plugin_data = get_plugin_data(__FILE__);
+	$block_entry->block_init($plugin_data['TextDomain'], __FILE__);
+});
 
-		// wp_die関数でカスタムメッセージとリンクを表示
-		wp_die($message . $return_link);
-	}
-}
+// 依存するプラグインが有効化されているかのアクティベーションフック
+register_activation_hook(__FILE__, function () use ($block_entry) {
+	$plugin_data = get_plugin_data(__FILE__);
+	$block_entry->activation_check($plugin_data, ['block-collections']); // ここでメソッドを呼び出し
+});
 
-// 管理画面での通知
-add_action('admin_notices', 'itmar_show_admin_dependency_notices');
-function itmar_show_admin_dependency_notices() {
-	$notice = itmar_check_form_send_dependencies();
-	if (!is_null($notice)) {
-		echo '<div class="error"><p>' . esc_html($notice["message"]);
-		echo '<a href="' . esc_url($notice["url"]) . '">' . esc_html($notice["link"]) . '</a></p></div>';
-	}
-}
+// 管理画面での通知フック
+add_action('admin_notices', function () use ($block_entry) {
+	$plugin_data = get_plugin_data(__FILE__);
+	$block_entry->show_admin_dependency_notices($plugin_data, ['block-collections']);
+});
 
-//ブロックの登録 
-function itmar_form_send_blocks_block_init() {
-	foreach (glob(plugin_dir_path(__FILE__) . 'build/blocks/*') as $block) {
-		$block_name = basename($block);
-		$script_handle = 'form-handle-' . $block_name;
-		$script_file = plugin_dir_path( __FILE__ ) . 'build/blocks/'.$block_name.'/index.js';
-		
-		// スクリプトの登録
-		wp_register_script(
-			$script_handle,
-			plugins_url( 'build/blocks/'.$block_name.'/index.js', __FILE__ ),
-			array( 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-block-editor' ),
-			filemtime($script_file)
-		);
-		// Static block
-		register_block_type(
-			$block,
-			array(
-				'editor_script' => $script_handle
-			)
-		);
-		// その後、このハンドルを使用してスクリプトの翻訳をセット
-		wp_set_script_translations( $script_handle, 'form-send-blocks', plugin_dir_path( __FILE__ ) . 'languages' );
-		//jsで使えるようにhome_urlをローカライズ
-		wp_localize_script($script_handle, 'itmar_form_send_option', array(
-			'home_url' => home_url()
-		));
-	}
-	//PHP用のテキストドメインの読込（国際化）
-	load_plugin_textdomain( 'form-send-blocks', false, basename( dirname( __FILE__ ) ) . '/languages' );
-}
-add_action( 'init', 'itmar_form_send_blocks_block_init' );
+// // 依存関係のチェック関数
+// function itmar_check_form_send_dependencies()
+// {
+// 	include_once(ABSPATH . 'wp-admin/includes/plugin.php'); //is_plugin_active() 関数の使用
 
-function itmar_contact_block_add_js() {
+// 	$required_plugins = ['block-collections']; // 依存するプラグインのスラッグ
+// 	$ret_obj = null; //インストールされているかの通知オブジェクト
+
+// 	foreach ($required_plugins as $plugin) {
+// 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin;
+// 		if (!is_plugin_active($plugin . '/' . $plugin . '.php')) {
+// 			if (file_exists($plugin_path)) {
+// 				// プラグインはインストールされているが有効化されていない
+// 				$plugin_file = $plugin . '/' . $plugin . '.php';
+// 				$activate_url = wp_nonce_url(admin_url('plugins.php?action=activate&plugin=' . $plugin_file), 'activate-plugin_' . $plugin_file);
+// 				$link = __("Activate Plugin", "form-send-blocks");
+// 				$message = 'Form Send Blocks:' . __("Required plugin is not active.", "form-send-blocks");
+// 				$ret_obj = array("message" => $message, "link" => $link, "url" => $activate_url);
+// 			} else {
+// 				// プラグインがインストールされていない
+// 				$install_url = admin_url('plugin-install.php?s=' . $plugin . '&tab=search&type=term');
+// 				$link = __("Install Plugin", "form-send-blocks");
+// 				$message = 'Form Send Blocks:' . __("Required plugin is not installed.", "form-send-blocks");
+// 				$ret_obj = array("message" => $message, "link" => $link, "url" => $install_url);
+// 			}
+// 			return $ret_obj;
+// 		}
+// 	}
+// 	return $ret_obj;
+// }
+
+// // アクティベーションフック
+// register_activation_hook(__FILE__, 'itmar_block_collections_activation_check');
+// function itmar_block_collections_activation_check()
+// {
+// 	//PHP用のテキストドメインの読込（国際化）
+// 	load_plugin_textdomain('form-send-blocks', false, basename(dirname(__FILE__)) . '/languages');
+
+// 	$notice = itmar_check_form_send_dependencies();
+
+// 	if (!is_null($notice)) {
+// 		// エラーメッセージ
+// 		$message = $notice["message"] . $notice["link"];
+// 		// プラグインへの戻るリンク
+// 		$return_link = '<br><br><a href="' . esc_url(admin_url('plugins.php')) . '">' . __("Return to Plugins Setting", "form-send-blocks") . '</a>';
+
+// 		// wp_die関数でカスタムメッセージとリンクを表示
+// 		wp_die($message . $return_link);
+// 	}
+// }
+
+// // 管理画面での通知
+// add_action('admin_notices', 'itmar_show_admin_dependency_notices');
+// function itmar_show_admin_dependency_notices()
+// {
+// 	$notice = itmar_check_form_send_dependencies();
+// 	if (!is_null($notice)) {
+// 		echo '<div class="error"><p>' . esc_html($notice["message"]);
+// 		echo '<a href="' . esc_url($notice["url"]) . '">' . esc_html($notice["link"]) . '</a></p></div>';
+// 	}
+// }
+
+// //ブロックの登録 
+// function itmar_form_send_blocks_block_init()
+// {
+// 	foreach (glob(plugin_dir_path(__FILE__) . 'build/blocks/*') as $block) {
+// 		$block_name = basename($block);
+// 		$script_handle = 'form-handle-' . $block_name;
+// 		$script_file = plugin_dir_path(__FILE__) . 'build/blocks/' . $block_name . '/index.js';
+
+// 		// スクリプトの登録
+// 		wp_register_script(
+// 			$script_handle,
+// 			plugins_url('build/blocks/' . $block_name . '/index.js', __FILE__),
+// 			array('wp-blocks', 'wp-element', 'wp-i18n', 'wp-block-editor'),
+// 			filemtime($script_file)
+// 		);
+// 		// Static block
+// 		$ret = register_block_type(
+// 			$block,
+// 			array(
+// 				'editor_script' => $script_handle
+// 			)
+// 		);
+// 		// その後、このハンドルを使用してスクリプトの翻訳をセット
+// 		wp_set_script_translations($script_handle, 'form-send-blocks', plugin_dir_path(__FILE__) . 'languages');
+// 		//jsで使えるようにhome_urlをローカライズ
+// 		wp_localize_script($script_handle, 'itmar_form_send_option', array(
+// 			'home_url' => home_url()
+// 		));
+// 	}
+// 	//PHP用のテキストドメインの読込（国際化）
+// 	load_plugin_textdomain('form-send-blocks', false, basename(dirname(__FILE__)) . '/languages');
+// }
+// add_action('init', 'itmar_form_send_blocks_block_init');
+
+function itmar_contact_block_add_js()
+{
 	//jquery-easingを読み込む
 	if (!wp_script_is('itmar_jquery_easing', 'enqueued')) {
-		wp_enqueue_script( 'itmar_jquery_easing', plugins_url('assets/jquery.easing.min.js', __FILE__ ), array('jquery' ), true );
+		wp_enqueue_script('itmar_jquery_easing', plugins_url('assets/jquery.easing.min.js', __FILE__), array('jquery'), true);
 	}
-	
+
 	//管理画面以外（フロントエンド側でのみ読み込む）
 	if (!is_admin()) {
 		$script_path = plugin_dir_path(__FILE__) . 'assets/contact_block.js';
-		wp_enqueue_script( 
-			'contact_js_handle', 
-			plugins_url( '/assets/contact_block.js', __FILE__ ), 
-			array('jquery'), 
+		wp_enqueue_script(
+			'contact_js_handle',
+			plugins_url('/assets/contact_block.js', __FILE__),
+			array('jquery'),
 			filemtime($script_path),
 			true
 		);
-		
+
 		//jsで使えるようにnonceとadmin_urlをローカライズ
-		wp_localize_script( 'contact_js_handle', 'itmar_form_send_option', array(
+		wp_localize_script('contact_js_handle', 'itmar_form_send_option', array(
 			'nonce' => wp_create_nonce('contact_send_nonce'),
-			'ajaxURL' => esc_url( admin_url( 'admin-ajax.php', __FILE__ ) ),
+			'ajaxURL' => esc_url(admin_url('admin-ajax.php', __FILE__)),
 			'home_url' => home_url()
 		));
 
 		// スクリプトの翻訳をセット
-		wp_set_script_translations( 'contact_js_handle', 'form-send-blocks', plugin_dir_path( __FILE__ ) . 'languages' );
-	}	
+		wp_set_script_translations('contact_js_handle', 'form-send-blocks', plugin_dir_path(__FILE__) . 'languages');
+	}
 }
-	
+
 
 add_action('enqueue_block_assets', 'itmar_contact_block_add_js');
 
 //コンタクト情報の処理
-function itmar_contact_send_ajax(){
-  $nonce = sanitize_key($_REQUEST['nonce']);
-  
-	if ( wp_verify_nonce( $nonce, 'contact_send_nonce' ) ) {
-    
-    // メールの設定(無害化処理)
-		$to = sanitize_email( $_POST['email'] );
-		$subject = sanitize_text_field( $_POST['subject'] );
-		$user_name = sanitize_text_field( $_POST['userName'] );
-		$message = sanitize_textarea_field( $_POST['message'] );
-		$reply = sanitize_email( $_POST['reply_address'] );
-		$reply_name = sanitize_text_field( $_POST['reply_name'] );
+function itmar_contact_send_ajax()
+{
+	$nonce = sanitize_key($_REQUEST['nonce']);
+
+	if (wp_verify_nonce($nonce, 'contact_send_nonce')) {
+
+		// メールの設定(無害化処理)
+		$to = sanitize_email($_POST['email']);
+		$subject = sanitize_text_field($_POST['subject']);
+		$user_name = sanitize_text_field($_POST['userName']);
+		$message = sanitize_textarea_field($_POST['message']);
+		$reply = sanitize_email($_POST['reply_address']);
+		$reply_name = sanitize_text_field($_POST['reply_name']);
 		$is_dataSave = filter_var($_POST['is_dataSave'], FILTER_VALIDATE_BOOLEAN);
 		$is_retMail = filter_var($_POST['is_retMail'], FILTER_VALIDATE_BOOLEAN);
-		$headers = 'From: '. $reply_name . '<'.$reply.'>' . "\r\n";
+		$headers = 'From: ' . $reply_name . '<' . $reply . '>' . "\r\n";
 
 		// バリデーション
-		if ( ! is_email( $to ) || ! is_email( $reply ) || empty( $subject ) || empty( $message ) ) {
+		if (!is_email($to) || !is_email($reply) || empty($subject) || empty($message)) {
 			$response['error'] = array('status' => 'error', 'message' =>  __('The server detected an error in the input item. Registration process was interrupted. ', 'form-send-blocks'));
 			echo wp_json_encode($response);
 			die();
@@ -169,74 +203,72 @@ function itmar_contact_send_ajax(){
 		$response = array();
 
 		//データの格納
-		if($is_dataSave){
+		if ($is_dataSave) {
 			//ユーザーの登録
 			//既に登録されているかの確認
-			$user_id = email_exists( $to );
-			if(!$user_id){
+			$user_id = email_exists($to);
+			if (!$user_id) {
 				$user_data = array(
 					'user_email' => $to,
-					'user_login' => $to,  
-					'display_name' => $user_name, 
-					'role' => 'subscriber' 
+					'user_login' => $to,
+					'display_name' => $user_name,
+					'role' => 'subscriber'
 				);
-				$user_id = wp_insert_user( $user_data );
-				if ( is_wp_error( $user_id ) ) {
+				$user_id = wp_insert_user($user_data);
+				if (is_wp_error($user_id)) {
 					// ユーザーの作成に失敗した場合、エラーを処理します
 					$response['save'] = array('status' => 'error', 'message' => $user_id->get_error_message());
-				}else{
+				} else {
 					//コンタクトデータを登録
-					$response['save']=itmar_contact_save($user_id, $message);
+					$response['save'] = itmar_contact_save($user_id, $message);
 				}
-			}else{
+			} else {
 				//コンタクトデータを登録
-				$response['save']=itmar_contact_save($user_id, $message);
+				$response['save'] = itmar_contact_save($user_id, $message);
 			}
-			
 		}
 
 		// メールを送信
 		if (wp_mail($to, $subject, $message, $headers)) {
-			if($is_retMail){
+			if ($is_retMail) {
 				$response['ret_mail'] = array('status' => 'success', 'message' => __("Your autoresponder email has been successfully sent.", 'form-send-blocks'));
-			}else{
+			} else {
 				$response['info_mail'] = array('status' => 'success', 'message' =>  __("The site administrator has been successfully notified.", 'form-send-blocks'));
 			}
 		} else {
-			if($is_retMail){
+			if ($is_retMail) {
 				$response['ret_mail'] = array('status' => 'error', 'message' =>  __('Failed to send auto-response email.', 'form-send-blocks'));
-			}else{
+			} else {
 				$response['info_mail'] = array('status' => 'error', 'message' =>  __('Failed to notify site administrator.', 'form-send-blocks'));
 			}
-    		
 		}
-  }else {
+	} else {
 		$response['error'] = array('status' => 'error', 'message' =>  __('Invalid request.', 'form-send-blocks'));
 	}
 	//結果を通知して終了
 	echo wp_json_encode($response);
-  die();
+	die();
 }
-add_action( 'wp_ajax_itmar_contact_send', 'itmar_contact_send_ajax' );
-add_action( 'wp_ajax_nopriv_itmar_contact_send', 'itmar_contact_send_ajax' );
+add_action('wp_ajax_itmar_contact_send', 'itmar_contact_send_ajax');
+add_action('wp_ajax_nopriv_itmar_contact_send', 'itmar_contact_send_ajax');
 
-function itmar_contact_save($user_id, $message){
+function itmar_contact_save($user_id, $message)
+{
 	//コンタクトデータを登録
 	$new_post = array(
-		'post_type'   => 'gcb_contact',//登録するカスタム投稿タイプ
-		'post_status' => 'private',//公開ステータス（ここは個人情報なので非公開に）
-		'post_title'  =>  __('Inquiry Data', 'form-send-blocks'),//タイトルは分かりやすいものに
+		'post_type'   => 'gcb_contact', //登録するカスタム投稿タイプ
+		'post_status' => 'private', //公開ステータス（ここは個人情報なので非公開に）
+		'post_title'  =>  __('Inquiry Data', 'form-send-blocks'), //タイトルは分かりやすいものに
 		'post_author' =>  $user_id
 	);
-	$post_id = wp_insert_post( $new_post, true );
+	$post_id = wp_insert_post($new_post, true);
 
-	if ( is_wp_error( $post_id ) ) {
+	if (is_wp_error($post_id)) {
 		// 投稿の作成に失敗した場合、エラーを処理します
 		return array('status' => 'error', 'message' => $post_id->get_error_message());
-		
-	}else{
-		update_post_meta( $post_id, 'send_date', current_time('mysql') );
-		update_post_meta( $post_id, 'message', $message );
+	} else {
+		update_post_meta($post_id, 'send_date', current_time('mysql'));
+		update_post_meta($post_id, 'message', $message);
 
 		return array('status' => 'success', 'message' =>  __('Receipt processing completed successfully.', 'form-send-blocks'));
 	}
