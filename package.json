@@ -16,9 +16,10 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^26.9.0"
+		"@wordpress/scripts": "^27.6.0"
 	},
 	"dependencies": {
+		"itmar-block-packages": "^1.2.3",
 		"styled-components": "^6.1.1"
 	}
 }

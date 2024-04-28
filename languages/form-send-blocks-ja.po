@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Form Send Blocks 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
-"POT-Creation-Date: 2024-02-13T02:35:01+01:00\n"
-"PO-Revision-Date: 2024-02-13 10:36+0900\n"
+"POT-Creation-Date: 2024-04-09T04:20:07+02:00\n"
+"PO-Revision-Date: 2024-04-09 11:37+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -16,19 +16,27 @@ msgstr ""
 "X-Domain: form-send-blocks\n"
 
 #. Plugin Name of the plugin
+#: C:\Users\itmaroon\Local
+#: Sites\block-test\app\public\wp-content\plugins\form-send-blocks\form-send-blocks.php
 msgid "Form Send Blocks"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: C:\Users\itmaroon\Local
+#: Sites\block-test\app\public\wp-content\plugins\form-send-blocks\form-send-blocks.php
 msgid "https://itmaroon.net"
 msgstr ""
 
 #. Description of the plugin
+#: C:\Users\itmaroon\Local
+#: Sites\block-test\app\public\wp-content\plugins\form-send-blocks\form-send-blocks.php
 msgid ""
 "This is a block that summarizes the display screen when submitting a form."
 msgstr "フォーム送信するときの表示画面をまとめたブロックです。"
 
 #. Author of the plugin
+#: C:\Users\itmaroon\Local
+#: Sites\block-test\app\public\wp-content\plugins\form-send-blocks\form-send-blocks.php
 msgid "Web Creator ITmaroon"
 msgstr "WebクリエイターITmaroon"
 
@@ -52,38 +60,38 @@ msgstr "プラグインのインストールが必要です。"
 msgid "Return to Plugins Setting"
 msgstr "プラグイン設定画面へ戻る"
 
-#: form-send-blocks.php:163
+#: form-send-blocks.php:101
 msgid ""
 "The server detected an error in the input item. Registration process was "
 "interrupted. "
 msgstr ""
 "サーバーは入力項目にエラーを検出しました。 登録プロセスが中断されました。"
 
-#: form-send-blocks.php:201
+#: form-send-blocks.php:138
 msgid "Your autoresponder email has been successfully sent."
 msgstr "自動応答メールは正常に送信されました。"
 
-#: form-send-blocks.php:203
+#: form-send-blocks.php:140
 msgid "The site administrator has been successfully notified."
 msgstr "サイト管理者に正常に通知されました。"
 
-#: form-send-blocks.php:207
+#: form-send-blocks.php:144
 msgid "Failed to send auto-response email."
 msgstr "自動応答メールの送信に失敗しました。"
 
-#: form-send-blocks.php:209
+#: form-send-blocks.php:146
 msgid "Failed to notify site administrator."
 msgstr "サイト管理者への通知に失敗しました。"
 
-#: form-send-blocks.php:214
+#: form-send-blocks.php:150
 msgid "Invalid request."
 msgstr "無効なリクエストです。"
 
-#: form-send-blocks.php:228
+#: form-send-blocks.php:165
 msgid "Inquiry Data"
 msgstr "お問合せ内容"
 
-#: form-send-blocks.php:241
+#: form-send-blocks.php:177
 msgid "Receipt processing completed successfully."
 msgstr "受信処理が正常に完了しました。"
 
@@ -95,135 +103,141 @@ msgstr "入力必須項目です。"
 msgid "sending..."
 msgstr "送信中..."
 
-#: build/blocks/confirm-figure-block/index.js:20
-#: src/blocks/confirm-figure-block/index.js:15
-msgid "This block is displayed to confirm the information entered in the form."
-msgstr "入力された情報を確認するための表示をするブロックです。"
-
-#: build/blocks/confirm-figure-block/index.js:20
-#: src/blocks/confirm-figure-block/index.js:20
-msgid "confirmation"
-msgstr "確認"
-
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:111
+#: build/blocks/confirm-figure-block/index.js:876
 msgid "Please check your entries"
 msgstr "入力内容を確認してください"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:130
+#: build/blocks/confirm-figure-block/index.js:895
 msgid "Send"
 msgstr "送信"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:131
+#: build/blocks/confirm-figure-block/index.js:896
 msgid "Return to send screen"
 msgstr "入力画面に戻る"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:222
+#: build/blocks/confirm-figure-block/index.js:987
 msgid "Confirmation form information setting"
 msgstr "確認フォーム情報設定"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:224
-#: src/blocks/input-figure-block/edit.js:165
-#: src/blocks/thanks-figure-block/edit.js:135
+#: src/blocks/input-figure-block/edit.js:168
+#: src/blocks/thanks-figure-block/edit.js:165
+#: build/blocks/confirm-figure-block/index.js:989
+#: build/blocks/input-figure-block/index.js:1253
+#: build/blocks/thanks-figure-block/index.js:1253
 msgid "Stage information"
 msgstr "ステージ情報"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:226
-#: src/blocks/input-figure-block/edit.js:167
-#: src/blocks/thanks-figure-block/edit.js:137
+#: src/blocks/input-figure-block/edit.js:170
+#: src/blocks/thanks-figure-block/edit.js:167
+#: build/blocks/confirm-figure-block/index.js:991
+#: build/blocks/input-figure-block/index.js:1255
+#: build/blocks/thanks-figure-block/index.js:1255
 msgid "Please enter the stage information to be displayed in the process area."
 msgstr "プロセスエリアに表示されるステージの情報を入力してください。"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:234
-#: src/blocks/input-figure-block/edit.js:175
-#: src/blocks/thanks-figure-block/edit.js:177
+#: src/blocks/input-figure-block/edit.js:178
+#: src/blocks/thanks-figure-block/edit.js:226
+#: build/blocks/confirm-figure-block/index.js:999
+#: build/blocks/input-figure-block/index.js:1263
+#: build/blocks/thanks-figure-block/index.js:1314
 msgid "Global settings"
 msgstr "全体設定"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:237
-#: src/blocks/input-figure-block/edit.js:178
-#: src/blocks/thanks-figure-block/edit.js:180
+#: src/blocks/input-figure-block/edit.js:181
+#: src/blocks/thanks-figure-block/edit.js:231
+#: build/blocks/confirm-figure-block/index.js:1002
+#: build/blocks/input-figure-block/index.js:1266
+#: build/blocks/thanks-figure-block/index.js:1319
 msgid "Background Color Setting"
 msgstr "背景色設定"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:241
-#: src/blocks/input-figure-block/edit.js:182
-#: src/blocks/thanks-figure-block/edit.js:184
+#: src/blocks/input-figure-block/edit.js:185
+#: src/blocks/thanks-figure-block/edit.js:235
+#: build/blocks/confirm-figure-block/index.js:1006
+#: build/blocks/input-figure-block/index.js:1270
+#: build/blocks/thanks-figure-block/index.js:1323
 msgid "Choose Block Background color"
 msgstr "ブロックの背景色を選択"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:248
-#: src/blocks/input-figure-block/edit.js:189
+#: src/blocks/input-figure-block/edit.js:192
+#: build/blocks/confirm-figure-block/index.js:1013
+#: build/blocks/input-figure-block/index.js:1277
 msgid "Choose Form Background color"
 msgstr "フォームの背景色を選択"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:254
-#: src/blocks/input-figure-block/edit.js:195
-#: src/blocks/thanks-figure-block/edit.js:197
+#: src/blocks/input-figure-block/edit.js:198
+#: src/blocks/thanks-figure-block/edit.js:252
+#: build/blocks/confirm-figure-block/index.js:1019
+#: build/blocks/input-figure-block/index.js:1283
+#: build/blocks/thanks-figure-block/index.js:1340
 msgid "Border Settings"
 msgstr "ボーダー設定"
 
-#: build/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/input-figure-block/index.js:20
 #: build/blocks/thanks-figure-block/index.js:20
 #: src/blocks/confirm-figure-block/edit.js:305
 #: src/blocks/contactmail-sender/edit.js:393
-#: src/blocks/input-figure-block/edit.js:246
-#: src/blocks/thanks-figure-block/edit.js:248
+#: src/blocks/input-figure-block/edit.js:249
+#: src/blocks/thanks-figure-block/edit.js:323
+#: build/blocks/confirm-figure-block/index.js:1070
+#: build/blocks/contactmail-sender/index.js:1127
+#: build/blocks/input-figure-block/index.js:1334
+#: build/blocks/thanks-figure-block/index.js:1411
 msgid "Is Shadow"
 msgstr "シャドーをつける"
 
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:16
-msgid "This is a block for setting up an inquiry form."
-msgstr "お問い合わせフォームを設置するためのブロックです。"
+#: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:15
+#: build/blocks/confirm-figure-block/index.js:1114
+msgid "This block is displayed to confirm the information entered in the form."
+msgstr "入力された情報を確認するための表示をするブロックです。"
 
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:21
-msgid "We have received an inquiry."
-msgstr "お問い合わせをいただきました。"
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:25
-msgid "We have received an inquiry regarding the following information."
-msgstr "下記の内容のとおりお問い合わせを受け付けております。"
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:29
-msgid "Thank you for contacting us."
-msgstr "お問合せいただきありがとうございます。"
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:33
-msgid "We have received your inquiry with the following details."
-msgstr "以下の内容でお問い合わせを受け付けております。"
+#: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:20
+#: build/blocks/confirm-figure-block/index.js:1119
+msgid "confirmation"
+msgstr "確認"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:99
+#: build/blocks/contactmail-sender/index.js:833
 msgid ""
 "The person in charge has been notified of your inquiry. Please wait for a "
 "while until we reply."
@@ -232,46 +246,55 @@ msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:100
+#: build/blocks/contactmail-sender/index.js:834
 msgid "Email notification to the person in charge failed."
 msgstr "担当者へのメール通知に失敗しました。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:101
+#: build/blocks/contactmail-sender/index.js:835
 msgid "We have sent an automatic response email to you, so please check it."
 msgstr "自動返信メールをお送りしておりますのでご確認下さい。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:102
+#: build/blocks/contactmail-sender/index.js:836
 msgid "Failed to send automatic response email to you."
 msgstr "自動返信メールの送信に失敗しました。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:132
+#: build/blocks/contactmail-sender/index.js:866
 msgid "Inquiry information notification email"
 msgstr "お問い合わせ情報通知メール"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:135
+#: build/blocks/contactmail-sender/index.js:869
 msgid "Notification email address (Master)"
 msgstr "通知メールアドレス（管理者）"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:143
+#: build/blocks/contactmail-sender/index.js:877
 msgid "The notification email address is blank or has an invalid format. "
 msgstr "通知電子メール アドレスが空白であるか、無効な形式です。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:157
+#: build/blocks/contactmail-sender/index.js:891
 msgid "Master Name"
 msgstr "管理者名"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:164
+#: build/blocks/contactmail-sender/index.js:898
 msgid "Do not leave the master name blank. "
 msgstr "管理者名は空白のままにしないでください。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:178
+#: build/blocks/contactmail-sender/index.js:912
 msgid "Notification email subject"
 msgstr "通知メールの件名"
 
@@ -279,107 +302,148 @@ msgstr "通知メールの件名"
 #: src/blocks/contactmail-sender/edit.js:185
 #: src/blocks/contactmail-sender/edit.js:284
 #: src/blocks/contactmail-sender/edit.js:305
+#: build/blocks/contactmail-sender/index.js:919
+#: build/blocks/contactmail-sender/index.js:1018
+#: build/blocks/contactmail-sender/index.js:1039
 msgid "Do not leave the subject of the notification email blank. "
 msgstr "通知メールの件名は空白のままにしないでください。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:199
+#: build/blocks/contactmail-sender/index.js:933
 msgid "Notification email body"
 msgstr "通知メールの本文"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:206
+#: build/blocks/contactmail-sender/index.js:940
 msgid "Do not leave the body of the notification email blank. "
 msgstr "通知メールの本文は空白のままにしないでください。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:217
+#: build/blocks/contactmail-sender/index.js:951
 msgid "Click the input item displayed below to quote it in the text."
 msgstr "本文中に引用する場合は、下に表示される入力項目をクリックしてください。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:238
+#: build/blocks/contactmail-sender/index.js:972
 msgid "Automatic response email"
 msgstr "自動返信メール"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:241
+#: build/blocks/contactmail-sender/index.js:975
 msgid "Send automatic response email"
 msgstr "自動返信メールを送信する"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:251
+#: build/blocks/contactmail-sender/index.js:985
 msgid "Reply to email address"
 msgstr "返信先メールアドレス"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:255
+#: build/blocks/contactmail-sender/index.js:989
 msgid ""
 "Click on the email address displayed below to set the response destination."
 msgstr "以下に表示されるメールアドレスをクリックして返信先を設定してください。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:277
+#: build/blocks/contactmail-sender/index.js:1011
 msgid "Automatic response email title"
 msgstr "自動返信メールの件名"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:298
+#: build/blocks/contactmail-sender/index.js:1032
 msgid "Automatic response email body"
 msgstr "自動返信メール本文"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:316
+#: build/blocks/contactmail-sender/index.js:1050
 msgid "Click on the input field below to quote it in the text."
 msgstr "本文中で引用するには下の入力フィールドをクリックしてください。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:339
+#: build/blocks/contactmail-sender/index.js:1073
 msgid "Save response contents to DB"
 msgstr "応答内容をデータベースに保存"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:352
+#: build/blocks/contactmail-sender/index.js:1086
 msgid "Space settings"
 msgstr "空白設定"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:356
+#: build/blocks/contactmail-sender/index.js:1090
 msgid "Margin settings(mobile)"
 msgstr "マージン設定(モバイル)"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:355
+#: build/blocks/contactmail-sender/index.js:1089
 msgid "Margin settings(desk top)"
 msgstr "マージン設定(デスクトップ)"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:374
+#: build/blocks/contactmail-sender/index.js:1108
 msgid "Padding settings(mobile)"
 msgstr "パディング設定(モバイル)"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:373
+#: build/blocks/contactmail-sender/index.js:1107
 msgid "Padding settings(desk top)"
 msgstr "パディング設定(デスクトップ)"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: src/blocks/contactmail-sender/edit.js:391
+#: build/blocks/contactmail-sender/index.js:1125
 msgid "Shadow settings"
 msgstr "シャドー設定"
 
-#: build/blocks/input-figure-block/index.js:20
-#: src/blocks/input-figure-block/index.js:15
-msgid "This is a block for collecting and displaying input elements in a form."
-msgstr "入力要素をフォームに集めるためのブロックです。"
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:16
+#: build/blocks/contactmail-sender/index.js:1171
+msgid "This is a block for setting up an inquiry form."
+msgstr "お問い合わせフォームを設置するためのブロックです。"
 
-#: build/blocks/input-figure-block/index.js:20
-#: src/blocks/input-figure-block/index.js:20
-msgid "Information input"
-msgstr "情報入力"
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:21
+#: build/blocks/contactmail-sender/index.js:1176
+msgid "We have received an inquiry."
+msgstr "お問い合わせをいただきました。"
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:25
+#: build/blocks/contactmail-sender/index.js:1180
+msgid "We have received an inquiry regarding the following information."
+msgstr "下記の内容のとおりお問い合わせを受け付けております。"
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:29
+#: build/blocks/contactmail-sender/index.js:1184
+msgid "Thank you for contacting us."
+msgstr "お問合せいただきありがとうございます。"
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:33
+#: build/blocks/contactmail-sender/index.js:1188
+msgid "We have received your inquiry with the following details."
+msgstr "以下の内容でお問い合わせを受け付けております。"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:96
+#: build/blocks/input-figure-block/index.js:1181
 msgid "Name"
 msgstr "お名前"
 
@@ -387,77 +451,93 @@ msgstr "お名前"
 #: src/blocks/input-figure-block/edit.js:96
 #: src/blocks/input-figure-block/edit.js:97
 #: src/blocks/input-figure-block/edit.js:98
+#: build/blocks/input-figure-block/index.js:1181
+#: build/blocks/input-figure-block/index.js:1182
+#: build/blocks/input-figure-block/index.js:1183
 msgid "Required"
 msgstr "必須"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:96
+#: build/blocks/input-figure-block/index.js:1181
 msgid "Please enter your name"
 msgstr "お名前を入力してください"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:97
+#: build/blocks/input-figure-block/index.js:1182
 msgid "E-mail Address"
 msgstr "メールアドレス"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:97
+#: build/blocks/input-figure-block/index.js:1182
 msgid "Please enter your e-mail address"
 msgstr "メールアドレスを入力してください"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:98
+#: build/blocks/input-figure-block/index.js:1183
 msgid "Inquiry details"
 msgstr "お問合せ内容"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:98
+#: build/blocks/input-figure-block/index.js:1183
 msgid "Please enter inquiry"
 msgstr "お問合せ内容を入力してください"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:99
+#: build/blocks/input-figure-block/index.js:1184
 msgid "Agree to the privacy policy and send."
 msgstr "プライバシーポリシーに同意して送信します。"
 
 #: build/blocks/input-figure-block/index.js:20
 #: src/blocks/input-figure-block/edit.js:100
+#: build/blocks/input-figure-block/index.js:1185
 msgid "To confirmation screen"
 msgstr "確認画面へ"
 
 #: build/blocks/input-figure-block/index.js:20
-#: src/blocks/input-figure-block/edit.js:157
+#: src/blocks/input-figure-block/edit.js:160
+#: build/blocks/input-figure-block/index.js:1245
 msgid "Transmission form information setting"
 msgstr "送信フォーム情報設定"
 
 #: build/blocks/input-figure-block/index.js:20
-#: src/blocks/input-figure-block/edit.js:159
+#: src/blocks/input-figure-block/edit.js:162
+#: build/blocks/input-figure-block/index.js:1247
 msgid "Form Name"
 msgstr "フォーム名"
 
 #: build/blocks/input-figure-block/index.js:20
-#: src/blocks/input-figure-block/edit.js:161
+#: src/blocks/input-figure-block/edit.js:164
+#: build/blocks/input-figure-block/index.js:1249
 msgid "This is the name used to identify it as a data source."
 msgstr "これは、データ ソースとして識別するために使用される名前です。"
 
-#: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/index.js:14
-msgid ""
-"It is a block that displays to convey gratitude when processing is completed"
-msgstr "処理が完了した際に感謝の気持ちを伝えるために表示するブロックです"
+#: build/blocks/input-figure-block/index.js:20
+#: src/blocks/input-figure-block/index.js:15
+#: build/blocks/input-figure-block/index.js:1379
+msgid "This is a block for collecting and displaying input elements in a form."
+msgstr "入力要素をフォームに集めるためのブロックです。"
+
+#: build/blocks/input-figure-block/index.js:20
+#: src/blocks/input-figure-block/index.js:20
+#: build/blocks/input-figure-block/index.js:1384
+msgid "Information input"
+msgstr "情報入力"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/index.js:19
-msgid "Processing completed"
-msgstr "処理完了"
-
-#: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:91
+#: src/blocks/thanks-figure-block/edit.js:94
+#: build/blocks/thanks-figure-block/index.js:1182
 msgid "Thank you for your inquiry."
 msgstr "お問合せいただきありがとうございます。"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:92
+#: src/blocks/thanks-figure-block/edit.js:100
+#: build/blocks/thanks-figure-block/index.js:1188
 msgid ""
 "The contents set in the sidebar will be displayed here as the transmission "
 "result. Any changes you make to the contents of this paragraph block will "
@@ -468,44 +548,65 @@ msgstr ""
 "す。"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:93
+#: src/blocks/thanks-figure-block/edit.js:110
+#: build/blocks/thanks-figure-block/index.js:1198
 msgid "Go to home screen"
 msgstr "ホーム画面へ"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:133
+#: src/blocks/thanks-figure-block/edit.js:160
+#: build/blocks/thanks-figure-block/index.js:1248
 msgid "Completion form information settings"
 msgstr "完了フォーム情報設定"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:141
+#: src/blocks/thanks-figure-block/edit.js:174
+#: build/blocks/thanks-figure-block/index.js:1262
 msgid "Notification email sending success display"
 msgstr "通知メール送信奏功時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:147
+#: src/blocks/thanks-figure-block/edit.js:183
+#: build/blocks/thanks-figure-block/index.js:1271
 msgid "Notification email sending error display"
 msgstr "通知メール送信エラー時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:153
+#: src/blocks/thanks-figure-block/edit.js:192
+#: build/blocks/thanks-figure-block/index.js:1280
 msgid "Response email sending success display"
 msgstr "応答メール送信奏功時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:159
+#: src/blocks/thanks-figure-block/edit.js:201
+#: build/blocks/thanks-figure-block/index.js:1289
 msgid "Response email sending error display"
 msgstr "応答メール送信エラー時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:165
+#: src/blocks/thanks-figure-block/edit.js:211
+#: build/blocks/thanks-figure-block/index.js:1299
 msgid "Select redirect destination when exiting"
 msgstr "終了時のリダイレクト先の選択"
 
 #: build/blocks/thanks-figure-block/index.js:20
-#: src/blocks/thanks-figure-block/edit.js:191
+#: src/blocks/thanks-figure-block/edit.js:243
+#: build/blocks/thanks-figure-block/index.js:1331
 msgid "Choose Background color"
 msgstr "背景色を選択"
+
+#: build/blocks/thanks-figure-block/index.js:20
+#: src/blocks/thanks-figure-block/index.js:14
+#: build/blocks/thanks-figure-block/index.js:1453
+msgid ""
+"It is a block that displays to convey gratitude when processing is completed"
+msgstr "処理が完了した際に感謝の気持ちを伝えるために表示するブロックです"
+
+#: build/blocks/thanks-figure-block/index.js:20
+#: src/blocks/thanks-figure-block/index.js:22
+#: build/blocks/thanks-figure-block/index.js:1461
+msgid "Processing completed"
+msgstr "処理完了"
 
 #: build/blocks/confirm-figure-block/block.json
 #: src/blocks/confirm-figure-block/block.json

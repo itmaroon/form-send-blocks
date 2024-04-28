@@ -23,9 +23,16 @@ import { useEffect, useState, useRef } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { StyleComp } from "./StyleThanksFigure";
 import { useStyleIframe } from "../iframeFooks";
-import ShadowStyle, { ShadowElm } from "../ShadowStyle";
-import { useElementBackgroundColor, useIsIframeMobile } from "../CustomFooks";
-import { PageSelectControl } from "../wordpressApi";
+//import ShadowStyle, { ShadowElm } from "../ShadowStyle";
+//import { useElementBackgroundColor, useIsIframeMobile } from "../CustomFooks";
+//import { PageSelectControl } from "../wordpressApi";
+import {
+	useElementBackgroundColor,
+	useIsIframeMobile,
+	ShadowStyle,
+	ShadowElm,
+	PageSelectControl,
+} from "itmar-block-packages";
 
 //スペースのリセットバリュー
 const padding_resetValues = {

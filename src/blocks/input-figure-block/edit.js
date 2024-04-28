@@ -1,62 +1,66 @@
-
-import { __ } from '@wordpress/i18n';
-import './editor.scss';
+import { __ } from "@wordpress/i18n";
+import "./editor.scss";
 
 import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
 	__experimentalPanelColorGradientSettings as PanelColorGradientSettings,
-	__experimentalBorderRadiusControl as BorderRadiusControl
-} from '@wordpress/block-editor';
+	__experimentalBorderRadiusControl as BorderRadiusControl,
+} from "@wordpress/block-editor";
 import {
 	PanelBody,
 	TextControl,
 	ToggleControl,
 	__experimentalBoxControl as BoxControl,
-	__experimentalBorderBoxControl as BorderBoxControl
-} from '@wordpress/components';
+	__experimentalBorderBoxControl as BorderBoxControl,
+} from "@wordpress/components";
 
-import './editor.scss';
+import "./editor.scss";
 
-import { useEffect, useRef } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
-import { StyleComp } from './StyleInputFigure';
-import { useStyleIframe } from '../iframeFooks';
-import ShadowStyle, { ShadowElm } from '../ShadowStyle';
-import { useElementBackgroundColor, useIsIframeMobile } from '../CustomFooks';
+import { useEffect, useRef } from "@wordpress/element";
+import { useSelect, useDispatch } from "@wordpress/data";
+import { StyleComp } from "./StyleInputFigure";
+import { useStyleIframe } from "../iframeFooks";
+//import ShadowStyle, { ShadowElm } from '../ShadowStyle';
+//import { useElementBackgroundColor, useIsIframeMobile } from '../CustomFooks';
+import {
+	useElementBackgroundColor,
+	useIsIframeMobile,
+	ShadowStyle,
+	ShadowElm,
+} from "itmar-block-packages";
 
 //スペースのリセットバリュー
 const padding_resetValues = {
-	top: '10px',
-	left: '10px',
-	right: '10px',
-	bottom: '10px',
-}
+	top: "10px",
+	left: "10px",
+	right: "10px",
+	bottom: "10px",
+};
 
 //ボーダーのリセットバリュー
 const border_resetValues = {
-	top: '0px',
-	left: '0px',
-	right: '0px',
-	bottom: '0px',
-}
+	top: "0px",
+	left: "0px",
+	right: "0px",
+	bottom: "0px",
+};
 
 const units = [
-	{ value: 'px', label: 'px' },
-	{ value: 'em', label: 'em' },
-	{ value: 'rem', label: 'rem' },
+	{ value: "px", label: "px" },
+	{ value: "em", label: "em" },
+	{ value: "rem", label: "rem" },
 ];
 
 //要素幅を計測する関数
 const measureTextWidth = (text, fontSize, fontFamily) => {
-	const canvas = document.createElement('canvas');
-	const context = canvas.getContext('2d');
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
 	context.font = `${fontSize} ${fontFamily}`;
 	const metrics = context.measureText(text);
 	return metrics.width;
-}
-
+};
 
 export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const {
@@ -70,60 +74,127 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		mobile_pos,
 		stage_info,
 		shadow_element,
-		is_shadow
+		is_shadow,
 	} = attributes;
 
 	//ブロックの背景色
 	const blockStyle = { background: bgColor };
 
 	//ブロック情報取得ツールの取得
-	const { getBlockRootClientId } = useSelect((select) => select('core/block-editor'), [clientId]);
+	const { getBlockRootClientId } = useSelect(
+		(select) => select("core/block-editor"),
+		[clientId]
+	);
 	// 親ブロックのclientIdを取得
 	const parentClientId = getBlockRootClientId(clientId);
 	// dispatch関数を取得
-	const { updateBlockAttributes } = useDispatch('core/block-editor');
+	const { updateBlockAttributes } = useDispatch("core/block-editor");
 
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// 親ブロックのstate_process属性を更新
-		updateBlockAttributes(parentClientId, { state_process: 'confirm' });
+		updateBlockAttributes(parentClientId, { state_process: "confirm" });
 	};
 
 	//インナーブロックの制御
 
 	const TEMPLATE = [
-		['itmar/design-text-ctrl', { inputName: 'userName', labelContent: __("Name", 'form-send-blocks'), required: { flg: true, display: __('Required', 'form-send-blocks') }, placeFolder: __("Please enter your name", 'form-send-blocks') }],
-		['itmar/design-text-ctrl', { inputName: 'email', labelContent: __("E-mail Address", 'form-send-blocks'), inputType: 'email', required: { flg: true, display: __('Required', 'form-send-blocks') }, placeFolder: __("Please enter your e-mail address", 'form-send-blocks') }],
-		['itmar/design-text-ctrl', { inputName: 'message', labelContent: __("Inquiry details", 'form-send-blocks'), inputType: 'textarea', required: { flg: true, display: __('Required', 'form-send-blocks') }, placeFolder: __("Please enter inquiry", 'form-send-blocks') }],
-		['itmar/design-checkbox', { labelContent: __("Agree to the privacy policy and send.", 'form-send-blocks') }],
-		['itmar/design-button', { buttonType: 'submit', labelContent: __("To confirmation screen", 'form-send-blocks'), align: 'center' }]
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "userName",
+				labelContent: __("Name", "form-send-blocks"),
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter your name", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "email",
+				labelContent: __("E-mail Address", "form-send-blocks"),
+				inputType: "email",
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter your e-mail address", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "message",
+				labelContent: __("Inquiry details", "form-send-blocks"),
+				inputType: "textarea",
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter inquiry", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-checkbox",
+			{
+				labelContent: __(
+					"Agree to the privacy policy and send.",
+					"form-send-blocks"
+				),
+			},
+		],
+		[
+			"itmar/design-button",
+			{
+				buttonType: "submit",
+				labelContent: __("To confirmation screen", "form-send-blocks"),
+				align: "center",
+			},
+		],
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
 		{
-			allowedBlocks: ['itmar/design-text-ctrl', 'itmar/design-checkbox', 'itmar/design-button', 'itmar/design-select'],
+			allowedBlocks: [
+				"itmar/design-text-ctrl",
+				"itmar/design-checkbox",
+				"itmar/design-button",
+				"itmar/design-select",
+			],
 			template: TEMPLATE,
-			templateLock: false
+			templateLock: false,
 		}
 	);
 
 	//インナーブロックを取得
-	const innerBlocks = useSelect((select) => select('core/block-editor').getBlocks(clientId), [clientId]);
+	const innerBlocks = useSelect(
+		(select) => select("core/block-editor").getBlocks(clientId),
+		[clientId]
+	);
 
 	//インナーブロックのラベル幅を取得
 	useEffect(() => {
 		//'itmar/design-checkbox''itmar/design-button'を除外
-		const filteredBlocks = innerBlocks.filter(block => block.name !== 'itmar/design-checkbox' && block.name !== 'itmar/design-button');
+		const filteredBlocks = innerBlocks.filter(
+			(block) =>
+				block.name !== "itmar/design-checkbox" &&
+				block.name !== "itmar/design-button"
+		);
 		const maxNum = filteredBlocks.reduce((max, block) => {
 			//必須項目の表示を設定
-			const dispLabel = block.attributes.required.flg ? `${block.attributes.labelContent}(${block.attributes.required.display})` : block.attributes.labelContent;
+			const dispLabel = block.attributes.required.flg
+				? `${block.attributes.labelContent}(${block.attributes.required.display})`
+				: block.attributes.labelContent;
 			//フォントサイズを取得
-			const renderFontSize = !isMobile ? block.attributes.font_style_label.default_fontSize : block.attributes.font_style_label.mobile_fontSize;
+			const renderFontSize = !isMobile
+				? block.attributes.font_style_label.default_fontSize
+				: block.attributes.font_style_label.mobile_fontSize;
 			//幅の計測
-			return Math.max(max, measureTextWidth(dispLabel, renderFontSize, block.attributes.font_style_label.fontFamily));
+			return Math.max(
+				max,
+				measureTextWidth(
+					dispLabel,
+					renderFontSize,
+					block.attributes.font_style_label.fontFamily
+				)
+			);
 		}, Number.MIN_SAFE_INTEGER);
-		setAttributes({ label_width: `${Math.round(maxNum)}px` })
+		setAttributes({ label_width: `${Math.round(maxNum)}px` });
 	}, [innerBlocks]);
 
 	//モバイルの判定
@@ -131,12 +202,14 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 
 	//ブロックの参照
 	const blockRef = useRef(null);
-	//ルート要素にスタイルとクラスを付加	
+	//ルート要素にスタイルとクラスを付加
 	const blockProps = useBlockProps({
-		ref: blockRef,// ここで参照を blockProps に渡しています
+		ref: blockRef, // ここで参照を blockProps に渡しています
 		style: blockStyle,
-		className: `figure_fieldset ${context['itmar/state_process'] === 'input' ? 'appear' : ""}`,
-		name: form_name
+		className: `figure_fieldset ${
+			context["itmar/state_process"] === "input" ? "appear" : ""
+		}`,
+		name: form_name,
 	});
 
 	//背景色の取得
@@ -145,9 +218,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//背景色変更によるシャドー属性の書き換え
 	useEffect(() => {
 		if (baseColor) {
-			setAttributes({ shadow_element: { ...shadow_element, baseColor: baseColor } });
+			setAttributes({
+				shadow_element: { ...shadow_element, baseColor: baseColor },
+			});
 			const new_shadow = ShadowElm({ ...shadow_element, baseColor: baseColor });
-			if (new_shadow) { setAttributes({ shadow_result: new_shadow.style }); }
+			if (new_shadow) {
+				setAttributes({ shadow_result: new_shadow.style });
+			}
 		}
 	}, [baseColor]);
 
@@ -157,122 +234,158 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title={__("Transmission form information setting", 'form-send-blocks')} initialOpen={true} className="form_setteing_ctrl">
+				<PanelBody
+					title={__(
+						"Transmission form information setting",
+						"form-send-blocks"
+					)}
+					initialOpen={true}
+					className="form_setteing_ctrl"
+				>
 					<TextControl
-						label={__("Form Name", 'form-send-blocks')}
+						label={__("Form Name", "form-send-blocks")}
 						value={form_name}
-						help={__("This is the name used to identify it as a data source.", 'form-send-blocks')}
+						help={__(
+							"This is the name used to identify it as a data source.",
+							"form-send-blocks"
+						)}
 						onChange={(newVal) => setAttributes({ form_name: newVal })}
 					/>
 					<TextControl
-						label={__("Stage information", 'form-send-blocks')}
+						label={__("Stage information", "form-send-blocks")}
 						value={stage_info}
-						help={__("Please enter the stage information to be displayed in the process area.", 'form-send-blocks')}
+						help={__(
+							"Please enter the stage information to be displayed in the process area.",
+							"form-send-blocks"
+						)}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
-
 				</PanelBody>
-
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title={__("Global settings", 'form-send-blocks')} initialOpen={true} className="form_design_ctrl">
-
+				<PanelBody
+					title={__("Global settings", "form-send-blocks")}
+					initialOpen={true}
+					className="form_design_ctrl"
+				>
 					<PanelColorGradientSettings
-						title={__("Background Color Setting", 'form-send-blocks')}
+						title={__("Background Color Setting", "form-send-blocks")}
 						settings={[
 							{
 								colorValue: bgColor,
-								label: __("Choose Block Background color", 'form-send-blocks'),
-								onColorChange: (newValue) => setAttributes({ bgColor: newValue }),
+								label: __("Choose Block Background color", "form-send-blocks"),
+								onColorChange: (newValue) =>
+									setAttributes({ bgColor: newValue }),
 							},
 							{
 								colorValue: bgColor_form,
 								gradientValue: bgGradient_form,
 
-								label: __("Choose Form Background color", 'form-send-blocks'),
-								onColorChange: (newValue) => setAttributes({ bgColor_form: newValue }),
-								onGradientChange: (newValue) => setAttributes({ bgGradient_form: newValue }),
+								label: __("Choose Form Background color", "form-send-blocks"),
+								onColorChange: (newValue) =>
+									setAttributes({ bgColor_form: newValue }),
+								onGradientChange: (newValue) =>
+									setAttributes({ bgGradient_form: newValue }),
 							},
 						]}
 					/>
-					<PanelBody title={__("Border Settings", 'form-send-blocks')} initialOpen={false} className="border_design_ctrl">
+					<PanelBody
+						title={__("Border Settings", "form-send-blocks")}
+						initialOpen={false}
+						className="border_design_ctrl"
+					>
 						<BorderBoxControl
-
 							onChange={(newValue) => setAttributes({ border_form: newValue })}
 							value={border_form}
-							allowReset={true}	// リセットの可否
-							resetValues={border_resetValues}	// リセット時の値
+							allowReset={true} // リセットの可否
+							resetValues={border_resetValues} // リセット時の値
 						/>
 						<BorderRadiusControl
 							values={radius_form}
 							onChange={(newBrVal) =>
-								setAttributes({ radius_form: typeof newBrVal === 'string' ? { "value": newBrVal } : newBrVal })}
+								setAttributes({
+									radius_form:
+										typeof newBrVal === "string"
+											? { value: newBrVal }
+											: newBrVal,
+								})
+							}
 						/>
 					</PanelBody>
 					<BoxControl
-						label={!isMobile ?
-							__("Margin settings(desk top)", 'itmar_block_collections')
-							: __("Margin settings(mobile)", 'itmar_block_collections')
+						label={
+							!isMobile
+								? __("Margin settings(desk top)", "itmar_block_collections")
+								: __("Margin settings(mobile)", "itmar_block_collections")
 						}
-						values={!isMobile ? default_pos.margin_form : mobile_pos.margin_form}
-						onChange={value => {
+						values={
+							!isMobile ? default_pos.margin_form : mobile_pos.margin_form
+						}
+						onChange={(value) => {
 							if (!isMobile) {
-								setAttributes({ default_pos: { ...default_pos, margin_form: value } });
+								setAttributes({
+									default_pos: { ...default_pos, margin_form: value },
+								});
 							} else {
-								setAttributes({ mobile_pos: { ...mobile_pos, margin_form: value } });
+								setAttributes({
+									mobile_pos: { ...mobile_pos, margin_form: value },
+								});
 							}
 						}}
-						units={units}	// 許可する単位
-						allowReset={true}	// リセットの可否
-						resetValues={padding_resetValues}	// リセット時の値
-
+						units={units} // 許可する単位
+						allowReset={true} // リセットの可否
+						resetValues={padding_resetValues} // リセット時の値
 					/>
 					<BoxControl
-						label={!isMobile ?
-							__("Padding settings(desk top)", 'itmar_block_collections')
-							: __("Padding settings(mobile)", 'itmar_block_collections')
+						label={
+							!isMobile
+								? __("Padding settings(desk top)", "itmar_block_collections")
+								: __("Padding settings(mobile)", "itmar_block_collections")
 						}
-						values={!isMobile ? default_pos.padding_form : mobile_pos.padding_form}
-						onChange={value => {
+						values={
+							!isMobile ? default_pos.padding_form : mobile_pos.padding_form
+						}
+						onChange={(value) => {
 							if (!isMobile) {
-								setAttributes({ default_pos: { ...default_pos, padding_form: value } })
+								setAttributes({
+									default_pos: { ...default_pos, padding_form: value },
+								});
 							} else {
-								setAttributes({ mobile_pos: { ...mobile_pos, padding_form: value } })
+								setAttributes({
+									mobile_pos: { ...mobile_pos, padding_form: value },
+								});
 							}
 						}}
-						units={units}	// 許可する単位
-						allowReset={true}	// リセットの可否
-						resetValues={padding_resetValues}	// リセット時の値
-
+						units={units} // 許可する単位
+						allowReset={true} // リセットの可否
+						resetValues={padding_resetValues} // リセット時の値
 					/>
 					<ToggleControl
-						label={__('Is Shadow', 'form-send-blocks')}
+						label={__("Is Shadow", "form-send-blocks")}
 						checked={is_shadow}
 						onChange={(newVal) => {
-							setAttributes({ is_shadow: newVal })
+							setAttributes({ is_shadow: newVal });
 						}}
 					/>
-					{is_shadow &&
+					{is_shadow && (
 						<ShadowStyle
 							shadowStyle={{ ...shadow_element }}
 							onChange={(newStyle, newState) => {
 								setAttributes({ shadow_result: newStyle.style });
-								setAttributes({ shadow_element: newState })
+								setAttributes({ shadow_element: newState });
 							}}
 						/>
-					}
+					)}
 				</PanelBody>
 			</InspectorControls>
 
 			<div {...blockProps}>
 				<StyleComp attributes={attributes}>
-					<form onSubmit={handleSubmit} >
+					<form onSubmit={handleSubmit}>
 						<div {...innerBlocksProps}></div>
 					</form>
 				</StyleComp>
-			</div >
-
+			</div>
 		</>
-
 	);
 }
