@@ -81,7 +81,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			const parentClientId = getBlockRootClientId(clientId);
 			return parentClientId;
 		},
-		[clientId]
+		[clientId],
 	); // clientIdが変わるたびに監視対象のstateを更新する
 
 	// 監視対象のinput要素を取得する
@@ -94,7 +94,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			const parentInnerBlocks = getBlocks(parentClientId);
 			//親のインナーブロックからitmar/input-figure-blockを抽出
 			const inputFigureBlock = parentInnerBlocks.find(
-				(block) => block.name === "itmar/input-figure-block"
+				(block) => block.name === "itmar/input-figure-block",
 			);
 			//その中のインナーブロック
 			const inputInnerBlocks = inputFigureBlock
@@ -102,7 +102,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				: [];
 			return inputInnerBlocks; // 監視対象のstateを返す
 		},
-		[clientId]
+		[clientId],
 	); // clientIdが変わるたびに監視対象のstateを更新する
 
 	//Nestされたブロックの情報取得
@@ -112,7 +112,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			return [];
 		}
 		const children = block.innerBlocks.map((innerBlock) =>
-			getAllNestedBlocks(innerBlock.clientId)
+			getAllNestedBlocks(innerBlock.clientId),
 		);
 		return [block, ...children.flat()];
 	}
@@ -123,7 +123,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			const blocks = select("core/block-editor").getBlocks(clientId);
 			//タイトル属性の取得・初期化
 			const titleBlock = blocks.find(
-				(block) => block.name === "itmar/design-title"
+				(block) => block.name === "itmar/design-title",
 			);
 			return titleBlock
 				? titleBlock.attributes
@@ -132,7 +132,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						headingType: "H3",
 				  };
 		},
-		[clientId]
+		[clientId],
 	);
 
 	//テーブル属性の監視（最初のitmar/design-table）
@@ -141,11 +141,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			const blocks = select("core/block-editor").getBlocks(clientId);
 			//タイトル属性の取得・初期化
 			const tableBlock = blocks.find(
-				(block) => block.name === "itmar/design-table"
+				(block) => block.name === "itmar/design-table",
 			);
 			return tableBlock ? tableBlock.attributes : {};
 		},
-		[clientId]
+		[clientId],
 	);
 
 	//ボタン属性の監視（２つのitmar/design-button）
@@ -153,7 +153,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		//ネストされたブロックも取得
 		const blocks = getAllNestedBlocks(clientId);
 		const buttonBlocks = blocks.filter(
-			(block) => block.name === "itmar/design-button"
+			(block) => block.name === "itmar/design-button",
 		);
 		//ボタン属性の取得・初期化
 		const buttonAttributes = buttonBlocks.length
@@ -183,7 +183,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			//allowedBlocks: ['itmar/input-figure-block'],
 			template: orgTemplate,
 			templateLock: true,
-		}
+		},
 	);
 
 	useEffect(() => {
@@ -213,7 +213,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					outer_align: "center",
 				},
 			},
-			[button1, button2]
+			[button1, button2],
 		);
 		const newInnerBlocks = [
 			createBlock("itmar/design-title", { ...titleBlockAttributes }),
@@ -275,7 +275,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<PanelBody
 					title={__(
 						"Confirmation form information setting",
-						"form-send-blocks"
+						"form-send-blocks",
 					)}
 					initialOpen={true}
 					className="form_setteing_ctrl"
@@ -285,7 +285,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						value={stage_info}
 						help={__(
 							"Please enter the stage information to be displayed in the process area.",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
@@ -344,8 +344,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					<BoxControl
 						label={
 							!isMobile
-								? __("Margin settings(desk top)", "itmar_block_collections")
-								: __("Margin settings(mobile)", "itmar_block_collections")
+								? __("Margin settings(desk top)", "form-send-blocks")
+								: __("Margin settings(mobile)", "form-send-blocks")
 						}
 						values={
 							!isMobile ? default_pos.margin_form : mobile_pos.margin_form
@@ -368,8 +368,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					<BoxControl
 						label={
 							!isMobile
-								? __("Padding settings(desk top)", "itmar_block_collections")
-								: __("Padding settings(mobile)", "itmar_block_collections")
+								? __("Padding settings(desk top)", "form-send-blocks")
+								: __("Padding settings(mobile)", "form-send-blocks")
 						}
 						values={
 							!isMobile ? default_pos.padding_form : mobile_pos.padding_form

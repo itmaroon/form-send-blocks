@@ -1,12 +1,12 @@
 === Form Send Blocks===
 Contributors:      itmaroon
-Tags:              block, Gutenberg, custom, form, e-mail, contact
+Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.3
-Tested up to:      6.4.3
-Stable tag:        1.0.1
+Tested up to:      6.5.2
+Stable tag:        1.1.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
-Requires PHP: 8.0.22
+Requires PHP: 8.1.22
 
 This is a block that summarizes the display screen when submitting a form.
 
@@ -14,6 +14,10 @@ This is a block that summarizes the display screen when submitting a form.
 
 * [Github](https://github.com/itmaroon/form-send-blocks)
 * [source code](https://github.com/itmaroon/form-send-blocks/tree/master/src/blocks)
+* [block-class-package:GitHub](https://github.com/itmaroon/block-class-package)  
+* [block-class-package:Packagist](https://packagist.org/packages/itmar/block-class-package) 
+* [itmar-block-packages:npm](https://www.npmjs.com/package/itmar-block-packages)  
+* [itmar-block-packages:GitHub](https://github.com/itmaroon/itmar-block-packages)
 
 == Description ==
 
@@ -69,9 +73,20 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
-= 1.0.1 =
+= 1.1.1 =
+Bug fixes
+- Fixed text domain setting mistake.  
+
+= 1.1.0 =
 Correction
 Corrected the function to align label widths with the addition of responsive font size function in Block Collection.
+- Modified to be compatible with WordPress 6.5.
+- PHP class management is now done using Composer.  
+[GitHub](https://github.com/itmaroon/block-class-package)  
+[Packagist](https://packagist.org/packages/itmar/block-class-package) 
+- I decided to make functions and components common to other plugins into npm packages, and install and use them from npm.  
+[npm](https://www.npmjs.com/package/itmar-block-packages)  
+[GitHub](https://github.com/itmaroon/itmar-block-packages)
 
 = 1.0.0 =
 First public release
@@ -85,3 +100,9 @@ Please note that responsiveness for tablet display is not supported.
 4. The Contact Mail Sender block uses jquery.easing for screen transition animation. Therefore, when using this block, please comply with the following terms of use.
 [jquery.easing/LICENSE-BSD-3-Clause.txt](https://github.com/gdsmith/jquery.easing/blob/master/LICENSE-BSD-3-Clause.txt)
 5. We use wp_mail for email sending. Therefore, when sending emails from a local environment, it is necessary to install a plugin that provides an SMTP environment such as [WP Mail SMTP by WPForms](https://ja.wordpress.org/plugins/wp-mail-smtp/). Is required.
+6. PHP class management is now done using Composer.  
+[GitHub](https://github.com/itmaroon/block-class-package)  
+[Packagist](https://packagist.org/packages/itmar/block-class-package) 
+7. I decided to make functions and components common to other plugins into npm packages, and install and use them from npm.  
+[npm](https://www.npmjs.com/package/itmar-block-packages)  
+[GitHub](https://github.com/itmaroon/itmar-block-packages)
