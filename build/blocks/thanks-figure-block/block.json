@@ -114,9 +114,9 @@
       "type": "boolean",
       "default": false
     },
-    "selectedPageId": {
-      "type": "number",
-      "default": -1
+    "selectedSlug": {
+      "type": "string",
+      "default": ""
     }
   },
   "usesContext": [

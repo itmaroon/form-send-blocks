@@ -72,6 +72,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		stage_info,
 		shadow_element,
 		is_shadow,
+		selectedSlug,
 	} = attributes;
 
 	//ブロックのスタイル設定
@@ -80,7 +81,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ブロック情報取得ツールの取得
 	const { getBlockRootClientId } = useSelect(
 		(select) => select("core/block-editor"),
-		[clientId]
+		[clientId],
 	);
 	// 親ブロックのclientIdを取得
 	const parentClientId = getBlockRootClientId(clientId);
@@ -106,7 +107,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				className: "itmar_ex_block",
 				content: __(
 					"The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid.",
-					"form-send-blocks"
+					"form-send-blocks",
 				),
 			},
 		],
@@ -124,7 +125,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		{
 			template: TEMPLATE,
 			templateLock: true,
-		}
+		},
 	);
 
 	//モバイルの判定
@@ -173,14 +174,14 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						value={stage_info}
 						help={__(
 							"Please enter the stage information to be displayed in the process area.",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
 					<TextareaControl
 						label={__(
 							"Notification email sending success display",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						value={infomail_success}
 						onChange={(newVal) => setAttributes({ infomail_success: newVal })}
@@ -189,7 +190,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					<TextareaControl
 						label={__(
 							"Notification email sending error display",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						value={infomail_faile}
 						onChange={(newVal) => setAttributes({ infomail_faile: newVal })}
@@ -198,7 +199,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					<TextareaControl
 						label={__(
 							"Response email sending success display",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						value={retmail_success}
 						onChange={(newVal) => setAttributes({ retmail_success: newVal })}
@@ -207,7 +208,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					<TextareaControl
 						label={__(
 							"Response email sending error display",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						value={retmail_faile}
 						onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
@@ -217,13 +218,20 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					<PanelBody
 						title={__(
 							"Select redirect destination when exiting",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 					>
 						<PageSelectControl
-							attributes={attributes}
-							setAttributes={setAttributes}
+							selectedSlug={selectedSlug}
 							homeUrl={form_send_blocks.home_url}
+							onChange={(postInfo) => {
+								if (postInfo) {
+									setAttributes({
+										selectedSlug: postInfo.slug,
+										selectedPageUrl: postInfo.link,
+									});
+								}
+							}}
 						/>
 					</PanelBody>
 				</PanelBody>
