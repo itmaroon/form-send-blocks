@@ -2,11 +2,11 @@
 Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.3
-Tested up to:      6.5.2
+Tested up to:      6.7
 Stable tag:        1.1.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
-Requires PHP: 8.1.22
+Requires PHP: 8.2.10
 
 This is a block that summarizes the display screen when submitting a form.
 
@@ -74,8 +74,9 @@ OR…
 
 == Changelog ==
 = 1.1.1 =
-Bug fixes
-- Fixed text domain setting mistake.  
+- Fixed text domain setting mistake. 
+- The inner block monitoring mechanism has been reorganized to improve maintainability.
+
 
 = 1.1.0 =
 Correction

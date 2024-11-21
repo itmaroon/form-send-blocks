@@ -105,73 +105,77 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		[clientId],
 	); // clientIdが変わるたびに監視対象のstateを更新する
 
-	//Nestされたブロックの情報取得
-	function getAllNestedBlocks(clientId) {
-		const block = select("core/block-editor").getBlock(clientId);
-		if (!block) {
-			return [];
-		}
-		const children = block.innerBlocks.map((innerBlock) =>
-			getAllNestedBlocks(innerBlock.clientId),
-		);
-		return [block, ...children.flat()];
-	}
-
 	//タイトル属性の監視（最初のitmar/design-title）
-	const titleBlockAttributes = useSelect(
+	// const titleBlockAttributes = useSelect(
+	// 	(select) => {
+	// 		const blocks = select("core/block-editor").getBlocks(clientId);
+	// 		//タイトル属性の取得・初期化
+	// 		const titleBlock = blocks.find(
+	// 			(block) => block.name === "itmar/design-title",
+	// 		);
+	// 		return titleBlock
+	// 			? titleBlock.attributes
+	// 			: {
+	// 					headingContent: __("Please check your entries", "form-send-blocks"),
+	// 					headingType: "H3",
+	// 			  };
+	// 	},
+	// 	[clientId],
+	// );
+
+	//テーブル属性の監視（最初のitmar/design-table）
+	// const tableBlockAttributes = useSelect(
+	// 	(select) => {
+	// 		const blocks = select("core/block-editor").getBlocks(clientId);
+	// 		//タイトル属性の取得・初期化
+	// 		const tableBlock = blocks.find(
+	// 			(block) => block.name === "itmar/design-table",
+	// 		);
+	// 		return tableBlock ? tableBlock.attributes : {};
+	// 	},
+	// 	[clientId],
+	// );
+
+	//ブロックの監視
+	const {
+		titleBlockAttributes,
+		tableBlockAttributes,
+		buttonGroupAttributes,
+		buttonBlockAttributes,
+	} = useSelect(
 		(select) => {
 			const blocks = select("core/block-editor").getBlocks(clientId);
+
 			//タイトル属性の取得・初期化
 			const titleBlock = blocks.find(
 				(block) => block.name === "itmar/design-title",
 			);
-			return titleBlock
-				? titleBlock.attributes
-				: {
-						headingContent: __("Please check your entries", "form-send-blocks"),
-						headingType: "H3",
-				  };
-		},
-		[clientId],
-	);
 
-	//テーブル属性の監視（最初のitmar/design-table）
-	const tableBlockAttributes = useSelect(
-		(select) => {
-			const blocks = select("core/block-editor").getBlocks(clientId);
-			//タイトル属性の取得・初期化
+			//テーブル属性の取得・初期化
 			const tableBlock = blocks.find(
 				(block) => block.name === "itmar/design-table",
 			);
-			return tableBlock ? tableBlock.attributes : {};
+
+			//ボタン属性の監視（itmar/design-groupと２つのitmar/design-button）
+			const buttonGroup = blocks.find(
+				(block) => block.name === "itmar/design-group",
+			);
+
+			const buttonAttributes = buttonGroup
+				? buttonGroup.innerBlocks
+						.filter((block) => block.name === "itmar/design-button")
+						.map((block) => block.attributes)
+				: [];
+
+			return {
+				titleBlockAttributes: titleBlock?.attributes,
+				tableBlockAttributes: tableBlock?.attributes,
+				buttonGroupAttributes: buttonGroup?.attributes,
+				buttonBlockAttributes: buttonAttributes,
+			};
 		},
 		[clientId],
 	);
-
-	//ボタン属性の監視（２つのitmar/design-button）
-	const buttonBlockAttributes = useSelect(() => {
-		//ネストされたブロックも取得
-		const blocks = getAllNestedBlocks(clientId);
-		const buttonBlocks = blocks.filter(
-			(block) => block.name === "itmar/design-button",
-		);
-		//ボタン属性の取得・初期化
-		const buttonAttributes = buttonBlocks.length
-			? buttonBlocks.map((block) => block.attributes)
-			: [
-					{
-						buttonType: "submit",
-						buttonId: "btn_id_send",
-						labelContent: __("Send", "form-send-blocks"),
-					},
-					{
-						buttonType: "submit",
-						buttonId: "btn_id_cancel",
-						labelContent: __("Return to send screen", "form-send-blocks"),
-					},
-			  ];
-		return buttonAttributes;
-	}, [clientId]);
 
 	//インナーブロックのテンプレートを初期化
 	const orgTemplate = [];
@@ -187,37 +191,79 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	);
 
 	useEffect(() => {
-		//ボタンのID属性をブロック属性に保存
-		setAttributes({ send_id: buttonBlockAttributes[0].buttonId });
-		setAttributes({ cancel_id: buttonBlockAttributes[1].buttonId });
-	}, [buttonBlockAttributes]);
+		//タイトルブロックの取得と初期化
+		const setTitleAttributes = titleBlockAttributes
+			? titleBlockAttributes
+			: {
+					headingContent: __("Please check your entries", "form-send-blocks"),
+					headingType: "H3",
+			  };
 
-	useEffect(() => {
-		const button1 = createBlock("itmar/design-button", {
-			...buttonBlockAttributes[0],
-		});
-		const button2 = createBlock("itmar/design-button", {
-			...buttonBlockAttributes[1],
-		});
+		//テーブルブロックの取得と初期化
+		const setTableAttributes = tableBlockAttributes ? tableBlockAttributes : {};
+
+		//ブロックのレンダリング処理
+		const button1 = createBlock(
+			"itmar/design-button",
+			buttonBlockAttributes && buttonBlockAttributes.length > 1
+				? {
+						...buttonBlockAttributes[0],
+				  }
+				: {
+						buttonType: "submit",
+						buttonId: "btn_id_send",
+						labelContent: __("Send", "form-send-blocks"),
+				  },
+		);
+		const button2 = createBlock(
+			"itmar/design-button",
+			buttonBlockAttributes && buttonBlockAttributes.length > 1
+				? {
+						...buttonBlockAttributes[1],
+				  }
+				: {
+						buttonType: "submit",
+						buttonId: "btn_id_cancel",
+						labelContent: __("Return to send screen", "form-send-blocks"),
+				  },
+		);
 		const groupBlock = createBlock(
 			"itmar/design-group",
-			{
-				default_pos: {
-					direction: "horizen",
-					inner_align: "center",
-					outer_align: "center",
-				},
-				mobile_pos: {
-					direction: "horizen",
-					inner_align: "center",
-					outer_align: "center",
-				},
-			},
+			buttonGroupAttributes
+				? { ...buttonGroupAttributes }
+				: {
+						default_val: {
+							direction: "horizen",
+							inner_align: "center",
+							outer_align: "center",
+							width_val: "fit",
+							max_width: "fit",
+							reverse: false,
+							wrap: false,
+							outer_vertical: "center",
+							height_val: "fit",
+						},
+						mobile_val: {
+							direction: "horizen",
+							inner_align: "center",
+							outer_align: "center",
+							width_val: "fit",
+							max_width: "fit",
+							reverse: false,
+							wrap: false,
+							outer_vertical: "center",
+							height_val: "fit",
+						},
+				  },
 			[button1, button2],
 		);
+		//ボタンのIDをcomfirm-figure-blockに登録
+		setAttributes({ send_id: button1.attributes.buttonId });
+		setAttributes({ cancel_id: button2.attributes.buttonId });
+
 		const newInnerBlocks = [
-			createBlock("itmar/design-title", { ...titleBlockAttributes }),
-			createBlock("itmar/design-table", { ...tableBlockAttributes }),
+			createBlock("itmar/design-title", { ...setTitleAttributes }),
+			createBlock("itmar/design-table", { ...setTableAttributes }),
 			groupBlock,
 		];
 

@@ -5,7 +5,7 @@
  * Plugin URI:        https://itmaroon.net
  * Description:       This is a block that summarizes the display screen when submitting a form.
  * Requires at least: 6.3
- * Requires PHP:      8.1.22
+ * Requires PHP:      8.2.10
  * Version:           1.1.1
  * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
