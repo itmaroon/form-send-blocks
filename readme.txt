@@ -2,8 +2,8 @@
 Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.3
-Tested up to:      6.7
-Stable tag:        1.1.1
+Tested up to:      6.7.1
+Stable tag:        1.1.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,9 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 1.1.2 =
+- Fixed the redirect destination when returning to the home page to be set to the front-end home URL when the front-end is rendered.  
+
 = 1.1.1 =
 - Fixed text domain setting mistake. 
 - The inner block monitoring mechanism has been reorganized to improve maintainability.

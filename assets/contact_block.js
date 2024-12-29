@@ -472,18 +472,13 @@ jQuery(function ($) {
 	//ホームに戻るボタンの処理
 	$("#to_home").on("submit", function (e) {
 		e.preventDefault();
-		let redirectUrl = $(this).data("selected_page");
-		console.log(redirectUrl);
-		//画面遷移
-		// $(this).parent().removeClass('appear');
-		// $(this).parent().siblings('.first_appear').addClass('appear');
-		//プログレスエリアの処理
-		// $('.wp-block-itmar-design-process').find('li').each(function (index) {
-		//   if (index > 0) {
-		//     $(this).removeClass('ready');
-		//   }
-		// });
+
+		// href属性の[home_url]をhomeUrlに置き換え
+		let updatedHref = $(this)
+			.data("selected_page")
+			.replace("[home_url]", form_send_blocks.home_url);
+
 		//リダイレクト
-		window.location.href = redirectUrl;
+		window.location.href = updatedHref;
 	});
 });

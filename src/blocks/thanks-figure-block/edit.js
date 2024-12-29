@@ -223,7 +223,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					>
 						<PageSelectControl
 							selectedSlug={selectedSlug}
-							homeUrl={form_send_blocks.home_url}
+							homeUrl="[home_url]"
 							onChange={(postInfo) => {
 								if (postInfo) {
 									setAttributes({
