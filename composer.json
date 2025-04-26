@@ -1,17 +1,5 @@
 {
-    "name": "itmaroon/form-send-blocks",
-    "autoload": {
-        "psr-4": {
-            "Itmaroon\\FormSendBlocks\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "itmaroon",
-            "email": "itmaroon@icloud.com"
-        }
-    ],
     "require": {
-        "itmar/block-class-package": "^1.1"
+        "itmar/block-class-package": "^1.3"
     }
 }

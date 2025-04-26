@@ -6,26 +6,26 @@
  * Description:       This is a block that summarizes the display screen when submitting a form.
  * Requires at least: 6.3
  * Requires PHP:      8.2.10
- * Version:           1.1.2
+ * Version:           1.1.3
  * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       form-send-blocks
- *
+ * Domain Path:       /languages
  * @package           itmar
  */
 
 if (!defined('ABSPATH')) exit;
 
 //composerによるリモートリポジトリからの読み込みを要求
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '\vendor\itmar\loader-package\src\register_autoloader.php';
 
 // プラグイン情報取得に必要なファイルを読み込む
 if (!function_exists('get_plugin_data')) {
 	require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 }
 
-$block_entry = new \Itmar\BlockClassPakage\ItmarEntryClass();
+$block_entry = new \Itmar\BlockClassPackage\ItmarEntryClass();
 
 //ブロックの初期登録
 add_action('init', function () use ($block_entry) {
