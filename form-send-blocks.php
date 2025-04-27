@@ -4,9 +4,9 @@
  * Plugin Name:       Form Send Blocks
  * Plugin URI:        https://itmaroon.net
  * Description:       This is a block that summarizes the display screen when submitting a form.
- * Requires at least: 6.3
+ * Requires at least: 6.4
  * Requires PHP:      8.2.10
- * Version:           1.1.3
+ * Version:           1.2.0
  * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -18,7 +18,7 @@
 if (!defined('ABSPATH')) exit;
 
 //composerによるリモートリポジトリからの読み込みを要求
-require_once __DIR__ . '\vendor\itmar\loader-package\src\register_autoloader.php';
+require_once __DIR__ . '/vendor/itmar/loader-package/src/register_autoloader.php';
 
 // プラグイン情報取得に必要なファイルを読み込む
 if (!function_exists('get_plugin_data')) {

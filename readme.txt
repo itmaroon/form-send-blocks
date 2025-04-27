@@ -1,9 +1,9 @@
 === Form Send Blocks===
 Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
-Requires at least: 6.3
-Tested up to:      6.7.1
-Stable tag:        1.1.3
+Requires at least: 6.4
+Tested up to:      6.8
+Stable tag:        1.2.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,10 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 1.2.0 =
+- Regarding the method of loading composer components, a mechanism has been introduced that does not conflict with other plugins. Accordingly, the composer components have been updated.
+- Operation check with WordPress 6.8  
+
 = 1.1.3 =
 - Fixed the issue where the icon inverted display was not displayed properly when selecting a block.
 
