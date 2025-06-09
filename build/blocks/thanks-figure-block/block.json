@@ -9,6 +9,10 @@
     "html": false
   },
   "attributes": {
+    "info_type": {
+      "type": "string",
+      "default": "inquiry"
+    },
     "infomail_success": {
       "type": "string",
       "default": ""

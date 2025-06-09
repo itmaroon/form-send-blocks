@@ -13,6 +13,7 @@ import {
 	ToggleControl,
 	TextareaControl,
 	TextControl,
+	SelectControl,
 	__experimentalBoxControl as BoxControl,
 	__experimentalBorderBoxControl as BorderBoxControl,
 } from "@wordpress/components";
@@ -58,6 +59,7 @@ const units = [
 
 export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const {
+		info_type,
 		infomail_success,
 		infomail_faile,
 		retmail_success,
@@ -91,16 +93,71 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		const next_state =
+			info_type == "inquiry"
+				? "input"
+				: info_type === "provision"
+				? "register"
+				: "input";
 		// 親ブロックのstate_process属性を更新
-		updateBlockAttributes(parentClientId, { state_process: "input" });
+		updateBlockAttributes(parentClientId, { state_process: next_state });
 	};
+
+	//info typeごとのデフォルトの標題
+
+	const headingContent =
+		info_type == "inquiry"
+			? __("Thank you for your inquiry.", "form-send-blocks")
+			: info_type === "provision"
+			? __("Thank you for your provisional registration", "form-send-blocks")
+			: info_type === "register"
+			? __("Proceed to registration", "form-send-blocks")
+			: "";
+
+	const buttonLabel =
+		info_type == "inquiry"
+			? __("Go to home screen", "form-send-blocks")
+			: info_type === "provision"
+			? __("Open the Mail app", "form-send-blocks")
+			: info_type === "register"
+			? __("To members only page", "form-send-blocks")
+			: "";
+	const infoSuccessLabel =
+		info_type == "inquiry"
+			? __("Notification email sending success display", "form-send-blocks")
+			: info_type === "provision"
+			? __("Notification email provision success display", "form-send-blocks")
+			: info_type === "register"
+			? __("Notification email register success display", "form-send-blocks")
+			: "";
+	const infoErrorLabel =
+		info_type == "inquiry"
+			? __("Notification email sending error display", "form-send-blocks")
+			: info_type === "provision"
+			? __("Notification email provision error display", "form-send-blocks")
+			: info_type === "register"
+			? __("Notification email register error display", "form-send-blocks")
+			: "";
+	const retSuccessLabel =
+		info_type == "inquiry"
+			? __("Response email sending success display", "form-send-blocks")
+			: info_type === "provision"
+			? __("Response email provision  display", "form-send-blocks")
+			: info_type === "register"
+			? __("Response email register success display", "form-send-blocks")
+			: "";
+	const retErrorLabel =
+		info_type == "inquiry"
+			? __("Response email sending error display", "form-send-blocks")
+			: info_type === "provision"
+			? __("Response email provision error display")
+			: info_type === "register"
+			? __("Response email register error display")
+			: "";
 
 	//インナーブロックの制御
 	const TEMPLATE = [
-		[
-			"itmar/design-title",
-			{ headingContent: __("Thank you for your inquiry.", "form-send-blocks") },
-		],
+		["itmar/design-title", { headingContent: headingContent }],
 		[
 			"core/paragraph",
 			{
@@ -115,7 +172,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			"itmar/design-button",
 			{
 				buttonType: "submit",
-				labelContent: __("Go to home screen", "form-send-blocks"),
+				labelContent: buttonLabel,
 				align: "center",
 			},
 		],
@@ -134,11 +191,12 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ブロックの参照
 	const blockRef = useRef(null);
 	//ルート要素にスタイルとクラスを付加
+	const appear_state = info_type == "inquiry" ? "thanks" : info_type;
 	const blockProps = useBlockProps({
 		ref: blockRef, // ここで参照を blockProps に渡しています
 		style: blockStyle,
 		className: `figure_fieldset ${
-			context["itmar/state_process"] === "thanks" ? "appear" : ""
+			context["itmar/state_process"] === appear_state ? "appear" : ""
 		}`,
 	});
 
@@ -169,6 +227,27 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					initialOpen={true}
 					className="form_setteing_ctrl"
 				>
+					<SelectControl
+						label={__("Infomation Type", "block-collections")}
+						value={info_type}
+						options={[
+							{
+								label: __("Inquiry", "block-collections"),
+								value: "inquiry",
+							},
+							{
+								label: __("Provisional registration", "block-collections"),
+								value: "provision",
+							},
+							{
+								label: __("Registration", "block-collections"),
+								value: "register",
+							},
+						]}
+						onChange={(newName) => {
+							setAttributes({ info_type: newName });
+						}}
+					/>
 					<TextControl
 						label={__("Stage information", "form-send-blocks")}
 						value={stage_info}
@@ -179,37 +258,25 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
 					<TextareaControl
-						label={__(
-							"Notification email sending success display",
-							"form-send-blocks",
-						)}
+						label={infoSuccessLabel}
 						value={infomail_success}
 						onChange={(newVal) => setAttributes({ infomail_success: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label={__(
-							"Notification email sending error display",
-							"form-send-blocks",
-						)}
+						label={infoErrorLabel}
 						value={infomail_faile}
 						onChange={(newVal) => setAttributes({ infomail_faile: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label={__(
-							"Response email sending success display",
-							"form-send-blocks",
-						)}
+						label={retSuccessLabel}
 						value={retmail_success}
 						onChange={(newVal) => setAttributes({ retmail_success: newVal })}
 						rows="3"
 					/>
 					<TextareaControl
-						label={__(
-							"Response email sending error display",
-							"form-send-blocks",
-						)}
+						label={retErrorLabel}
 						value={retmail_faile}
 						onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
 						rows="3"

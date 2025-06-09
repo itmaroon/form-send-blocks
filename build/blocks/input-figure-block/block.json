@@ -9,6 +9,9 @@
     "html": false
   },
   "attributes": {
+    "form_type": {
+      "type": "string"
+    },
     "form_name": {
       "type": "string"
     },

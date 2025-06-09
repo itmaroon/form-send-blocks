@@ -177,3 +177,317 @@ function itmar_contact_save($user_id, $message)
 		return array('status' => 'success', 'message' =>  __('Receipt processing completed successfully.', 'form-send-blocks'));
 	}
 }
+
+//仮登録の処理とトークンのメール送信
+
+function itmar_register_send_token()
+{
+	check_ajax_referer('contact_send_nonce', 'nonce');
+
+	// 必要に応じて仮登録のテーブル作成
+	itmar_create_pending_users_table_if_not_exists();
+
+
+	if (!isset($_POST['form_data'])) {
+		wp_send_json_error(['err_code' => 'no_data']);
+	}
+
+	// フォームデータをパース
+	parse_str($_POST['form_data'], $form);
+	//その他のデータ
+	$master_email = sanitize_email($_POST['master_email'] ?? '');
+	$master_name = sanitize_text_field($_POST['master_name'] ?? '');
+	$subject_prov = sanitize_text_field($_POST['subject_prov'] ?? '');
+	$message_prov = sanitize_textarea_field($_POST['message_prov'] ?? '');
+	$is_logon = $_POST['is_logon'] === '1' || $_POST['is_logon'] === 'true';
+	//リダイレクト先
+	$redirect_to = isset($_POST['redirect_to']) ? esc_url_raw($_POST['redirect_to']) : home_url();
+
+	$email = sanitize_email($form['email'] ?? '');
+	$name = sanitize_text_field($form['memberName'] ?? '');
+	$password = $form['password'] ?? '';
+
+	if (empty($email) || !is_email($email)) {
+		wp_send_json_error(['err_code' => 'invalid_mail']);
+	}
+	if (empty($name) || empty($password)) {
+		wp_send_json_error(['err_code' => 'no_require']);
+	}
+
+	// 既存ユーザーのメールやユーザー名の重複チェック
+	if (email_exists($email)) {
+		wp_send_json_error(['err_code' => 'email_exists']);
+	}
+	if (username_exists($name)) {
+		wp_send_json_error(['err_code' => 'username_exists']);
+	}
+
+	// トークン生成（64文字程度の一意な文字列）
+	$token = wp_generate_password(48, false, false);
+
+	// DB保存
+	global $wpdb;
+	$table = $wpdb->prefix . 'pending_users';
+
+	$result = $wpdb->insert(
+		$table,
+		[
+			'email' => $email,
+			'name' => $name,
+			'password' => password_hash($password, PASSWORD_DEFAULT), // パスワードはハッシュ化
+			'token' => $token,
+			'created_at' => current_time('mysql'),
+			'is_used' => 0,
+		],
+		['%s', '%s', '%s', '%s', '%s', '%d']
+	);
+
+	if (!$result) {
+		wp_send_json_error([['err_code' => 'save_error']]);
+	}
+
+	// メール送信
+	$confirm_url = add_query_arg([
+		'token'       => $token,
+		'redirect_to' => rawurlencode($redirect_to), // リダイレクト先
+		'is_logon' => $is_logon,
+	], site_url('/register-confirm'));
+
+	$subject = $subject_prov;
+	$lines = [
+		"{$message_prov}",
+		"",
+		"-------------------------------",
+		"{$confirm_url}",
+	];
+
+	$body = implode("\r\n", $lines);
+
+	$headers = (empty($master_name) || empty($master_email)) ? 'Content-Type: text/plain; charset=UTF-8' : [
+		'From: ' . $master_name . ' <' . $master_email . '>',
+		'Content-Type: text/plain; charset=UTF-8'
+	];
+
+	$mail_result = wp_mail($email, $subject, $body, $headers);
+
+	if (!$mail_result) {
+		wp_send_json_error(['err_code' => 'mail_error']);
+	}
+
+	wp_send_json_success();
+}
+
+add_action('wp_ajax_itmar_register_send_token', 'itmar_register_send_token');
+add_action('wp_ajax_nopriv_itmar_register_send_token', 'itmar_register_send_token');
+
+//仮登録ユーザー情報格納用テーブルの生成
+function itmar_create_pending_users_table_if_not_exists()
+{
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'pending_users';
+
+	// テーブルが存在するかチェック
+	if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") !== $table_name) {
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE $table_name (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			email VARCHAR(255) NOT NULL,
+			name VARCHAR(255),
+			password VARCHAR(255),
+			token VARCHAR(64) NOT NULL,
+			created_at DATETIME NOT NULL,
+			is_used TINYINT(1) DEFAULT 0,
+			PRIMARY KEY (id),
+			UNIQUE KEY (token),
+			KEY (email)
+		) $charset_collate;";
+
+		dbDelta($sql);
+	}
+}
+//本登録クエリ用クエリーの生成とフロントエンドへのリダイレクト情報送信
+//1.クエリ変数を登録
+function itmar_register_query_vars($vars)
+{
+	$vars[] = 'token';
+	$vars[] = 'redirect_to';
+	$vars[] = 'is_logon';
+	return $vars;
+}
+add_filter('query_vars', 'itmar_register_query_vars');
+//2. リライトルールを追加
+add_action('init', function () {
+	add_rewrite_rule(
+		'^register-confirm/token/([^/]+)/redirect/(.+)/?$',
+		'index.php?register_token=$matches[1]&redirect_to=$matches[2]',
+		'top'
+	);
+});
+//3. リライトルールをフラッシュ
+function itmar_flush_rewrite_rules()
+{
+	flush_rewrite_rules();
+}
+register_activation_hook(__FILE__, 'itmar_flush_rewrite_rules');
+
+//4.処理を実行
+function itmar_handle_register_confirm()
+{
+	$token       = get_query_var('token');
+	$redirect_to = get_query_var('redirect_to');
+	$is_logon = get_query_var('is_logon');
+
+	if (!$token) return;
+
+	$token = sanitize_text_field($token);
+	$redirect_url = $redirect_to ? rawurldecode($redirect_to) : home_url();
+
+	// 本登録処理
+	$result = itmar_process_token_registration($token, $is_logon);
+
+	if ($result['success']) {
+		$user_name = isset($result['user_name']) ? $result['user_name'] : 'unknown';
+		$mail_to = isset($result['mail_to']) ? $result['mail_to'] : 'unknown';
+		$redirect_url = add_query_arg([
+			'registered' => 'success',
+			'user_name'  => $user_name,
+			'mail_to'    => $mail_to,
+		], $redirect_url); // ← 第2引数がベースURL
+
+		wp_safe_redirect($redirect_url);
+	} else {
+		// エラーメッセージをコード化
+		$error_code = isset($result['error_code']) ? $result['error_code'] : 'unknown';
+		$redirect_url = add_query_arg([
+			'registered' => 'error',
+			'error_code' => $error_code,
+		], $redirect_url); // ← 第2引数がベースURL
+
+		wp_safe_redirect($redirect_url);
+	}
+	exit;
+}
+add_action('template_redirect', function () {
+	$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	if (strpos($path, '/register-confirm') === 0) { //register-confirm以外のURLでは発火させない
+		itmar_handle_register_confirm();
+	}
+});
+
+
+//トークン検証とユーザー作成処理
+function itmar_process_token_registration($token, $is_logon)
+{
+	global $wpdb;
+	$table = $wpdb->prefix . 'pending_users';
+
+	// トークンに該当する仮登録ユーザーを取得
+	$row = $wpdb->get_row(
+		$wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token),
+		ARRAY_A
+	);
+
+	if (!$row) {
+		return ['success' => false, 'error_code' => 'invalid_token'];
+	}
+
+	// 有効期限チェック（24時間）
+	$created = strtotime($row['created_at']);
+	if ((time() - $created) > 86400) {
+		return ['success' => false, 'error_code' => 'expired'];
+	}
+
+	$email = sanitize_email($row['email']);
+	$display_name = sanitize_text_field($row['name']);
+	$hashed_password = $row['password'];
+
+	// user_login を自動生成
+	$base = 'user_' . substr(md5($email), 0, 8);
+	$username = $base;
+	$i = 1;
+	while (username_exists($username)) {
+		$username = $base . $i++;
+	}
+
+	// ユーザー作成（仮パスワードを設定）
+	$user_id = wp_insert_user([
+		'user_login'   => $username,
+		'user_pass'    => wp_generate_password(),
+		'user_email'   => $email,
+		'display_name' => $display_name,
+		'nickname'     => $display_name,
+		'role'         => 'subscriber',
+	]);
+
+	if (is_wp_error($user_id)) {
+		return ['success' => false, 'error_code' => 'user_fail'];
+	}
+
+	// パスワードを仮登録のハッシュで上書き
+	$wpdb->update(
+		$wpdb->users,
+		['user_pass' => $hashed_password],
+		['ID' => $user_id],
+		['%s'],
+		['%d']
+	);
+
+	// 仮登録情報を削除
+	$wpdb->delete($table, ['id' => $row['id']], ['%d']);
+
+	if ($is_logon) {
+		// ✅ 自動ログイン
+		wp_clear_auth_cookie();
+		wp_set_current_user($user_id);
+		wp_set_auth_cookie($user_id, true);
+	}
+
+	//成功を返す
+	return ['success' => true, 'user_name' => $username, 'mail_to' => $email];
+}
+
+//カスタムログインの処理
+function itmar_custom_login()
+{
+	check_ajax_referer('contact_send_nonce', 'nonce');
+
+	if (!isset($_POST['form_data'])) {
+		wp_send_json_error(['message' => 'フォームデータが不正です']);
+	}
+
+	// シリアライズされたデータをパース
+	parse_str($_POST['form_data'], $form);
+	//ログイン状態を保持するか
+	$remember = isset($_POST['remember']) && $_POST['remember'] == 1;
+
+	$username = sanitize_user($form['userID'] ?? '');
+	$password = $form['password'] ?? '';
+
+	if (empty($username) || empty($password)) {
+		wp_send_json_error(['message' => 'ユーザー名またはパスワードが未入力です']);
+	}
+
+	$creds = [
+		'user_login'    => $username,
+		'user_password' => $password,
+		'remember'      => $remember,
+	];
+
+	$user = wp_signon($creds, false);
+
+	if (is_wp_error($user)) {
+		wp_send_json_error(['message' => $user->get_error_message()]);
+	}
+
+	// ✅ 正常ログイン時 → JSONで成功 + リダイレクト先を渡す
+	wp_send_json_success([
+		'message' => 'ログインに成功しました',
+	]);
+}
+
+
+add_action('wp_ajax_itmar_custom_login', 'itmar_custom_login');
+add_action('wp_ajax_nopriv_itmar_custom_login', 'itmar_custom_login');

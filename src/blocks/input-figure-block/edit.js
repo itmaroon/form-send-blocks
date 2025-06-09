@@ -12,6 +12,7 @@ import {
 	PanelBody,
 	TextControl,
 	ToggleControl,
+	SelectControl,
 	__experimentalBoxControl as BoxControl,
 	__experimentalBorderBoxControl as BorderBoxControl,
 } from "@wordpress/components";
@@ -64,6 +65,7 @@ const measureTextWidth = (text, fontSize, fontFamily) => {
 
 export default function Edit({ attributes, setAttributes, context, clientId }) {
 	const {
+		form_type,
 		form_name,
 		bgColor,
 		bgColor_form,
@@ -83,7 +85,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ブロック情報取得ツールの取得
 	const { getBlockRootClientId } = useSelect(
 		(select) => select("core/block-editor"),
-		[clientId]
+		[clientId],
 	);
 	// 親ブロックのclientIdを取得
 	const parentClientId = getBlockRootClientId(clientId);
@@ -93,13 +95,20 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		if (form_type === "login") return; //loginのときは遷移なし
+		const new_state =
+			form_type === "inquiry"
+				? "confirm"
+				: form_type === "member"
+				? "provision"
+				: "";
 		// 親ブロックのstate_process属性を更新
-		updateBlockAttributes(parentClientId, { state_process: "confirm" });
+		updateBlockAttributes(parentClientId, { state_process: new_state });
 	};
 
 	//インナーブロックの制御
 
-	const TEMPLATE = [
+	const MAIL_TEMPLATE = [
 		[
 			"itmar/design-text-ctrl",
 			{
@@ -134,7 +143,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			{
 				labelContent: __(
 					"Agree to the privacy policy and send.",
-					"form-send-blocks"
+					"form-send-blocks",
 				),
 			},
 		],
@@ -147,6 +156,115 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			},
 		],
 	];
+	const MEMBER_TEMPLATE = [
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "memberName",
+				labelContent: __("Name", "form-send-blocks"),
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter your name", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "email",
+				labelContent: __("E-mail Address", "form-send-blocks"),
+				inputType: "email",
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter your e-mail address", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "password",
+				labelContent: __("PassWord", "form-send-blocks"),
+				inputType: "pass",
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter Password", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-checkbox",
+			{
+				labelContent: __(
+					"Agree to the privacy policy and send.",
+					"form-send-blocks",
+				),
+			},
+		],
+		[
+			"itmar/design-button",
+			{
+				buttonType: "submit",
+				labelContent: __("Sending a confirmation email", "form-send-blocks"),
+				align: "center",
+			},
+		],
+	];
+
+	const LOGIN_TEMPLATE = [
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "userID",
+				labelContent: __("ID or email", "form-send-blocks"),
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter your name", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "password",
+				labelContent: __("PassWord", "form-send-blocks"),
+				inputType: "pass",
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter Password", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-checkbox",
+			{
+				labelContent: __(
+					"Agree to the privacy policy and send.",
+					"form-send-blocks",
+				),
+			},
+		],
+		[
+			"itmar/design-title",
+			{
+				headingContent: __(
+					"If you haven't registered yet, click here",
+					"form-send-blocks",
+				),
+				headingType: "H3",
+				linkKind: "fixed",
+				is_underLine: true,
+			},
+		],
+		[
+			"itmar/design-button",
+			{
+				buttonType: "submit",
+				labelContent: __("Login", "form-send-blocks"),
+				align: "center",
+			},
+		],
+	];
+
+	const input_template =
+		form_type === "inquiry"
+			? MAIL_TEMPLATE
+			: form_type === "member"
+			? MEMBER_TEMPLATE
+			: form_type === "login"
+			? LOGIN_TEMPLATE
+			: null;
+
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
 		{
@@ -155,16 +273,17 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				"itmar/design-checkbox",
 				"itmar/design-button",
 				"itmar/design-select",
+				"itmar/design-title",
 			],
-			template: TEMPLATE,
+			template: input_template,
 			templateLock: false,
-		}
+		},
 	);
 
 	//インナーブロックを取得
 	const innerBlocks = useSelect(
 		(select) => select("core/block-editor").getBlocks(clientId),
-		[clientId]
+		[clientId],
 	);
 
 	//インナーブロックのラベル幅を取得
@@ -173,7 +292,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		const filteredBlocks = innerBlocks.filter(
 			(block) =>
 				block.name !== "itmar/design-checkbox" &&
-				block.name !== "itmar/design-button"
+				block.name !== "itmar/design-button" &&
+				block.name !== "itmar/design-title",
 		);
 		const maxNum = filteredBlocks.reduce((max, block) => {
 			//必須項目の表示を設定
@@ -190,8 +310,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				measureTextWidth(
 					dispLabel,
 					renderFontSize,
-					block.attributes.font_style_label.fontFamily
-				)
+					block.attributes.font_style_label.fontFamily,
+				),
 			);
 		}, Number.MIN_SAFE_INTEGER);
 		setAttributes({ label_width: `${Math.round(maxNum)}px` });
@@ -237,17 +357,35 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				<PanelBody
 					title={__(
 						"Transmission form information setting",
-						"form-send-blocks"
+						"form-send-blocks",
 					)}
 					initialOpen={true}
 					className="form_setteing_ctrl"
 				>
+					<SelectControl
+						label={__("Input Form Type", "block-collections")}
+						value={form_type}
+						options={[
+							{ label: __("Inquiry", "block-collections"), value: "inquiry" },
+							{
+								label: __("Membership Registration", "block-collections"),
+								value: "member",
+							},
+							{
+								label: __("Login", "block-collections"),
+								value: "login",
+							},
+						]}
+						onChange={(newName) => {
+							setAttributes({ form_type: newName });
+						}}
+					/>
 					<TextControl
 						label={__("Form Name", "form-send-blocks")}
 						value={form_name}
 						help={__(
 							"This is the name used to identify it as a data source.",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						onChange={(newVal) => setAttributes({ form_name: newVal })}
 					/>
@@ -256,7 +394,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						value={stage_info}
 						help={__(
 							"Please enter the stage information to be displayed in the process area.",
-							"form-send-blocks"
+							"form-send-blocks",
 						)}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>

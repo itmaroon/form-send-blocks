@@ -100,26 +100,29 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	const TEMPLATE = [
 		//同一ブロックを２つ以上入れないこと（名称の文字列が重ならないこと）
 		["itmar/design-process", {}],
-		["itmar/input-figure-block", { form_name: "inquiry_form" }],
+		[
+			"itmar/input-figure-block",
+			{ form_type: "inquiry", form_name: "inquiry_form" },
+		],
 		["itmar/confirm-figure-block", {}],
 		[
 			"itmar/thanks-figure-block",
 			{
 				infomail_success: __(
 					"The person in charge has been notified of your inquiry. Please wait for a while until we reply.",
-					"form-send-blocks"
+					"form-send-blocks",
 				),
 				infomail_faile: __(
 					"Email notification to the person in charge failed.",
-					"form-send-blocks"
+					"form-send-blocks",
 				),
 				retmail_success: __(
 					"We have sent an automatic response email to you, so please check it.",
-					"form-send-blocks"
+					"form-send-blocks",
 				),
 				retmail_faile: __(
 					"Failed to send automatic response email to you.",
-					"form-send-blocks"
+					"form-send-blocks",
 				),
 			},
 		],
@@ -129,16 +132,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		{
 			template: TEMPLATE,
 			templateLock: true,
-		}
+		},
 	);
 
 	//インナーブロックを取得
 	const innerBlocks = useSelect(
 		(select) => select("core/block-editor").getBlocks(clientId),
-		[clientId]
+		[clientId],
 	);
 	const inputFigureBlock = innerBlocks.find(
-		(block) => block.name === "itmar/input-figure-block"
+		(block) => block.name === "itmar/input-figure-block",
 	);
 	const inputInnerBlocks = inputFigureBlock ? inputFigureBlock.innerBlocks : [];
 
@@ -159,7 +162,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				<PanelBody
 					title={__(
 						"Inquiry information notification email",
-						"form-send-blocks"
+						"form-send-blocks",
 					)}
 					initialOpen={true}
 					className="mailinfo_ctrl"
@@ -168,7 +171,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						<TextControl
 							label={__(
 								"Notification email address (Master)",
-								"form-send-blocks"
+								"form-send-blocks",
 							)}
 							value={master_mail_editing}
 							onChange={(newVal) => setMasterMailValue(newVal)} // 一時的な編集値として保存する
@@ -182,9 +185,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 										"error",
 										__(
 											"The notification email address is blank or has an invalid format. ",
-											"form-send-blocks"
+											"form-send-blocks",
 										),
-										{ type: "snackbar", isDismissible: true }
+										{ type: "snackbar", isDismissible: true },
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
 									setMasterMailValue(master_mail);
@@ -206,9 +209,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 										"error",
 										__(
 											"Do not leave the master name blank. ",
-											"form-send-blocks"
+											"form-send-blocks",
 										),
-										{ type: "snackbar", isDismissible: true }
+										{ type: "snackbar", isDismissible: true },
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
 									setMasterNameValue(master_name);
@@ -230,9 +233,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 										"error",
 										__(
 											"Do not leave the subject of the notification email blank. ",
-											"form-send-blocks"
+											"form-send-blocks",
 										),
-										{ type: "snackbar", isDismissible: true }
+										{ type: "snackbar", isDismissible: true },
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
 									setSubjectInfoValue(subject_info);
@@ -254,9 +257,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 										"error",
 										__(
 											"Do not leave the body of the notification email blank. ",
-											"form-send-blocks"
+											"form-send-blocks",
 										),
-										{ type: "snackbar", isDismissible: true }
+										{ type: "snackbar", isDismissible: true },
 									);
 									// バリデーションエラーがある場合、編集値を元の値にリセットする
 									setMessageInfoValue(message_info);
@@ -266,17 +269,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								}
 							}}
 							rows="5"
-							help={__(
-								"Click the input item displayed below to quote it in the text.",
-								"form-send-blocks"
-							)}
 						/>
 					</PanelRow>
 					{inputInnerBlocks
 						.filter(
 							(block) =>
 								block.name !== "itmar/design-checkbox" &&
-								block.name !== "itmar/design-button"
+								block.name !== "itmar/design-button",
 						)
 						.map((input_elm, index) => {
 							const actions = [
@@ -316,17 +315,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 									value={ret_mail}
 									isPressEnterToChange
 									onChange={(newVal) => setAttributes({ ret_mail: newVal })}
-									help={__(
-										"Click on the email address displayed below to set the response destination.",
-										"form-send-blocks"
-									)}
 								/>
 							</PanelRow>
 							{inputInnerBlocks
 								.filter(
 									(block) =>
 										block.name !== "itmar/design-checkbox" &&
-										block.name !== "itmar/design-button"
+										block.name !== "itmar/design-button",
 								)
 								.map((input_elm, index) => {
 									if (input_elm.attributes.inputType === "email") {
@@ -355,7 +350,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								<TextControl
 									label={__(
 										"Automatic response email title",
-										"form-send-blocks"
+										"form-send-blocks",
 									)}
 									value={subject_ret_editing}
 									onChange={(newVal) => setSubjectRetValue(newVal)} // 一時的な編集値として保存する
@@ -365,9 +360,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 												"error",
 												__(
 													"Do not leave the subject of the notification email blank. ",
-													"form-send-blocks"
+													"form-send-blocks",
 												),
-												{ type: "snackbar", isDismissible: true }
+												{ type: "snackbar", isDismissible: true },
 											);
 											// バリデーションエラーがある場合、編集値を元の値にリセットする
 											setSubjectRetValue(subject_ret);
@@ -382,7 +377,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								<TextareaControl
 									label={__(
 										"Automatic response email body",
-										"form-send-blocks"
+										"form-send-blocks",
 									)}
 									value={message_ret_editing}
 									onChange={(newVal) => setMessageRetValue(newVal)} // 一時的な編集値として保存する
@@ -392,9 +387,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 												"error",
 												__(
 													"Do not leave the subject of the notification email blank. ",
-													"form-send-blocks"
+													"form-send-blocks",
 												),
-												{ type: "snackbar", isDismissible: true }
+												{ type: "snackbar", isDismissible: true },
 											);
 											// バリデーションエラーがある場合、編集値を元の値にリセットする
 											setMessageRetValue(message_info);
@@ -406,7 +401,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 									rows="5"
 									help={__(
 										"Click on the input field below to quote it in the text.",
-										"form-send-blocks"
+										"form-send-blocks",
 									)}
 								/>
 							</PanelRow>
@@ -414,7 +409,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								.filter(
 									(block) =>
 										block.name !== "itmar/design-checkbox" &&
-										block.name !== "itmar/design-button"
+										block.name !== "itmar/design-button",
 								)
 								.map((input_elm, index) => {
 									const actions = [

@@ -53,25 +53,27 @@ function removeLoading(dispMsg, target) {
 jQuery(function ($) {
 	//確認画面遷移のボタンの有効化
 	$(document).ready(function () {
+		$target_form = $("#send_confirm_form, #to_login_form, #to_confirm_form");
 		// チェックボックスの状態を評価してsubmitボタンの状態を更新する関数
 		function evaluateCheckboxes() {
 			// 全てのチェックボックスが選択されているかチェック
 			var allChecked = true;
-			$('#to_confirm_form input[type="checkbox"][data-is_proceed="true"]').each(
-				function () {
+
+			$target_form
+				.find('input[type="checkbox"][data-is_proceed="true"]')
+				.each(function () {
 					if (!$(this).prop("checked")) {
 						allChecked = false;
 						return false; // eachループを抜ける
 					}
-				},
-			);
+				});
 
 			if (!allChecked) {
 				// 一つでもチェックされていなければ、submitボタンを無効化
-				$('#to_confirm_form input[type="submit"]').prop("disabled", true);
+				$target_form.find('input[type="submit"]').prop("disabled", true);
 			} else {
 				// すべてチェックされていれば、submitボタンを有効化
-				$('#to_confirm_form input[type="submit"]').prop("disabled", false);
+				$target_form.find('input[type="submit"]').prop("disabled", false);
 			}
 		}
 
@@ -79,10 +81,9 @@ jQuery(function ($) {
 		evaluateCheckboxes();
 
 		// チェックボックスの変更時に関数を実行
-		$('#to_confirm_form input[type="checkbox"][data-is_proceed="true"]').on(
-			"change",
-			evaluateCheckboxes,
-		);
+		$target_form
+			.find('input[type="checkbox"][data-is_proceed="true"]')
+			.on("change", evaluateCheckboxes);
 	});
 
 	//メール送信関数
@@ -160,25 +161,45 @@ jQuery(function ($) {
 		return message;
 	};
 
-	//プロセス更新関数
+	//プロセスブロックの更新
 	const process_change = (figure_elm, set_flg) => {
-		let classNames = figure_elm.attr("class").split(/\s+/); // クラス名を空白文字で分割
-		let wpBlockClasses = $.grep(classNames, function (className) {
-			// 'wp-block'で始まるクラス名を抽出
-			return /^wp-block/.test(className);
-		});
-		let lis = $(".wp-block-itmar-design-process").find("li");
-		let targetLis = lis.filter(function () {
-			var liClasses = $(this).attr("class").split(/\s+/); // li要素のクラス名を取得し配列にする
-			return liClasses.some(function (liClass) {
-				if (liClass === "") {
-					return false; // liClassが空文字であればfalseを返す
-				}
-				var result = wpBlockClasses.some(function (wpBlockClasse) {
-					return wpBlockClasse.includes(liClass);
-				}); // wpBlockClassesにliのクラス名が含まれるかチェック
-				return result;
-			});
+		const figureClassList = figure_elm
+			.attr("class")
+			.split(/\s+/)
+			.filter((c) => c !== "");
+
+		// wp-block-* のクラスだけを接頭辞を取り除いた形で取得
+		const wpBlockClasses = figureClassList
+			.filter((c) => c.startsWith("wp-block-"))
+			.map((c) => c.replace(/^wp-block-/, ""));
+
+		const lis = $(".wp-block-itmar-design-process").find("li");
+
+		const targetLis = lis.filter(function () {
+			const liClassList = $(this)
+				.attr("class")
+				.split(/\s+/)
+				.filter((c) => c !== "");
+
+			// li クラス内の wp-block-* に対応するもの（li 側は接頭辞無し想定）
+			const liWpClassCandidates = liClassList.filter((c) =>
+				wpBlockClasses.includes(c),
+			);
+
+			// li クラス内のその他（つまり wpBlockClass でないもの）
+			const liOtherClasses = liClassList.filter(
+				(c) => !wpBlockClasses.includes(c),
+			);
+
+			// 1. wp-block クラスが1つ以上一致
+			const hasMatchingBlockClass = liWpClassCandidates.length > 0;
+
+			// 2. その他のクラスもすべて figure_elm 側に含まれている
+			const allOtherClassesMatch = liOtherClasses.every((c) =>
+				figureClassList.includes(c),
+			);
+
+			return hasMatchingBlockClass && allOtherClassesMatch;
 		});
 
 		if (set_flg) {
@@ -255,16 +276,11 @@ jQuery(function ($) {
 		);
 	};
 
-	//formの確認画面へボタンが押されたときの処理
-	$("#to_confirm_form").on("submit", function (e) {
-		e.preventDefault();
-
-		//アニメーション中ならリターン
-		if (animating) return false;
-
+	//必須項目のバリデーションチェック
+	function require_check(form) {
 		let err_flg = false; //エラーフラグをセット
 		//バリデーションチェック
-		$(this)
+		form
 			.find(".wp-block-itmar-design-text-ctrl, .wp-block-itmar-design-select")
 			.each(function () {
 				let required = $(this).data("required");
@@ -291,7 +307,6 @@ jQuery(function ($) {
 					}
 
 					if (required_err) {
-						const { __ } = wp.i18n;
 						const msg = __("This is a required field.", "form-send-blocks");
 						console.log(msg);
 						let err_msg_elm = $(
@@ -307,9 +322,184 @@ jQuery(function ($) {
 					}
 				}
 			});
-		if (err_flg) {
-			return; //エラーフラグがtrueなら処理終了
+		return err_flg;
+	}
+
+	const { __ } = wp.i18n;
+	const errorMap = {
+		invalid_token: __(
+			"The token has already been used or is invalid.",
+			"form-send-blocks",
+		),
+		expired: __("The token has expired.", "form-send-blocks"),
+		user_fail: __("User registration failed.", "form-send-blocks"),
+		no_data: __("Input data missing", "form-send-blocks"),
+		invalid_mail: __(
+			"The email address format is invalid.",
+			"form-send-blocks",
+		),
+		no_require: __("Your name and password are required.", "form-send-blocks"),
+		email_exists: __(
+			"The email address is already in use.",
+			"form-send-blocks",
+		),
+		username_exists: __("The user ID is already in use.", "form-send-blocks"),
+		save_error: __(
+			"Failed to save temporary registration data.",
+			"form-send-blocks",
+		),
+		mail_error: __(
+			"The email containing the provisional registration results could not be sent.",
+			"form-send-blocks",
+		),
+	};
+
+	// クエリパラメータによる処理(本登録の処理)
+	const urlParams = new URLSearchParams(window.location.search);
+	const isRegisteredSuccess = urlParams.get("registered") === "success";
+	const isRegisteredError = urlParams.get("registered") === "error";
+	const register_block = $(".wp-block-itmar-member-register");
+	if (register_block.length > 0) {
+		//block-itmar-member-registerの場合に限定
+		const ajax_result = {}; //本登録の結果
+
+		if (isRegisteredSuccess || isRegisteredError) {
+			const fieldset_objs = register_block.find(".figure_fieldset");
+			const last_fieldset = fieldset_objs.last();
+			// アニメーションの実行
+			processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(2), true);
+
+			// プログレスエリアの処理
+			process_change(fieldset_objs.eq(1), true);
+			process_change(last_fieldset, true);
+
+			//表示エリアに表示
+			let result_disp = $("#to_regist_page p");
+			result_disp.empty();
+
+			if (isRegisteredSuccess) {
+				// ✅ wp_send_json_success の場合
+
+				const user_name = urlParams.get("user_name");
+				const mail_to = urlParams.get("mail_to");
+
+				let p = $("<p></p>")
+					.addClass("success")
+					.text($("#to_regist_page").data("info_mail_success"));
+				result_disp.append(p);
+				//結果の記録
+				ajax_result.status = "success";
+				ajax_result.content = `${__(
+					"user name",
+					"form-send-blocks",
+				)} : ${user_name}\n${__(
+					"mail address",
+					"form-send-blocks",
+				)} : ${mail_to}`;
+
+				//確認メールをおくる
+				if (register_block.data("is_retmail")) {
+					// ✅ 登録完了通知メール送信
+					let master_email = register_block.data("master_mail");
+					let master_name = register_block.data("master_name");
+					let subject_register = register_block.data("subject_reg");
+					let message_register = register_block.data("message_reg");
+					//message_retの再構築
+					message_register = `${message_rebuild(
+						message_register,
+					)}\n\n-------------------------------------------------\n${__(
+						"userID",
+						"form-send-blocks",
+					)} : ${user_name}`;
+					//メールの送信
+					sendMail_ajax(
+						mail_to,
+						subject_register,
+						message_register,
+						master_email,
+						master_name,
+						false,
+						true,
+					);
+				}
+				//自動ログオンが設定されていないときはボタンを消す
+				const $parentBlock = $(this).closest(".wp-block-itmar-member-register");
+				if ($parentBlock.data("is_logon")) {
+					$("#to_regist_page").find(".wp-block-itmar-design-button").hide();
+				}
+			} else if (isRegisteredError) {
+				// ❌ wp_send_json_error の場合
+				let p = $("<p></p>")
+					.addClass("error")
+					.text($("#to_regist_page").data("info_mail_error"));
+				result_disp.append(p);
+				let err_msg = `--------------------\nerror content : ${
+					errorMap[urlParams.get("error_code")]
+				}`;
+				let err_p = $("<p></p>")
+					.addClass("error")
+					.html(err_msg.replace(/\n/g, "<br>"));
+				result_disp.append(err_p);
+
+				//ボタンを消す
+				$("#to_regist_page").find(".wp-block-itmar-design-button").hide();
+				//結果の記録
+				ajax_result.status = "error";
+				ajax_result.content = urlParams.get("error_code");
+			}
+
+			//管理者への通知メール
+			if (register_block.data("is_reg_notice")) {
+				let master_email = register_block.data("master_mail");
+				let master_name = register_block.data("master_name");
+				let subject_ret_reg = register_block.data("subject_ret_reg");
+				let message_ret_reg = register_block.data("message_ret_reg");
+				//message_retの再構築
+				message_ret_reg = `${message_rebuild(
+					message_ret_reg,
+				)}\n\n-------------------------------------------------\n${__(
+					"Official registration results",
+					"form-send-blocks",
+				)} : ${ajax_result.status}`;
+
+				if (ajax_result.status === "error") {
+					//エラーの原因を通知
+					message_ret_reg = `${message_ret_reg}\n${__(
+						"Official registration error cause",
+						"form-send-blocks",
+					)} : ${errorMap[ajax_result.content]}`;
+				} else {
+					//成功の時
+					message_ret_reg = `${message_ret_reg}\n${__(
+						"Official registration info",
+						"form-send-blocks",
+					)} : ${ajax_result.content}`;
+				}
+
+				//メールの送信
+				sendMail_ajax(
+					master_email,
+					subject_ret_reg,
+					message_ret_reg,
+					master_email,
+					master_name,
+					false,
+					true,
+				);
+			}
 		}
+	}
+
+	//formの確認画面へボタンが押されたときの処理
+	$("#to_confirm_form").on("submit", function (e) {
+		e.preventDefault();
+
+		//アニメーション中ならリターン
+		if (animating) return false;
+
+		//必須のバリデーションチェック
+		if (require_check($(this))) return;
+
 		animating = true; //アニメーションフラグを立てる
 
 		//次の画面に遷移
@@ -352,12 +542,13 @@ jQuery(function ($) {
 		});
 	});
 
-	//実行またはキャンセルボタンが押されたときの処理
+	//問い合わせの実行またはキャンセルボタンが押されたときの処理
 	$("#itmar_send_exec").on("submit", function (e) {
 		e.preventDefault();
 
 		//アニメーション中ならリターン
 		if (animating) return false;
+
 		animating = true;
 
 		//押されたボタンの取得
@@ -386,7 +577,6 @@ jQuery(function ($) {
 		//message_infoの再構築
 		message_info = message_rebuild(message_info);
 		//ローディングマークを出す
-		const { __ } = wp.i18n;
 		dispLoading(__("sending...", "form-send-blocks"), $("#itmar_send_exec"));
 		//通知メールの送信
 		promises.push(
@@ -478,6 +668,216 @@ jQuery(function ($) {
 			.data("selected_page")
 			.replace("[home_url]", form_send_blocks.home_url);
 
+		//リダイレクト
+		window.location.href = updatedHref;
+	});
+
+	//会員仮登録の処理と本登録メールの送信
+	$("#send_confirm_form").on("submit", function (e) {
+		e.preventDefault();
+
+		//アニメーション中ならリターン
+		if (animating) return false;
+		//必須のバリデーションチェック
+		if (require_check($(this))) return;
+		animating = true;
+
+		//親ブロックの情報取得
+		let parent_block = $(this).parents(".wp-block-itmar-member-register");
+
+		const block_info_obj = {
+			master_email: parent_block.data("master_mail"),
+			master_name: parent_block.data("master_name"),
+			subject_prov: parent_block.data("subject_prov"),
+			message_prov: message_rebuild(parent_block.data("message_prov")), //message_provの再構築
+			is_retmail: parent_block.data("is_retmail"),
+			is_logon: parent_block.data("is_logon"),
+		};
+
+		//現在のページ
+		const pageUrl = window.location.href;
+
+		//ローディングマークを出す
+		dispLoading(__("sending...", "form-send-blocks"), $("#send_confirm_form"));
+
+		//noceの取得
+		const nonce = itmar_form_send_option.nonce;
+
+		//ajaxの送り先
+		const ajaxUrl = itmar_form_send_option.ajaxURL;
+
+		const $form = $(this);
+		const formData = $form.serialize();
+
+		const ajax_result = {};
+
+		$.ajax({
+			url: ajaxUrl,
+
+			type: "POST",
+			data: {
+				action: "itmar_register_send_token",
+				nonce: nonce,
+				redirect_to: pageUrl, // ← 現在のURLを追加
+				form_data: formData,
+				...block_info_obj,
+			},
+			dataType: "json",
+		})
+			.done(function (response) {
+				//表示エリアに表示
+				let result_disp = $("#to_mail p");
+				result_disp.empty();
+
+				if (response.success) {
+					// ✅ wp_send_json_success の場合
+					//let message = $("#to_home").data(`${key}_${value.status}`);
+					let p = $("<p></p>")
+						.addClass("success")
+						.text($("#to_mail").data("info_mail_success"));
+					result_disp.append(p);
+					ajax_result.status = "success";
+				} else {
+					// ❌ wp_send_json_error の場合
+					let p = $("<p></p>")
+						.addClass("error")
+						.text($("#to_mail").data("info_mail_error"));
+					result_disp.append(p);
+					let err_msg = `--------------------\nerror content : ${
+						errorMap[response.data.err_code]
+					}`;
+					let err_p = $("<p></p>")
+						.addClass("error")
+						.html(err_msg.replace(/\n/g, "<br>"));
+					result_disp.append(err_p);
+					//ボタンを消す
+					$("#to_mail").find(".wp-block-itmar-design-button").hide();
+					//結果の記録
+					ajax_result.status = "error";
+					ajax_result.error_code = response.data.err_code;
+				}
+			})
+			.fail(function (xhr, status, error) {
+				ajax_result.status = "error";
+			})
+			.always(function () {
+				//管理者への通知メール
+				if (parent_block.data("is_prov_notice")) {
+					let master_email = parent_block.data("master_mail");
+					let master_name = parent_block.data("master_name");
+					let subject_ret_prov = parent_block.data("subject_ret_prov");
+					let message_ret_prov = parent_block.data("message_ret_prov");
+					//message_retの再構築
+					message_ret_prov = `${message_rebuild(
+						message_ret_prov,
+					)}\n\n-------------------------------------------------\n${__(
+						"Provisional registration results",
+						"form-send-blocks",
+					)} : ${ajax_result.status}`;
+					//エラーの原因を通知
+					if (ajax_result.status === "error") {
+						message_ret_prov = `${message_ret_prov}\n${__(
+							"Provisional registration error cause",
+							"form-send-blocks",
+						)} : ${errorMap[ajax_result.error_code]}`;
+					}
+					//メールの送信
+					sendMail_ajax(
+						master_email,
+						subject_ret_prov,
+						message_ret_prov,
+						master_email,
+						master_name,
+						false,
+						true,
+					);
+				}
+				//ローディングマーク消去
+				removeLoading("", $("#send_confirm_form"));
+				//アニメーションの実行
+				processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(1), true);
+				//プログレスエリアの処理
+				process_change(
+					$form.parent().parent().nextAll(".figure_fieldset").first(),
+					true,
+				);
+			});
+	});
+
+	//メールを開くボタンの処理
+	$("#to_mail").on("submit", function (e) {
+		e.preventDefault();
+
+		//リダイレクト
+		window.location.href = `mailto:`;
+	});
+
+	//カスタムログインの処理
+	$("#to_login_form").on("submit", function (e) {
+		e.preventDefault();
+
+		//アニメーション中ならリターン
+		if (animating) return false;
+
+		//必須のバリデーションチェック
+		if (require_check($(this))) return;
+
+		animating = true;
+
+		//ローディングマークを出す
+		dispLoading(__("sending...", "form-send-blocks"), $("#to_login_form"));
+
+		//noceの取得
+		const nonce = itmar_form_send_option.nonce;
+
+		//ajaxの送り先
+		const ajaxUrl = itmar_form_send_option.ajaxURL;
+
+		const $form = $(this);
+		const formData = $form.serialize();
+		const formParent = $form.closest(".wp-block-itmar-coustom-login");
+
+		$.ajax({
+			url: ajaxUrl,
+
+			type: "POST",
+			data: {
+				action: "itmar_custom_login",
+				nonce: nonce,
+				form_data: formData,
+				remember: formParent.data("is_remember") ? 1 : 0, // 数値で渡すのが確実
+			},
+			dataType: "json",
+		})
+			.done(function (response) {
+				if (response.success) {
+					// [home_url]をhomeUrlに置き換え
+					let updatedHref = formParent
+						.data("redirect_url")
+						.replace("[home_url]", form_send_blocks.home_url);
+					window.location.href = updatedHref;
+				} else {
+					alert("ログインエラー: " + response.data.message);
+				}
+			})
+			.fail(function (xhr, status, error) {
+				alert("通信エラーが発生しました：" + error);
+			})
+			.always(function () {
+				//ローディングマーク消去
+				removeLoading("", $("#to_login_form"));
+			});
+	});
+
+	//専用ページを開くボタンの処理
+	$("#to_regist_page").on("submit", function (e) {
+		e.preventDefault();
+
+		// href属性の[home_url]をhomeUrlに置き換え
+		let updatedHref = $(this)
+			.data("selected_page")
+			.replace("[home_url]", form_send_blocks.home_url);
+		console.log(updatedHref);
 		//リダイレクト
 		window.location.href = updatedHref;
 	});

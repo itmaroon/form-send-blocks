@@ -1,0 +1,102 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "itmar/coustom-login",
+	"version": "0.1.0",
+	"title": "Custom Login",
+	"category": "media",
+	"supports": {
+		"multiple": false,
+		"html": false,
+		"color": {
+			"background": true,
+			"text": false,
+			"gradients": true,
+			"custom": true
+		}
+	},
+	"attributes": {
+		"default_pos": {
+			"type": "object",
+			"default": {
+				"margin_value": {
+					"top": "1em",
+					"left": "2em",
+					"bottom": "1em",
+					"right": "2em"
+				},
+				"padding_value": {
+					"top": "1em",
+					"left": "2em",
+					"bottom": "1em",
+					"right": "2em"
+				}
+			}
+		},
+		"mobile_pos": {
+			"type": "object",
+			"default": {
+				"margin_value": {
+					"top": "1em",
+					"left": "0",
+					"bottom": "1em",
+					"right": "0"
+				},
+				"padding_value": {
+					"top": "0",
+					"left": "0",
+					"bottom": "0",
+					"right": "0"
+				}
+			}
+		},
+		"shadow_element": {
+			"type": "object",
+			"default": {
+				"shadowType": "nomal",
+				"spread": 2,
+				"lateral": 2,
+				"longitude": 2,
+				"nomalBlur": 3,
+				"shadowColor": "#9F9F9F",
+				"distance": 5,
+				"intensity": 5,
+				"opacity": 0.5,
+				"depth": 5,
+				"blur": 5,
+				"bdBlur": 5,
+				"expand": 5,
+				"glassblur": 5,
+				"glassopa": 0.5,
+				"newDirection": "top_left",
+				"clayDirection": "top",
+				"embos": "swell",
+				"hasOutline": true,
+				"baseColor": "#ffffff"
+			}
+		},
+		"shadow_result": {
+			"type": "object"
+		},
+		"is_shadow": {
+			"type": "boolean",
+			"default": false
+		},
+		"selectedSlug": {
+			"type": "string",
+			"default": ""
+		},
+
+		"isRemember":{
+			"type":"boolean",
+			"default":true
+		}
+	},
+	"providesContext": {
+		"itmar/state_process": "state_process"
+	},
+	"textdomain": "form-send-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}
