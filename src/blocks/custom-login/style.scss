@@ -9,6 +9,14 @@
 	position: relative;
 	width: 100%;
 
+	.figure_fieldset {
+		display: none;
+
+		&.appear {
+			display: block;
+		}
+	}
+
 	#to_login_form {
 		.err_msg {
 			position: absolute;

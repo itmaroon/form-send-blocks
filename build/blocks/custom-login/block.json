@@ -89,6 +89,10 @@
     "isRemember": {
       "type": "boolean",
       "default": true
+    },
+    "state_process": {
+      "type": "string",
+      "default": "input"
     }
   },
   "providesContext": {

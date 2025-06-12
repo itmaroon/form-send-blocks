@@ -660,9 +660,8 @@ jQuery(function ($) {
 	});
 
 	//ホームに戻るボタンの処理
-	$("#to_home").on("submit", function (e) {
+	$("#to_home, #error_to_home, #to_mail").on("submit", function (e) {
 		e.preventDefault();
-
 		// href属性の[home_url]をhomeUrlに置き換え
 		let updatedHref = $(this)
 			.data("selected_page")
@@ -804,14 +803,6 @@ jQuery(function ($) {
 			});
 	});
 
-	//メールを開くボタンの処理
-	$("#to_mail").on("submit", function (e) {
-		e.preventDefault();
-
-		//リダイレクト
-		window.location.href = `mailto:`;
-	});
-
 	//カスタムログインの処理
 	$("#to_login_form").on("submit", function (e) {
 		e.preventDefault();
@@ -857,7 +848,22 @@ jQuery(function ($) {
 						.replace("[home_url]", form_send_blocks.home_url);
 					window.location.href = updatedHref;
 				} else {
-					alert("ログインエラー: " + response.data.message);
+					//表示エリアに表示
+					let result_disp = $("#error_to_home p");
+					result_disp.empty();
+
+					let p = $("<p></p>")
+						.addClass("error")
+						.text($("#error_to_home").data("info_mail_error"));
+					result_disp.append(p);
+					let err_msg = `--------------------\n${response.data.message}`;
+					let err_p = $("<p></p>")
+						.addClass("error")
+						.html(err_msg.replace(/\n/g, "<br>"));
+					result_disp.append(err_p);
+					//alert("ログインエラー: " + response.data.message);
+					//アニメーションの実行
+					processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(1), true);
 				}
 			})
 			.fail(function (xhr, status, error) {

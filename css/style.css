@@ -5,26 +5,26 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-itmar-member-register {
+.wp-block-itmar-coustom-login {
   position: relative;
   width: 100%;
   /* loading
   ===================================== */
 }
-.wp-block-itmar-member-register .figure_fieldset {
+.wp-block-itmar-coustom-login .figure_fieldset {
   display: none;
 }
-.wp-block-itmar-member-register .figure_fieldset.appear {
+.wp-block-itmar-coustom-login .figure_fieldset.appear {
   display: block;
 }
-.wp-block-itmar-member-register #send_confirm_form .err_msg {
+.wp-block-itmar-coustom-login #to_login_form .err_msg {
   position: absolute;
   font-size: 0.8em;
   color: var(--wp--preset--color--err-message);
   top: 90%;
   left: 10%;
 }
-.wp-block-itmar-member-register .loading {
+.wp-block-itmar-coustom-login .loading {
   font-size: clamp(4.5px, 0.52vw, 15px);
   position: absolute;
   top: 0;
@@ -35,10 +35,10 @@
   opacity: 0.7;
   z-index: 100;
 }
-.wp-block-itmar-member-register .loading.body {
+.wp-block-itmar-coustom-login .loading.body {
   position: fixed;
 }
-.wp-block-itmar-member-register .loading .loadingMsg {
+.wp-block-itmar-coustom-login .loading .loadingMsg {
   color: #eee;
   position: absolute;
   top: 50%;
@@ -46,7 +46,7 @@
   transform: translate(-50%, -50%);
   font-size: 20px;
 }
-.wp-block-itmar-member-register .loading .loading_icon {
+.wp-block-itmar-coustom-login .loading .loading_icon {
   box-sizing: border-box;
   width: 15px;
   height: 15px;

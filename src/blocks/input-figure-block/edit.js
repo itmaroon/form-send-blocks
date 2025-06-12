@@ -95,12 +95,14 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (form_type === "login") return; //loginのときは遷移なし
+
 		const new_state =
 			form_type === "inquiry"
 				? "confirm"
 				: form_type === "member"
 				? "provision"
+				: form_type === "login"
+				? "logonErr"
 				: "";
 		// 親ブロックのstate_process属性を更新
 		updateBlockAttributes(parentClientId, { state_process: new_state });

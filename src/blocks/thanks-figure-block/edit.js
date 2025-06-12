@@ -112,31 +112,55 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			? __("Thank you for your provisional registration", "form-send-blocks")
 			: info_type === "register"
 			? __("Proceed to registration", "form-send-blocks")
+			: info_type === "logonErr"
+			? __("Logon failed", "form-send-blocks")
 			: "";
 
 	const buttonLabel =
 		info_type == "inquiry"
 			? __("Go to home screen", "form-send-blocks")
 			: info_type === "provision"
-			? __("Open the Mail app", "form-send-blocks")
+			? __("Go to home screen", "form-send-blocks")
 			: info_type === "register"
 			? __("To members only page", "form-send-blocks")
+			: info_type === "logonErr"
+			? __("Go to home screen", "form-send-blocks")
 			: "";
 	const infoSuccessLabel =
 		info_type == "inquiry"
-			? __("Notification email sending success display", "form-send-blocks")
+			? __(
+					"Notification screen and email sending success display",
+					"form-send-blocks",
+			  )
 			: info_type === "provision"
-			? __("Notification email provision success display", "form-send-blocks")
+			? __(
+					"Notification screen and email provision success display",
+					"form-send-blocks",
+			  )
 			: info_type === "register"
-			? __("Notification email register success display", "form-send-blocks")
+			? __(
+					"Notification screen and email register success display",
+					"form-send-blocks",
+			  )
 			: "";
 	const infoErrorLabel =
 		info_type == "inquiry"
-			? __("Notification email sending error display", "form-send-blocks")
+			? __(
+					"Notification screen and email sending error display",
+					"form-send-blocks",
+			  )
 			: info_type === "provision"
-			? __("Notification email provision error display", "form-send-blocks")
+			? __(
+					"Notification screen and email provision error display",
+					"form-send-blocks",
+			  )
 			: info_type === "register"
-			? __("Notification email register error display", "form-send-blocks")
+			? __(
+					"Notification screen and email register error display",
+					"form-send-blocks",
+			  )
+			: info_type === "logonErr"
+			? __("Notification screen login error display", "form-send-blocks")
 			: "";
 	const retSuccessLabel =
 		info_type == "inquiry"
@@ -150,9 +174,9 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		info_type == "inquiry"
 			? __("Response email sending error display", "form-send-blocks")
 			: info_type === "provision"
-			? __("Response email provision error display")
+			? __("Response email provision error display", "form-send-blocks")
 			: info_type === "register"
-			? __("Response email register error display")
+			? __("Response email register error display", "form-send-blocks")
 			: "";
 
 	//インナーブロックの制御
@@ -228,20 +252,24 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					className="form_setteing_ctrl"
 				>
 					<SelectControl
-						label={__("Infomation Type", "block-collections")}
+						label={__("Infomation Type", "form-send-blocks")}
 						value={info_type}
 						options={[
 							{
-								label: __("Inquiry", "block-collections"),
+								label: __("Inquiry", "form-send-blocks"),
 								value: "inquiry",
 							},
 							{
-								label: __("Provisional registration", "block-collections"),
+								label: __("Provisional registration", "form-send-blocks"),
 								value: "provision",
 							},
 							{
-								label: __("Registration", "block-collections"),
+								label: __("Registration", "form-send-blocks"),
 								value: "register",
+							},
+							{
+								label: __("Logon Error", "form-send-blocks"),
+								value: "logonErr",
 							},
 						]}
 						onChange={(newName) => {
@@ -257,31 +285,42 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 						)}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
-					<TextareaControl
-						label={infoSuccessLabel}
-						value={infomail_success}
-						onChange={(newVal) => setAttributes({ infomail_success: newVal })}
-						rows="3"
-					/>
+					{info_type !== "logonErr" && (
+						<>
+							<TextareaControl
+								label={infoSuccessLabel}
+								value={infomail_success}
+								onChange={(newVal) =>
+									setAttributes({ infomail_success: newVal })
+								}
+								rows="3"
+							/>
+						</>
+					)}
 					<TextareaControl
 						label={infoErrorLabel}
 						value={infomail_faile}
 						onChange={(newVal) => setAttributes({ infomail_faile: newVal })}
 						rows="3"
 					/>
-					<TextareaControl
-						label={retSuccessLabel}
-						value={retmail_success}
-						onChange={(newVal) => setAttributes({ retmail_success: newVal })}
-						rows="3"
-					/>
-					<TextareaControl
-						label={retErrorLabel}
-						value={retmail_faile}
-						onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
-						rows="3"
-					/>
-
+					{info_type !== "logonErr" && (
+						<>
+							<TextareaControl
+								label={retSuccessLabel}
+								value={retmail_success}
+								onChange={(newVal) =>
+									setAttributes({ retmail_success: newVal })
+								}
+								rows="3"
+							/>
+							<TextareaControl
+								label={retErrorLabel}
+								value={retmail_faile}
+								onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
+								rows="3"
+							/>
+						</>
+					)}
 					<PanelBody
 						title={__(
 							"Select redirect destination when exiting",

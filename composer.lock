@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d30c0dc14cf91217c373b7d4b4da89b1",
+    "content-hash": "b051d114bd1abb6bd5f65bc3cb24e4e1",
     "packages": [
         {
             "name": "itmar/block-class-package",
@@ -82,6 +82,46 @@
                 "source": "https://github.com/itmaroon/loader-package/tree/v1.1.0"
             },
             "time": "2025-05-03T12:36:23+00:00"
+        },
+        {
+            "name": "itmar/wpsetting-class-package",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/itmaroon/wpsetting-class-package.git",
+                "reference": "29e51d60e8d3f5ba46860fc7264ed8ee54832745"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/itmaroon/wpsetting-class-package/zipball/29e51d60e8d3f5ba46860fc7264ed8ee54832745",
+                "reference": "29e51d60e8d3f5ba46860fc7264ed8ee54832745",
+                "shasum": ""
+            },
+            "require": {
+                "itmar/loader-package": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Itmar\\WpsettingClassPackage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "itmaroon",
+                    "email": "master@itmaroon.net"
+                }
+            ],
+            "description": "This package contains classes that provide a GUI for configuring various settings in WordPress.",
+            "support": {
+                "issues": "https://github.com/itmaroon/wpsetting-class-package/issues",
+                "source": "https://github.com/itmaroon/wpsetting-class-package/tree/v1.3.0"
+            },
+            "time": "2025-06-11T01:57:41+00:00"
         }
     ],
     "packages-dev": [],

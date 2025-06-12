@@ -14,9 +14,5 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start"
-	},
-	"dependencies": {
-		"itmar-block-packages": "^1.6.1",
-		"styled-components": "^6.1.1"
 	}
 }

@@ -6,7 +6,7 @@
  * Description:       This is a block that summarizes the display screen when submitting a form.
  * Requires at least: 6.4
  * Requires PHP:      8.2.10
- * Version:           1.2.0
+ * Version:           1.3.0
  * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -26,6 +26,8 @@ if (!function_exists('get_plugin_data')) {
 }
 
 $block_entry = new \Itmar\BlockClassPackage\ItmarEntryClass();
+
+use Itmar\WpsettingClassPackage\ItmarDbCache;
 
 //ブロックの初期登録
 add_action('init', function () use ($block_entry) {
@@ -49,7 +51,7 @@ function itmar_contact_block_add_js()
 {
 	//jquery-easingを読み込む
 	if (!wp_script_is('itmar_jquery_easing', 'enqueued')) {
-		wp_enqueue_script('itmar_jquery_easing', plugins_url('assets/jquery.easing.min.js', __FILE__), array('jquery'), true);
+		wp_enqueue_script('itmar_jquery_easing', plugins_url('assets/jquery.easing.min.js', __FILE__), array('jquery'), '1.0', true);
 	}
 
 	//管理画面以外（フロントエンド側でのみ読み込む）
@@ -81,19 +83,20 @@ add_action('enqueue_block_assets', 'itmar_contact_block_add_js');
 //コンタクト情報の処理
 function itmar_contact_send_ajax()
 {
-	$nonce = sanitize_key($_REQUEST['nonce']);
+	$nonce = isset($_REQUEST['nonce']) ? sanitize_key($_REQUEST['nonce']) : '';
 
 	if (wp_verify_nonce($nonce, 'contact_send_nonce')) {
 
 		// メールの設定(無害化処理)
-		$to = sanitize_email($_POST['email']);
-		$subject = sanitize_text_field($_POST['subject']);
-		$user_name = sanitize_text_field($_POST['userName']);
-		$message = sanitize_textarea_field($_POST['message']);
-		$reply = sanitize_email($_POST['reply_address']);
-		$reply_name = sanitize_text_field($_POST['reply_name']);
-		$is_dataSave = filter_var($_POST['is_dataSave'], FILTER_VALIDATE_BOOLEAN);
-		$is_retMail = filter_var($_POST['is_retMail'], FILTER_VALIDATE_BOOLEAN);
+		$to = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+		$subject = sanitize_text_field(wp_unslash($_POST['subject'] ?? ''));
+		$user_name = sanitize_text_field(wp_unslash($_POST['userName'] ?? ''));
+		$message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+		$reply = sanitize_email(wp_unslash($_POST['reply_address'] ?? ''));
+		$reply_name = sanitize_text_field(wp_unslash($_POST['reply_name'] ?? ''));
+		$is_dataSave = filter_var(wp_unslash($_POST['is_dataSave'] ?? ''), FILTER_VALIDATE_BOOLEAN);
+		$is_retMail = filter_var(wp_unslash($_POST['is_retMail'] ?? ''), FILTER_VALIDATE_BOOLEAN);
+
 		$headers = 'From: ' . $reply_name . '<' . $reply . '>' . "\r\n";
 
 		// バリデーション
@@ -179,7 +182,6 @@ function itmar_contact_save($user_id, $message)
 }
 
 //仮登録の処理とトークンのメール送信
-
 function itmar_register_send_token()
 {
 	check_ajax_referer('contact_send_nonce', 'nonce');
@@ -191,17 +193,18 @@ function itmar_register_send_token()
 	if (!isset($_POST['form_data'])) {
 		wp_send_json_error(['err_code' => 'no_data']);
 	}
-
 	// フォームデータをパース
-	parse_str($_POST['form_data'], $form);
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- form_dataは後で個別にサニタイズ済み
+	$form_data = wp_unslash($_POST['form_data'] ?? '');
+	parse_str($form_data, $form);
 	//その他のデータ
-	$master_email = sanitize_email($_POST['master_email'] ?? '');
-	$master_name = sanitize_text_field($_POST['master_name'] ?? '');
-	$subject_prov = sanitize_text_field($_POST['subject_prov'] ?? '');
-	$message_prov = sanitize_textarea_field($_POST['message_prov'] ?? '');
-	$is_logon = $_POST['is_logon'] === '1' || $_POST['is_logon'] === 'true';
+	$master_email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+	$master_name = sanitize_text_field(wp_unslash($_POST['master_name'] ?? ''));
+	$subject_prov = sanitize_text_field(wp_unslash($_POST['subject_prov'] ?? ''));
+	$message_prov = sanitize_textarea_field(wp_unslash($_POST['message_prov'] ?? ''));
+	$is_logon = filter_var(wp_unslash($_POST['is_logon'] ?? ''), FILTER_VALIDATE_BOOLEAN);
 	//リダイレクト先
-	$redirect_to = isset($_POST['redirect_to']) ? esc_url_raw($_POST['redirect_to']) : home_url();
+	$redirect_to = isset($_POST['redirect_to']) ? esc_url_raw(wp_unslash($_POST['redirect_to'])) : home_url();
 
 	$email = sanitize_email($form['email'] ?? '');
 	$name = sanitize_text_field($form['memberName'] ?? '');
@@ -286,8 +289,12 @@ function itmar_create_pending_users_table_if_not_exists()
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'pending_users';
 
-	// テーブルが存在するかチェック
-	if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") !== $table_name) {
+	// テーブル存在チェック
+
+	$sql = $wpdb->prepare("SHOW TABLES LIKE %s", $table_name);
+	$result = ItmarDbCache::get_var_cached($sql, 'table_exists_' . md5($table_name));
+
+	if (!$result) {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$charset_collate = $wpdb->get_charset_collate();
@@ -371,7 +378,8 @@ function itmar_handle_register_confirm()
 	exit;
 }
 add_action('template_redirect', function () {
-	$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	$request_uri = isset($_SERVER['REQUEST_URI']) ? esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])) : '';
+	$path = wp_parse_url($request_uri, PHP_URL_PATH);
 	if (strpos($path, '/register-confirm') === 0) { //register-confirm以外のURLでは発火させない
 		itmar_handle_register_confirm();
 	}
@@ -383,12 +391,11 @@ function itmar_process_token_registration($token, $is_logon)
 {
 	global $wpdb;
 	$table = $wpdb->prefix . 'pending_users';
+	$token = sanitize_text_field($token);
 
 	// トークンに該当する仮登録ユーザーを取得
-	$row = $wpdb->get_row(
-		$wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token),
-		ARRAY_A
-	);
+	$sql = $wpdb->prepare("SELECT * FROM {$table} WHERE token = %s", $token);
+	$row = ItmarDbCache::get_row_cached($sql, 'token_row_' . md5($token));
 
 	if (!$row) {
 		return ['success' => false, 'error_code' => 'invalid_token'];
@@ -412,7 +419,7 @@ function itmar_process_token_registration($token, $is_logon)
 		$username = $base . $i++;
 	}
 
-	// ユーザー作成（仮パスワードを設定）
+	// ユーザー作成
 	$user_id = wp_insert_user([
 		'user_login'   => $username,
 		'user_pass'    => wp_generate_password(),
@@ -427,16 +434,22 @@ function itmar_process_token_registration($token, $is_logon)
 	}
 
 	// パスワードを仮登録のハッシュで上書き
-	$wpdb->update(
+	ItmarDbCache::update_and_clear_cache(
 		$wpdb->users,
 		['user_pass' => $hashed_password],
 		['ID' => $user_id],
 		['%s'],
-		['%d']
+		['%d'],
+		['user_cache_' . $user_id]
 	);
 
 	// 仮登録情報を削除
-	$wpdb->delete($table, ['id' => $row['id']], ['%d']);
+	ItmarDbCache::delete_and_clear_cache(
+		$table,
+		['id' => $row['id']],
+		['%d'],
+		['row_token_' . md5($row['token'])]
+	);
 
 	if ($is_logon) {
 		// ✅ 自動ログイン
@@ -459,7 +472,9 @@ function itmar_custom_login()
 	}
 
 	// シリアライズされたデータをパース
-	parse_str($_POST['form_data'], $form);
+	$form_data = wp_unslash($_POST['form_data'] ?? ''); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- form_dataは後で個別にサニタイズ済み
+	parse_str($form_data, $form);
+
 	//ログイン状態を保持するか
 	$remember = isset($_POST['remember']) && $_POST['remember'] == 1;
 

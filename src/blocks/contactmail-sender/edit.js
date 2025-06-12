@@ -1,8 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { StyleComp } from "./StyleContactMail";
 import { useStyleIframe } from "../iframeFooks";
-//import ShadowStyle, { ShadowElm } from '../ShadowStyle';
-//import { useElementBackgroundColor, useIsIframeMobile } from '../CustomFooks';
+
 import {
 	useElementBackgroundColor,
 	useIsIframeMobile,

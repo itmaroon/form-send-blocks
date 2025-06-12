@@ -93,6 +93,17 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			"itmar/input-figure-block",
 			{ form_type: "login", form_name: "login_form" },
 		],
+		[
+			"itmar/thanks-figure-block",
+			{
+				info_type: "logonErr",
+				stage_info: __("Logon Error", "form-send-blocks"),
+				infomail_faile: __(
+					"Login failed for the following reasons:",
+					"form-send-blocks",
+				),
+			},
+		],
 	];
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
@@ -114,7 +125,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 				>
 					<PanelBody
 						title={__(
-							"Select redirect destination when loged in",
+							"Select redirect destination when loged in success",
 							"form-send-blocks",
 						)}
 					>
@@ -134,7 +145,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
 					<PanelBody title={__("Stay logged in", "form-send-blocks")}>
 						<ToggleControl
-							label={__("Remember Me", "block-collections")}
+							label={__("Remember Me", "form-send-blocks")}
 							checked={isRemember}
 							onChange={(newVal) => {
 								setAttributes({ isRemember: newVal });

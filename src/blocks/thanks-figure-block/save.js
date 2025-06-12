@@ -39,6 +39,8 @@ export default function save({ attributes }) {
 			? "to_mail"
 			: info_type === "register"
 			? "to_regist_page"
+			: info_type === "logonErr"
+			? "error_to_home"
 			: "";
 
 	return (
