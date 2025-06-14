@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Form Send Blocks 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
-"POT-Creation-Date: 2025-06-03T11:33:46+02:00\n"
-"PO-Revision-Date: 2025-06-03 19:00+0900\n"
+"POT-Creation-Date: 2025-06-12T08:46:19+02:00\n"
+"PO-Revision-Date: 2025-06-12 15:46+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -36,38 +36,38 @@ msgstr "フォーム送信するときの表示画面をまとめたブロック
 msgid "Web Creator ITmaroon"
 msgstr "WebクリエイターITmaroon"
 
-#: form-send-blocks.php:101
+#: form-send-blocks.php:104
 msgid ""
 "The server detected an error in the input item. Registration process was "
 "interrupted. "
 msgstr ""
 "サーバーは入力項目にエラーを検出しました。 登録プロセスが中断されました。"
 
-#: form-send-blocks.php:138
+#: form-send-blocks.php:141
 msgid "Your autoresponder email has been successfully sent."
 msgstr "自動応答メールは正常に送信されました。"
 
-#: form-send-blocks.php:140
+#: form-send-blocks.php:143
 msgid "The site administrator has been successfully notified."
 msgstr "サイト管理者に正常に通知されました。"
 
-#: form-send-blocks.php:144
+#: form-send-blocks.php:147
 msgid "Failed to send auto-response email."
 msgstr "自動応答メールの送信に失敗しました。"
 
-#: form-send-blocks.php:146
+#: form-send-blocks.php:149
 msgid "Failed to notify site administrator."
 msgstr "サイト管理者への通知に失敗しました。"
 
-#: form-send-blocks.php:150
+#: form-send-blocks.php:153
 msgid "Invalid request."
 msgstr "無効なリクエストです。"
 
-#: form-send-blocks.php:165
+#: form-send-blocks.php:168
 msgid "Inquiry Data"
 msgstr "お問合せ内容"
 
-#: form-send-blocks.php:177
+#: form-send-blocks.php:180
 msgid "Receipt processing completed successfully."
 msgstr "受信処理が正常に完了しました。"
 
@@ -140,40 +140,46 @@ msgstr "本登録エラーの原因"
 msgid "Official registration info"
 msgstr "本登録の情報"
 
-#: assets/contact_block.js:580 assets/contact_block.js:701
-#: assets/contact_block.js:828
+#: assets/contact_block.js:580 assets/contact_block.js:700
+#: assets/contact_block.js:819
 msgid "sending..."
 msgstr "送信中..."
 
-#: assets/contact_block.js:773
+#: assets/contact_block.js:772
 msgid "Provisional registration results"
 msgstr "仮登録の結果"
 
-#: assets/contact_block.js:779
+#: assets/contact_block.js:778
 msgid "Provisional registration error cause"
 msgstr "仮登録エラーの原因"
 
 #: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:15
+msgid "This block is displayed to confirm the information entered in the form."
+msgstr "入力された情報を確認するための表示をするブロックです。"
+
+#: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:20
+msgid "confirmation"
+msgstr "確認"
+
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:198
-#: build/blocks/confirm-figure-block/index.js:317
 msgid "Please check your entries"
 msgstr "入力内容を確認してください"
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:215
-#: build/blocks/confirm-figure-block/index.js:334
 msgid "Send"
 msgstr "送信"
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:227
-#: build/blocks/confirm-figure-block/index.js:346
 msgid "Return to send screen"
 msgstr "入力画面に戻る"
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:322
-#: build/blocks/confirm-figure-block/index.js:441
 msgid "Confirmation form information setting"
 msgstr "確認フォーム情報設定"
 
@@ -181,11 +187,8 @@ msgstr "確認フォーム情報設定"
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:330
-#: src/blocks/input-figure-block/edit.js:393
-#: src/blocks/thanks-figure-block/edit.js:252
-#: build/blocks/confirm-figure-block/index.js:449
-#: build/blocks/input-figure-block/index.js:547
-#: build/blocks/thanks-figure-block/index.js:412
+#: src/blocks/input-figure-block/edit.js:395
+#: src/blocks/thanks-figure-block/edit.js:280
 msgid "Stage information"
 msgstr "ステージ情報"
 
@@ -193,11 +196,8 @@ msgstr "ステージ情報"
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:332
-#: src/blocks/input-figure-block/edit.js:395
-#: src/blocks/thanks-figure-block/edit.js:254
-#: build/blocks/confirm-figure-block/index.js:451
-#: build/blocks/input-figure-block/index.js:549
-#: build/blocks/thanks-figure-block/index.js:414
+#: src/blocks/input-figure-block/edit.js:397
+#: src/blocks/thanks-figure-block/edit.js:282
 msgid "Please enter the stage information to be displayed in the process area."
 msgstr "プロセスエリアに表示されるステージの情報を入力してください。"
 
@@ -205,11 +205,8 @@ msgstr "プロセスエリアに表示されるステージの情報を入力し
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:342
-#: src/blocks/input-figure-block/edit.js:405
-#: src/blocks/thanks-figure-block/edit.js:308
-#: build/blocks/confirm-figure-block/index.js:461
-#: build/blocks/input-figure-block/index.js:559
-#: build/blocks/thanks-figure-block/index.js:468
+#: src/blocks/input-figure-block/edit.js:407
+#: src/blocks/thanks-figure-block/edit.js:347
 msgid "Global settings"
 msgstr "全体設定"
 
@@ -217,11 +214,8 @@ msgstr "全体設定"
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:347
-#: src/blocks/input-figure-block/edit.js:410
-#: src/blocks/thanks-figure-block/edit.js:313
-#: build/blocks/confirm-figure-block/index.js:466
-#: build/blocks/input-figure-block/index.js:564
-#: build/blocks/thanks-figure-block/index.js:473
+#: src/blocks/input-figure-block/edit.js:412
+#: src/blocks/thanks-figure-block/edit.js:352
 msgid "Background Color Setting"
 msgstr "背景色設定"
 
@@ -229,20 +223,15 @@ msgstr "背景色設定"
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:351
-#: src/blocks/input-figure-block/edit.js:414
-#: src/blocks/thanks-figure-block/edit.js:317
-#: build/blocks/confirm-figure-block/index.js:470
-#: build/blocks/input-figure-block/index.js:568
-#: build/blocks/thanks-figure-block/index.js:477
+#: src/blocks/input-figure-block/edit.js:416
+#: src/blocks/thanks-figure-block/edit.js:356
 msgid "Choose Block Background color"
 msgstr "ブロックの背景色を選択"
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:359
-#: src/blocks/input-figure-block/edit.js:422
-#: build/blocks/confirm-figure-block/index.js:478
-#: build/blocks/input-figure-block/index.js:576
+#: src/blocks/input-figure-block/edit.js:424
 msgid "Choose Form Background color"
 msgstr "フォームの背景色を選択"
 
@@ -250,11 +239,8 @@ msgstr "フォームの背景色を選択"
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:368
-#: src/blocks/input-figure-block/edit.js:431
-#: src/blocks/thanks-figure-block/edit.js:334
-#: build/blocks/confirm-figure-block/index.js:487
-#: build/blocks/input-figure-block/index.js:585
-#: build/blocks/thanks-figure-block/index.js:494
+#: src/blocks/input-figure-block/edit.js:433
+#: src/blocks/thanks-figure-block/edit.js:373
 msgid "Border Settings"
 msgstr "ボーダー設定"
 
@@ -263,12 +249,8 @@ msgstr "ボーダー設定"
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:394
-#: src/blocks/contactmail-sender/edit.js:453
-#: src/blocks/custom-login/edit.js:157 src/blocks/member-register/edit.js:680
-#: build/blocks/confirm-figure-block/index.js:513
-#: build/blocks/contactmail-sender/index.js:536
-#: build/blocks/custom-login/index.js:262
-#: build/blocks/member-register/index.js:812
+#: src/blocks/contactmail-sender/edit.js:452
+#: src/blocks/custom-login/edit.js:168 src/blocks/member-register/edit.js:680
 msgid "Margin settings(mobile)"
 msgstr "マージン設定(モバイル)"
 
@@ -277,12 +259,8 @@ msgstr "マージン設定(モバイル)"
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:393
-#: src/blocks/contactmail-sender/edit.js:452
-#: src/blocks/custom-login/edit.js:156 src/blocks/member-register/edit.js:679
-#: build/blocks/confirm-figure-block/index.js:512
-#: build/blocks/contactmail-sender/index.js:535
-#: build/blocks/custom-login/index.js:261
-#: build/blocks/member-register/index.js:811
+#: src/blocks/contactmail-sender/edit.js:451
+#: src/blocks/custom-login/edit.js:167 src/blocks/member-register/edit.js:679
 msgid "Margin settings(desk top)"
 msgstr "マージン設定(デスクトップ)"
 
@@ -291,12 +269,8 @@ msgstr "マージン設定(デスクトップ)"
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:418
-#: src/blocks/contactmail-sender/edit.js:477
-#: src/blocks/custom-login/edit.js:181 src/blocks/member-register/edit.js:704
-#: build/blocks/confirm-figure-block/index.js:537
-#: build/blocks/contactmail-sender/index.js:560
-#: build/blocks/custom-login/index.js:286
-#: build/blocks/member-register/index.js:836
+#: src/blocks/contactmail-sender/edit.js:476
+#: src/blocks/custom-login/edit.js:192 src/blocks/member-register/edit.js:704
 msgid "Padding settings(mobile)"
 msgstr "パディング設定(モバイル)"
 
@@ -305,12 +279,8 @@ msgstr "パディング設定(モバイル)"
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:417
-#: src/blocks/contactmail-sender/edit.js:476
-#: src/blocks/custom-login/edit.js:180 src/blocks/member-register/edit.js:703
-#: build/blocks/confirm-figure-block/index.js:536
-#: build/blocks/contactmail-sender/index.js:559
-#: build/blocks/custom-login/index.js:285
-#: build/blocks/member-register/index.js:835
+#: src/blocks/contactmail-sender/edit.js:475
+#: src/blocks/custom-login/edit.js:191 src/blocks/member-register/edit.js:703
 msgid "Padding settings(desk top)"
 msgstr "パディング設定(デスクトップ)"
 
@@ -321,35 +291,41 @@ msgstr "パディング設定(デスクトップ)"
 #: build/blocks/member-register/index.js:16
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:439
-#: src/blocks/contactmail-sender/edit.js:504
-#: src/blocks/custom-login/edit.js:208
-#: src/blocks/input-figure-block/edit.js:502
+#: src/blocks/contactmail-sender/edit.js:503
+#: src/blocks/custom-login/edit.js:219
+#: src/blocks/input-figure-block/edit.js:504
 #: src/blocks/member-register/edit.js:731
-#: src/blocks/thanks-figure-block/edit.js:405
-#: build/blocks/confirm-figure-block/index.js:558
-#: build/blocks/contactmail-sender/index.js:587
-#: build/blocks/custom-login/index.js:313
-#: build/blocks/input-figure-block/index.js:656
-#: build/blocks/member-register/index.js:863
-#: build/blocks/thanks-figure-block/index.js:565
+#: src/blocks/thanks-figure-block/edit.js:444
 msgid "Is Shadow"
 msgstr "シャドーをつける"
 
-#: build/blocks/confirm-figure-block/index.js:18
-#: src/blocks/confirm-figure-block/index.js:15
-#: build/blocks/confirm-figure-block/index.js:600
-msgid "This block is displayed to confirm the information entered in the form."
-msgstr "入力された情報を確認するための表示をするブロックです。"
-
-#: build/blocks/confirm-figure-block/index.js:18
-#: src/blocks/confirm-figure-block/index.js:20
-#: build/blocks/confirm-figure-block/index.js:605
-msgid "confirmation"
-msgstr "確認"
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:16
+msgid "This is a block for setting up an inquiry form."
+msgstr "お問い合わせフォームを設置するためのブロックです。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:111
-#: build/blocks/contactmail-sender/index.js:194
+#: src/blocks/contactmail-sender/index.js:21
+msgid "We have received an inquiry."
+msgstr "お問い合わせをいただきました。"
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:25
+msgid "We have received an inquiry regarding the following information."
+msgstr "下記の内容のとおりお問い合わせを受け付けております。"
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:29
+msgid "Thank you for contacting us."
+msgstr "お問合せいただきありがとうございます。"
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:33
+msgid "We have received your inquiry with the following details."
+msgstr "以下の内容でお問い合わせを受け付けております。"
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/edit.js:110
 msgid ""
 "The person in charge has been notified of your inquiry. Please wait for a "
 "while until we reply."
@@ -357,526 +333,305 @@ msgstr ""
 "お問い合わせ内容は担当者に通知されました。 返信までしばらくお待ちください。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:115
-#: build/blocks/contactmail-sender/index.js:198
+#: src/blocks/contactmail-sender/edit.js:114
 msgid "Email notification to the person in charge failed."
 msgstr "担当者へのメール通知に失敗しました。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:119
-#: build/blocks/contactmail-sender/index.js:202
+#: src/blocks/contactmail-sender/edit.js:118
 msgid "We have sent an automatic response email to you, so please check it."
 msgstr "自動返信メールをお送りしておりますのでご確認下さい。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:123
-#: build/blocks/contactmail-sender/index.js:206
+#: src/blocks/contactmail-sender/edit.js:122
 msgid "Failed to send automatic response email to you."
 msgstr "自動返信メールの送信に失敗しました。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:163
-#: build/blocks/contactmail-sender/index.js:246
+#: src/blocks/contactmail-sender/edit.js:162
 msgid "Inquiry information notification email"
 msgstr "お問い合わせ情報通知メール"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:172
+#: src/blocks/contactmail-sender/edit.js:171
 #: src/blocks/member-register/edit.js:228
-#: build/blocks/contactmail-sender/index.js:255
-#: build/blocks/member-register/index.js:360
 msgid "Notification email address (Master)"
 msgstr "通知メールアドレス（管理者）"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:186
+#: src/blocks/contactmail-sender/edit.js:185
 #: src/blocks/member-register/edit.js:242
-#: build/blocks/contactmail-sender/index.js:269
-#: build/blocks/member-register/index.js:374
 msgid "The notification email address is blank or has an invalid format. "
 msgstr "通知電子メール アドレスが空白であるか、無効な形式です。"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:203
+#: src/blocks/contactmail-sender/edit.js:202
 #: src/blocks/member-register/edit.js:204
-#: build/blocks/contactmail-sender/index.js:286
-#: build/blocks/member-register/index.js:336
 msgid "Master Name"
 msgstr "管理者名"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:210
+#: src/blocks/contactmail-sender/edit.js:209
 #: src/blocks/member-register/edit.js:211
-#: build/blocks/contactmail-sender/index.js:293
-#: build/blocks/member-register/index.js:343
 msgid "Do not leave the master name blank. "
 msgstr "管理者名は空白のままにしないでください。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:227
-#: build/blocks/contactmail-sender/index.js:310
+#: src/blocks/contactmail-sender/edit.js:226
 msgid "Notification email subject"
 msgstr "通知メールの件名"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:234
-#: src/blocks/contactmail-sender/edit.js:361
-#: src/blocks/contactmail-sender/edit.js:388
+#: src/blocks/contactmail-sender/edit.js:233
+#: src/blocks/contactmail-sender/edit.js:360
+#: src/blocks/contactmail-sender/edit.js:387
 #: src/blocks/member-register/edit.js:281
 #: src/blocks/member-register/edit.js:381
 #: src/blocks/member-register/edit.js:474
 #: src/blocks/member-register/edit.js:575
-#: build/blocks/contactmail-sender/index.js:317
-#: build/blocks/contactmail-sender/index.js:444
-#: build/blocks/contactmail-sender/index.js:471
-#: build/blocks/member-register/index.js:413
-#: build/blocks/member-register/index.js:513
-#: build/blocks/member-register/index.js:606
-#: build/blocks/member-register/index.js:707
 msgid "Do not leave the subject of the notification email blank. "
 msgstr "通知メールの件名は空白のままにしないでください。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:251
-#: build/blocks/contactmail-sender/index.js:334
+#: src/blocks/contactmail-sender/edit.js:250
 msgid "Notification email body"
 msgstr "通知メールの本文"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:258
+#: src/blocks/contactmail-sender/edit.js:257
 #: src/blocks/member-register/edit.js:310
 #: src/blocks/member-register/edit.js:410
 #: src/blocks/member-register/edit.js:503
 #: src/blocks/member-register/edit.js:604
-#: build/blocks/contactmail-sender/index.js:341
-#: build/blocks/member-register/index.js:442
-#: build/blocks/member-register/index.js:542
-#: build/blocks/member-register/index.js:635
-#: build/blocks/member-register/index.js:736
 msgid "Do not leave the body of the notification email blank. "
 msgstr "通知メールの本文は空白のままにしないでください。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:299
-#: build/blocks/contactmail-sender/index.js:382
+#: src/blocks/contactmail-sender/edit.js:298
 msgid "Automatic response email"
 msgstr "自動返信メール"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:305
-#: build/blocks/contactmail-sender/index.js:388
+#: src/blocks/contactmail-sender/edit.js:304
 msgid "Send automatic response email"
 msgstr "自動返信メールを送信する"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:314
-#: build/blocks/contactmail-sender/index.js:397
+#: src/blocks/contactmail-sender/edit.js:313
 msgid "Reply to email address"
 msgstr "返信先メールアドレス"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:351
-#: build/blocks/contactmail-sender/index.js:434
+#: src/blocks/contactmail-sender/edit.js:350
 msgid "Automatic response email title"
 msgstr "自動返信メールの件名"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:378
-#: build/blocks/contactmail-sender/index.js:461
+#: src/blocks/contactmail-sender/edit.js:377
 msgid "Automatic response email body"
 msgstr "自動返信メール本文"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:402
-#: build/blocks/contactmail-sender/index.js:485
+#: src/blocks/contactmail-sender/edit.js:401
 msgid "Click on the input field below to quote it in the text."
 msgstr "本文中で引用するには下の入力フィールドをクリックしてください。"
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:433
-#: build/blocks/contactmail-sender/index.js:516
+#: src/blocks/contactmail-sender/edit.js:432
 msgid "Save response contents to DB"
 msgstr "応答内容をデータベースに保存"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:445
-#: src/blocks/custom-login/edit.js:149 src/blocks/member-register/edit.js:672
-#: build/blocks/contactmail-sender/index.js:528
-#: build/blocks/custom-login/index.js:254
-#: build/blocks/member-register/index.js:804
+#: src/blocks/contactmail-sender/edit.js:444
+#: src/blocks/custom-login/edit.js:160 src/blocks/member-register/edit.js:672
 msgid "Space settings"
 msgstr "空白設定"
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:499
-#: src/blocks/custom-login/edit.js:203 src/blocks/member-register/edit.js:726
-#: build/blocks/contactmail-sender/index.js:582
-#: build/blocks/custom-login/index.js:308
-#: build/blocks/member-register/index.js:858
+#: src/blocks/contactmail-sender/edit.js:498
+#: src/blocks/custom-login/edit.js:214 src/blocks/member-register/edit.js:726
 msgid "Shadow settings"
 msgstr "シャドー設定"
 
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:16
-#: build/blocks/contactmail-sender/index.js:629
-msgid "This is a block for setting up an inquiry form."
-msgstr "お問い合わせフォームを設置するためのブロックです。"
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:21
-#: build/blocks/contactmail-sender/index.js:634
-msgid "We have received an inquiry."
-msgstr "お問い合わせをいただきました。"
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:25
-#: build/blocks/contactmail-sender/index.js:638
-msgid "We have received an inquiry regarding the following information."
-msgstr "下記の内容のとおりお問い合わせを受け付けております。"
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:29
-#: build/blocks/contactmail-sender/index.js:642
-msgid "Thank you for contacting us."
-msgstr "お問合せいただきありがとうございます。"
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:33
-#: build/blocks/contactmail-sender/index.js:646
-msgid "We have received your inquiry with the following details."
-msgstr "以下の内容でお問い合わせを受け付けております。"
-
-#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:111
-#: build/blocks/custom-login/index.js:216
-msgid "Custom Login Setting"
-msgstr "カスタムログイン設定"
-
-#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:116
-#: build/blocks/custom-login/index.js:221
-msgid "Select redirect destination when loged in"
-msgstr "終了時のリダイレクト先の選択"
-
-#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:135
-#: build/blocks/custom-login/index.js:240
-msgid "Stay logged in"
-msgstr "ログイン状態を維持"
-
 #: build/blocks/custom-login/index.js:16 src/blocks/custom-login/index.js:15
-#: build/blocks/custom-login/index.js:354
 msgid ""
 "This block provides the functionality to display a customized login screen."
 msgstr ""
 "このブロックは、カスタマイズされたログイン画面を表示する機能を提供します。"
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:116
-#: src/blocks/input-figure-block/edit.js:164
-#: build/blocks/input-figure-block/index.js:270
-#: build/blocks/input-figure-block/index.js:318
-msgid "Name"
-msgstr "お名前"
+#: build/blocks/custom-login/index.js:16
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/custom-login/edit.js:100
+#: src/blocks/thanks-figure-block/edit.js:271
+msgid "Logon Error"
+msgstr "ログオンエラー"
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:117
-#: src/blocks/input-figure-block/edit.js:127
-#: src/blocks/input-figure-block/edit.js:137
-#: src/blocks/input-figure-block/edit.js:165
-#: src/blocks/input-figure-block/edit.js:175
-#: src/blocks/input-figure-block/edit.js:185
-#: src/blocks/input-figure-block/edit.js:214
-#: src/blocks/input-figure-block/edit.js:224
-#: build/blocks/input-figure-block/index.js:271
-#: build/blocks/input-figure-block/index.js:281
-#: build/blocks/input-figure-block/index.js:291
-#: build/blocks/input-figure-block/index.js:319
-#: build/blocks/input-figure-block/index.js:329
-#: build/blocks/input-figure-block/index.js:339
-#: build/blocks/input-figure-block/index.js:368
-#: build/blocks/input-figure-block/index.js:378
-msgid "Required"
-msgstr "必須"
+#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:101
+msgid "Login failed for the following reasons:"
+msgstr "ログオンに失敗しました。原因は以下のとおりです："
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:118
-#: src/blocks/input-figure-block/edit.js:166
-#: src/blocks/input-figure-block/edit.js:215
-#: build/blocks/input-figure-block/index.js:272
-#: build/blocks/input-figure-block/index.js:320
-#: build/blocks/input-figure-block/index.js:369
-msgid "Please enter your name"
-msgstr "お名前を入力してください"
+#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:122
+msgid "Custom Login Setting"
+msgstr "カスタムログイン設定"
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:125
-#: src/blocks/input-figure-block/edit.js:173
-#: build/blocks/input-figure-block/index.js:279
-#: build/blocks/input-figure-block/index.js:327
-msgid "E-mail Address"
-msgstr "メールアドレス"
+#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:127
+msgid "Select redirect destination when loged in success"
+msgstr "ログイン成功時のリダイレクト先の選択"
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:128
-#: src/blocks/input-figure-block/edit.js:176
-#: build/blocks/input-figure-block/index.js:282
-#: build/blocks/input-figure-block/index.js:330
-msgid "Please enter your e-mail address"
-msgstr "メールアドレスを入力してください"
+#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:146
+msgid "Stay logged in"
+msgstr "ログイン状態"
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:135
-#: build/blocks/input-figure-block/index.js:289
-msgid "Inquiry details"
-msgstr "お問合せ内容"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:138
-#: build/blocks/input-figure-block/index.js:292
-msgid "Please enter inquiry"
-msgstr "お問合せ内容を入力してください"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:144
-#: src/blocks/input-figure-block/edit.js:192
-#: src/blocks/input-figure-block/edit.js:231
-#: build/blocks/input-figure-block/index.js:298
-#: build/blocks/input-figure-block/index.js:346
-#: build/blocks/input-figure-block/index.js:385
-msgid "Agree to the privacy policy and send."
-msgstr "プライバシーポリシーに同意して送信します。"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:154
-#: build/blocks/input-figure-block/index.js:308
-msgid "To confirmation screen"
-msgstr "確認画面へ"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:183
-#: src/blocks/input-figure-block/edit.js:222
-#: build/blocks/input-figure-block/index.js:337
-#: build/blocks/input-figure-block/index.js:376
-msgid "PassWord"
-msgstr "パスワード"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:186
-#: src/blocks/input-figure-block/edit.js:225
-#: build/blocks/input-figure-block/index.js:340
-#: build/blocks/input-figure-block/index.js:379
-msgid "Please enter Password"
-msgstr "パスワードを入力してください"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:202
-#: build/blocks/input-figure-block/index.js:356
-msgid "Sending a confirmation email"
-msgstr "確認メールを送信しています"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:213
-#: build/blocks/input-figure-block/index.js:367
-msgid "ID or email"
-msgstr "IDまたはメールアドレス"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:240
-#: build/blocks/input-figure-block/index.js:394
-msgid "If you haven't registered yet, click here"
-msgstr "まだ登録していない場合は、ここをクリックしてください"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:253
-#: build/blocks/input-figure-block/index.js:407
-msgid "Login"
-msgstr "ログイン"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:358
-#: build/blocks/input-figure-block/index.js:512
-msgid "Transmission form information setting"
-msgstr "送信フォーム情報設定"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:384
-#: build/blocks/input-figure-block/index.js:538
-msgid "Form Name"
-msgstr "フォーム名"
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:386
-#: build/blocks/input-figure-block/index.js:540
-msgid "This is the name used to identify it as a data source."
-msgstr "これは、データ ソースとして識別するために使用される名前です。"
+#: build/blocks/custom-login/index.js:16 src/blocks/custom-login/edit.js:148
+msgid "Remember Me"
+msgstr "ログインした状態にする"
 
 #: build/blocks/input-figure-block/index.js:18
 #: src/blocks/input-figure-block/index.js:15
-#: build/blocks/input-figure-block/index.js:699
 msgid "This is a block for collecting and displaying input elements in a form."
 msgstr "入力要素をフォームに集めるためのブロックです。"
 
 #: build/blocks/input-figure-block/index.js:18
 #: src/blocks/input-figure-block/index.js:20
-#: build/blocks/input-figure-block/index.js:704
 msgid "Information input"
 msgstr "情報入力"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:113
-#: build/blocks/member-register/index.js:245
-msgid "Provisional registration input"
-msgstr "仮登録入力"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:118
+#: src/blocks/input-figure-block/edit.js:166
+msgid "Name"
+msgstr "お名前"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:120
-#: build/blocks/member-register/index.js:252
-msgid "Official Registration"
-msgstr "本登録"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:119
+#: src/blocks/input-figure-block/edit.js:129
+#: src/blocks/input-figure-block/edit.js:139
+#: src/blocks/input-figure-block/edit.js:167
+#: src/blocks/input-figure-block/edit.js:177
+#: src/blocks/input-figure-block/edit.js:187
+#: src/blocks/input-figure-block/edit.js:216
+#: src/blocks/input-figure-block/edit.js:226
+msgid "Required"
+msgstr "必須"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:121
-#: build/blocks/member-register/index.js:253
-msgid ""
-"Your provisional registration has been processed successfully. We have sent "
-"you an email, so please access the URL in the email to complete your "
-"registration."
-msgstr ""
-"仮登録が完了しました。メールをお送りいたしましたので、メール内のURLにアクセス"
-"して登録を完了してください。"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:120
+#: src/blocks/input-figure-block/edit.js:168
+#: src/blocks/input-figure-block/edit.js:217
+msgid "Please enter your name"
+msgstr "お名前を入力してください"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:125
-#: build/blocks/member-register/index.js:257
-msgid ""
-"The provisional registration process has failed. Please check your email "
-"address and try again."
-msgstr "仮登録に失敗しました。メールアドレスをご確認の上、再度お試しください。"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:127
+#: src/blocks/input-figure-block/edit.js:175
+msgid "E-mail Address"
+msgstr "メールアドレス"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:135
-#: build/blocks/member-register/index.js:267
-msgid "Registration complete"
-msgstr "登録完了"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:130
+#: src/blocks/input-figure-block/edit.js:178
+msgid "Please enter your e-mail address"
+msgstr "メールアドレスを入力してください"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:136
-#: build/blocks/member-register/index.js:268
-msgid ""
-"Your registration has been processed successfully. Thank you for registering."
-msgstr "本登録が正常に処理されました。ご登録ありがとうございます。"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:137
+msgid "Inquiry details"
+msgstr "お問合せ内容"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:140
-#: build/blocks/member-register/index.js:272
-msgid "We are sorry, but please try again with temporary registration."
-msgstr "申し訳ございませんが、仮登録にて再度お試しください。"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:140
+msgid "Please enter inquiry"
+msgstr "お問合せ内容を入力してください"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:144
-#: build/blocks/member-register/index.js:276
-msgid ""
-"We have sent you an email confirming your registration. Please check the "
-"details."
-msgstr "本登録の確認メールをお送りいたしました。内容をご確認ください。"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:146
+#: src/blocks/input-figure-block/edit.js:194
+#: src/blocks/input-figure-block/edit.js:233
+msgid "Agree to the privacy policy and send."
+msgstr "プライバシーポリシーに同意して送信します。"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:148
-#: build/blocks/member-register/index.js:280
-msgid "The email confirming your registration could not be sent."
-msgstr "本登録を確認するメールを送信できませんでした。"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:156
+msgid "To confirmation screen"
+msgstr "確認画面へ"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:198
-#: build/blocks/member-register/index.js:330
-msgid "Administrator notification settings"
-msgstr "管理者通知設定"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:185
+#: src/blocks/input-figure-block/edit.js:224
+msgid "PassWord"
+msgstr "パスワード"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:259
-#: build/blocks/member-register/index.js:391
-msgid "Notification of provisional registration application"
-msgstr "仮登録申請の通知"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:188
+#: src/blocks/input-figure-block/edit.js:227
+msgid "Please enter Password"
+msgstr "パスワードを入力してください"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:271
-#: src/blocks/member-register/edit.js:464
-#: build/blocks/member-register/index.js:403
-#: build/blocks/member-register/index.js:596
-msgid "Provisional registration email subject"
-msgstr "仮登録メールの件名"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:204
+msgid "Sending a confirmation email"
+msgstr "確認メールを送信しています"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:300
-#: src/blocks/member-register/edit.js:493
-#: build/blocks/member-register/index.js:432
-#: build/blocks/member-register/index.js:625
-msgid "Provisional registration email body"
-msgstr "仮登録メール本文"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:215
+msgid "ID or email"
+msgstr "IDまたはメールアドレス"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:326
-#: src/blocks/member-register/edit.js:426
-#: src/blocks/member-register/edit.js:519
-#: src/blocks/member-register/edit.js:620
-#: build/blocks/member-register/index.js:458
-#: build/blocks/member-register/index.js:558
-#: build/blocks/member-register/index.js:651
-#: build/blocks/member-register/index.js:752
-msgid "Click the input item displayed below to quote it in the text."
-msgstr "本文中に引用する場合は、下に表示される入力項目をクリックしてください。"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:242
+msgid "If you haven't registered yet, click here"
+msgstr "まだ登録していない場合は、ここをクリックしてください"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:359
-#: build/blocks/member-register/index.js:491
-msgid "Notification of official registration"
-msgstr "本登録の通知"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:255
+#: src/blocks/input-figure-block/edit.js:377
+msgid "Login"
+msgstr "ログイン"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:371
-#: src/blocks/member-register/edit.js:565
-#: build/blocks/member-register/index.js:503
-#: build/blocks/member-register/index.js:697
-msgid "Official registration email subject"
-msgstr "本登録通知メールの件名"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:360
+msgid "Transmission form information setting"
+msgstr "送信フォーム情報設定"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:400
-#: src/blocks/member-register/edit.js:594
-#: build/blocks/member-register/index.js:532
-#: build/blocks/member-register/index.js:726
-msgid "Official registration email body"
-msgstr "本登録通知メールの本文"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:368
+msgid "Input Form Type"
+msgstr "入力フォームタイプ"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:458
-#: build/blocks/member-register/index.js:590
-msgid "User notification settings"
-msgstr "ユーザー通知設定"
+#: build/blocks/input-figure-block/index.js:18
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:371
+#: src/blocks/thanks-figure-block/edit.js:259
+msgid "Inquiry"
+msgstr "お問合せ"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:551
-#: build/blocks/member-register/index.js:683
-msgid "An email will be sent to confirm your registration"
-msgstr "本登録の確認メールが送信"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:373
+msgid "Membership Registration"
+msgstr "メンバー登録"
 
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/edit.js:659
-#: build/blocks/member-register/index.js:791
-msgid "Automatic logon after registration"
-msgstr "登録後の自動ログオン"
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:386
+msgid "Form Name"
+msgstr "フォーム名"
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:388
+msgid "This is the name used to identify it as a data source."
+msgstr "これは、データ ソースとして識別するために使用される名前です。"
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:15
-#: build/blocks/member-register/index.js:904
 msgid ""
 "This block sends a verification email to register members and registers them "
 "as WordPress members depending on the response."
@@ -888,14 +643,11 @@ msgstr ""
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/member-register/index.js:23
 #: src/blocks/thanks-figure-block/edit.js:112
-#: build/blocks/member-register/index.js:912
-#: build/blocks/thanks-figure-block/index.js:272
 msgid "Thank you for your provisional registration"
 msgstr "仮登録ありがとうございます"
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:30
-#: build/blocks/member-register/index.js:919
 msgid ""
 "Provisional registration has been completed. To complete your registration, "
 "please access the following URL."
@@ -904,25 +656,21 @@ msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:37
-#: build/blocks/member-register/index.js:926
 msgid "Provisional registration completion notice"
 msgstr "仮登録完了通知"
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:44
-#: build/blocks/member-register/index.js:933
 msgid "Your provisional registration application has been accepted."
 msgstr "仮登録申請が受理されました。"
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:51
-#: build/blocks/member-register/index.js:940
 msgid "This registration is complete"
 msgstr "本登録は完了です"
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:55
-#: build/blocks/member-register/index.js:944
 msgid ""
 "Registration is now complete. You can log in with the user ID below or the "
 "email address and password you entered."
@@ -932,110 +680,237 @@ msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:62
-#: build/blocks/member-register/index.js:951
 msgid "Notification of completion of registration"
 msgstr "本登録完了通知"
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/index.js:69
-#: build/blocks/member-register/index.js:958
 msgid ""
 "The registration process has been completed and the new user has been added."
 msgstr "登録プロセスが完了し、新しいユーザーが追加されました。"
 
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:113
+msgid "Provisional registration input"
+msgstr "仮登録入力"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:120
+msgid "Official Registration"
+msgstr "本登録"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:121
+msgid ""
+"Your provisional registration has been processed successfully. We have sent "
+"you an email, so please access the URL in the email to complete your "
+"registration."
+msgstr ""
+"仮登録が完了しました。メールをお送りいたしましたので、メール内のURLにアクセス"
+"して登録を完了してください。"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:125
+msgid ""
+"The provisional registration process has failed. Please check your email "
+"address and try again."
+msgstr "仮登録に失敗しました。メールアドレスをご確認の上、再度お試しください。"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:135
+msgid "Registration complete"
+msgstr "登録完了"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:136
+msgid ""
+"Your registration has been processed successfully. Thank you for registering."
+msgstr "本登録が正常に処理されました。ご登録ありがとうございます。"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:140
+msgid "We are sorry, but please try again with temporary registration."
+msgstr "申し訳ございませんが、仮登録にて再度お試しください。"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:144
+msgid ""
+"We have sent you an email confirming your registration. Please check the "
+"details."
+msgstr "本登録の確認メールをお送りいたしました。内容をご確認ください。"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:148
+msgid "The email confirming your registration could not be sent."
+msgstr "本登録を確認するメールを送信できませんでした。"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:198
+msgid "Administrator notification settings"
+msgstr "管理者通知設定"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:259
+msgid "Notification of provisional registration application"
+msgstr "仮登録申請の通知"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:271
+#: src/blocks/member-register/edit.js:464
+msgid "Provisional registration email subject"
+msgstr "仮登録メールの件名"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:300
+#: src/blocks/member-register/edit.js:493
+msgid "Provisional registration email body"
+msgstr "仮登録メール本文"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:326
+#: src/blocks/member-register/edit.js:426
+#: src/blocks/member-register/edit.js:519
+#: src/blocks/member-register/edit.js:620
+msgid "Click the input item displayed below to quote it in the text."
+msgstr "本文中に引用する場合は、下に表示される入力項目をクリックしてください。"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:359
+msgid "Notification of official registration"
+msgstr "本登録の通知"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:371
+#: src/blocks/member-register/edit.js:565
+msgid "Official registration email subject"
+msgstr "本登録通知メールの件名"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:400
+#: src/blocks/member-register/edit.js:594
+msgid "Official registration email body"
+msgstr "本登録通知メールの本文"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:458
+msgid "User notification settings"
+msgstr "ユーザー通知設定"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:551
+msgid "An email will be sent to confirm your registration"
+msgstr "本登録の確認メールが送信"
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/edit.js:659
+msgid "Automatic logon after registration"
+msgstr "登録後の自動ログオン"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/index.js:14
+msgid ""
+"It is a block that displays to convey gratitude when processing is completed"
+msgstr "処理が完了した際に感謝の気持ちを伝えるために表示するブロックです"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/index.js:22
+msgid "Processing completed"
+msgstr "処理完了"
+
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/thanks-figure-block/edit.js:110
-#: build/blocks/thanks-figure-block/index.js:270
 msgid "Thank you for your inquiry."
 msgstr "お問合せいただきありがとうございます。"
 
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/thanks-figure-block/edit.js:114
-#: build/blocks/thanks-figure-block/index.js:274
 msgid "Proceed to registration"
 msgstr "本登録に進む"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:119
-#: build/blocks/thanks-figure-block/index.js:279
+#: src/blocks/thanks-figure-block/edit.js:116
+msgid "Logon failed"
+msgstr "ログオンに失敗"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:121
+#: src/blocks/thanks-figure-block/edit.js:123
+#: src/blocks/thanks-figure-block/edit.js:127
 msgid "Go to home screen"
 msgstr "ホーム画面へ"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:121
-#: build/blocks/thanks-figure-block/index.js:281
-msgid "Open the Mail app"
-msgstr "メールアプリを開く"
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:123
-#: build/blocks/thanks-figure-block/index.js:283
+#: src/blocks/thanks-figure-block/edit.js:125
 msgid "To members only page"
 msgstr "会員専用ページへ"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:127
-#: build/blocks/thanks-figure-block/index.js:287
-msgid "Notification email sending success display"
-msgstr "通知メール送信奏功時の表示"
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:129
-#: build/blocks/thanks-figure-block/index.js:289
-msgid "Notification email provision success display"
-msgstr "仮登録メール送信奏功時の表示"
-
-#: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/thanks-figure-block/edit.js:131
-#: build/blocks/thanks-figure-block/index.js:291
-msgid "Notification email register success display"
-msgstr "本登録通知メール送信奏功時の表示"
+msgid "Notification screen and email sending success display"
+msgstr "通知メール送信奏功時の画面とメール文の表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:135
-#: build/blocks/thanks-figure-block/index.js:295
-msgid "Notification email sending error display"
-msgstr "通知メール送信エラー時の表示"
+#: src/blocks/thanks-figure-block/edit.js:136
+msgid "Notification screen and email provision success display"
+msgstr "仮登録メール送信奏功時の画面とメール文表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:137
-#: build/blocks/thanks-figure-block/index.js:297
-msgid "Notification email provision error display"
-msgstr "仮登録通知メール送信エラー時の表示"
+#: src/blocks/thanks-figure-block/edit.js:141
+msgid "Notification screen and email register success display"
+msgstr "本登録通知メール送信奏功時の画面とメール文表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:139
-#: build/blocks/thanks-figure-block/index.js:299
-msgid "Notification email register error display"
-msgstr "本登録通知メール送信エラー時の表示"
+#: src/blocks/thanks-figure-block/edit.js:148
+msgid "Notification screen and email sending error display"
+msgstr "通知メール送信エラー時の画面とメール文表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:143
-#: build/blocks/thanks-figure-block/index.js:303
+#: src/blocks/thanks-figure-block/edit.js:153
+msgid "Notification screen and email provision error display"
+msgstr "仮登録通知メール送信エラー時の画面とメール文表示"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:158
+msgid "Notification screen and email register error display"
+msgstr "本登録通知メール送信エラー時の画面とメール文表示"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:163
+msgid "Notification screen login error display"
+msgstr "通知メール送信エラー時の画面とメール文表示"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:167
 msgid "Response email sending success display"
 msgstr "応答メール送信奏功時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:145
-#: build/blocks/thanks-figure-block/index.js:305
+#: src/blocks/thanks-figure-block/edit.js:169
 msgid "Response email provision  display"
 msgstr "仮登録メール送信時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:147
-#: build/blocks/thanks-figure-block/index.js:307
+#: src/blocks/thanks-figure-block/edit.js:171
 msgid "Response email register success display"
 msgstr "本登録メール送信奏功時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:151
-#: build/blocks/thanks-figure-block/index.js:311
+#: src/blocks/thanks-figure-block/edit.js:175
 msgid "Response email sending error display"
 msgstr "応答メール送信エラー時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:165
-#: build/blocks/thanks-figure-block/index.js:325
+#: src/blocks/thanks-figure-block/edit.js:177
+msgid "Response email provision error display"
+msgstr "仮登録メール送信エラー時の表示"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:179
+msgid "Response email register error display"
+msgstr "本登録メール送信エラー時の表示"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:189
 msgid ""
 "The contents set in the sidebar will be displayed here as the transmission "
 "result. Any changes you make to the contents of this paragraph block will "
@@ -1046,35 +921,34 @@ msgstr ""
 "す。"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:226
-#: build/blocks/thanks-figure-block/index.js:386
+#: src/blocks/thanks-figure-block/edit.js:250
 msgid "Completion form information settings"
 msgstr "完了フォーム情報設定"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:286
-#: build/blocks/thanks-figure-block/index.js:446
+#: src/blocks/thanks-figure-block/edit.js:255
+msgid "Infomation Type"
+msgstr "情報タイプ"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:263
+msgid "Provisional registration"
+msgstr "仮登録"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:267
+msgid "Registration"
+msgstr "本登録"
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:325
 msgid "Select redirect destination when exiting"
 msgstr "終了時のリダイレクト先の選択"
 
 #: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:325
-#: build/blocks/thanks-figure-block/index.js:485
+#: src/blocks/thanks-figure-block/edit.js:364
 msgid "Choose Background color"
 msgstr "背景色を選択"
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/index.js:14
-#: build/blocks/thanks-figure-block/index.js:607
-msgid ""
-"It is a block that displays to convey gratitude when processing is completed"
-msgstr "処理が完了した際に感謝の気持ちを伝えるために表示するブロックです"
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/index.js:22
-#: build/blocks/thanks-figure-block/index.js:615
-msgid "Processing completed"
-msgstr "処理完了"
 
 #: build/blocks/confirm-figure-block/block.json
 #: src/blocks/confirm-figure-block/block.json
@@ -1110,6 +984,9 @@ msgstr ""
 msgctxt "block title"
 msgid "Thanks Figure"
 msgstr ""
+
+#~ msgid "Open the Mail app"
+#~ msgstr "メールアプリを開く"
 
 #~ msgid "Activate Plugin"
 #~ msgstr "プラグインの有効化"

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Form Send Blocks 1.2.0\n"
+"Project-Id-Version: Form Send Blocks 1.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-03T11:33:46+02:00\n"
+"POT-Creation-Date: 2025-06-12T08:46:19+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: form-send-blocks\n"
@@ -34,35 +34,35 @@ msgstr ""
 msgid "Web Creator ITmaroon"
 msgstr ""
 
-#: form-send-blocks.php:101
+#: form-send-blocks.php:104
 msgid "The server detected an error in the input item. Registration process was interrupted. "
 msgstr ""
 
-#: form-send-blocks.php:138
+#: form-send-blocks.php:141
 msgid "Your autoresponder email has been successfully sent."
 msgstr ""
 
-#: form-send-blocks.php:140
+#: form-send-blocks.php:143
 msgid "The site administrator has been successfully notified."
 msgstr ""
 
-#: form-send-blocks.php:144
+#: form-send-blocks.php:147
 msgid "Failed to send auto-response email."
 msgstr ""
 
-#: form-send-blocks.php:146
+#: form-send-blocks.php:149
 msgid "Failed to notify site administrator."
 msgstr ""
 
-#: form-send-blocks.php:150
+#: form-send-blocks.php:153
 msgid "Invalid request."
 msgstr ""
 
-#: form-send-blocks.php:165
+#: form-send-blocks.php:168
 msgid "Inquiry Data"
 msgstr ""
 
-#: form-send-blocks.php:177
+#: form-send-blocks.php:180
 msgid "Receipt processing completed successfully."
 msgstr ""
 
@@ -136,40 +136,46 @@ msgid "Official registration info"
 msgstr ""
 
 #: assets/contact_block.js:580
-#: assets/contact_block.js:701
-#: assets/contact_block.js:828
+#: assets/contact_block.js:700
+#: assets/contact_block.js:819
 msgid "sending..."
 msgstr ""
 
-#: assets/contact_block.js:773
+#: assets/contact_block.js:772
 msgid "Provisional registration results"
 msgstr ""
 
-#: assets/contact_block.js:779
+#: assets/contact_block.js:778
 msgid "Provisional registration error cause"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:15
+msgid "This block is displayed to confirm the information entered in the form."
+msgstr ""
+
+#: build/blocks/confirm-figure-block/index.js:18
+#: src/blocks/confirm-figure-block/index.js:20
+msgid "confirmation"
+msgstr ""
+
+#: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:198
-#: build/blocks/confirm-figure-block/index.js:317
 msgid "Please check your entries"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:215
-#: build/blocks/confirm-figure-block/index.js:334
 msgid "Send"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:227
-#: build/blocks/confirm-figure-block/index.js:346
 msgid "Return to send screen"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:322
-#: build/blocks/confirm-figure-block/index.js:441
 msgid "Confirmation form information setting"
 msgstr ""
 
@@ -177,11 +183,8 @@ msgstr ""
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:330
-#: src/blocks/input-figure-block/edit.js:393
-#: src/blocks/thanks-figure-block/edit.js:252
-#: build/blocks/confirm-figure-block/index.js:449
-#: build/blocks/input-figure-block/index.js:547
-#: build/blocks/thanks-figure-block/index.js:412
+#: src/blocks/input-figure-block/edit.js:395
+#: src/blocks/thanks-figure-block/edit.js:280
 msgid "Stage information"
 msgstr ""
 
@@ -189,11 +192,8 @@ msgstr ""
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:332
-#: src/blocks/input-figure-block/edit.js:395
-#: src/blocks/thanks-figure-block/edit.js:254
-#: build/blocks/confirm-figure-block/index.js:451
-#: build/blocks/input-figure-block/index.js:549
-#: build/blocks/thanks-figure-block/index.js:414
+#: src/blocks/input-figure-block/edit.js:397
+#: src/blocks/thanks-figure-block/edit.js:282
 msgid "Please enter the stage information to be displayed in the process area."
 msgstr ""
 
@@ -201,11 +201,8 @@ msgstr ""
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:342
-#: src/blocks/input-figure-block/edit.js:405
-#: src/blocks/thanks-figure-block/edit.js:308
-#: build/blocks/confirm-figure-block/index.js:461
-#: build/blocks/input-figure-block/index.js:559
-#: build/blocks/thanks-figure-block/index.js:468
+#: src/blocks/input-figure-block/edit.js:407
+#: src/blocks/thanks-figure-block/edit.js:347
 msgid "Global settings"
 msgstr ""
 
@@ -213,11 +210,8 @@ msgstr ""
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:347
-#: src/blocks/input-figure-block/edit.js:410
-#: src/blocks/thanks-figure-block/edit.js:313
-#: build/blocks/confirm-figure-block/index.js:466
-#: build/blocks/input-figure-block/index.js:564
-#: build/blocks/thanks-figure-block/index.js:473
+#: src/blocks/input-figure-block/edit.js:412
+#: src/blocks/thanks-figure-block/edit.js:352
 msgid "Background Color Setting"
 msgstr ""
 
@@ -225,20 +219,15 @@ msgstr ""
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:351
-#: src/blocks/input-figure-block/edit.js:414
-#: src/blocks/thanks-figure-block/edit.js:317
-#: build/blocks/confirm-figure-block/index.js:470
-#: build/blocks/input-figure-block/index.js:568
-#: build/blocks/thanks-figure-block/index.js:477
+#: src/blocks/input-figure-block/edit.js:416
+#: src/blocks/thanks-figure-block/edit.js:356
 msgid "Choose Block Background color"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:18
 #: build/blocks/input-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:359
-#: src/blocks/input-figure-block/edit.js:422
-#: build/blocks/confirm-figure-block/index.js:478
-#: build/blocks/input-figure-block/index.js:576
+#: src/blocks/input-figure-block/edit.js:424
 msgid "Choose Form Background color"
 msgstr ""
 
@@ -246,11 +235,8 @@ msgstr ""
 #: build/blocks/input-figure-block/index.js:18
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:368
-#: src/blocks/input-figure-block/edit.js:431
-#: src/blocks/thanks-figure-block/edit.js:334
-#: build/blocks/confirm-figure-block/index.js:487
-#: build/blocks/input-figure-block/index.js:585
-#: build/blocks/thanks-figure-block/index.js:494
+#: src/blocks/input-figure-block/edit.js:433
+#: src/blocks/thanks-figure-block/edit.js:373
 msgid "Border Settings"
 msgstr ""
 
@@ -259,13 +245,9 @@ msgstr ""
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:394
-#: src/blocks/contactmail-sender/edit.js:453
-#: src/blocks/custom-login/edit.js:157
+#: src/blocks/contactmail-sender/edit.js:452
+#: src/blocks/custom-login/edit.js:168
 #: src/blocks/member-register/edit.js:680
-#: build/blocks/confirm-figure-block/index.js:513
-#: build/blocks/contactmail-sender/index.js:536
-#: build/blocks/custom-login/index.js:262
-#: build/blocks/member-register/index.js:812
 msgid "Margin settings(mobile)"
 msgstr ""
 
@@ -274,13 +256,9 @@ msgstr ""
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:393
-#: src/blocks/contactmail-sender/edit.js:452
-#: src/blocks/custom-login/edit.js:156
+#: src/blocks/contactmail-sender/edit.js:451
+#: src/blocks/custom-login/edit.js:167
 #: src/blocks/member-register/edit.js:679
-#: build/blocks/confirm-figure-block/index.js:512
-#: build/blocks/contactmail-sender/index.js:535
-#: build/blocks/custom-login/index.js:261
-#: build/blocks/member-register/index.js:811
 msgid "Margin settings(desk top)"
 msgstr ""
 
@@ -289,13 +267,9 @@ msgstr ""
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:418
-#: src/blocks/contactmail-sender/edit.js:477
-#: src/blocks/custom-login/edit.js:181
+#: src/blocks/contactmail-sender/edit.js:476
+#: src/blocks/custom-login/edit.js:192
 #: src/blocks/member-register/edit.js:704
-#: build/blocks/confirm-figure-block/index.js:537
-#: build/blocks/contactmail-sender/index.js:560
-#: build/blocks/custom-login/index.js:286
-#: build/blocks/member-register/index.js:836
 msgid "Padding settings(mobile)"
 msgstr ""
 
@@ -304,13 +278,9 @@ msgstr ""
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
 #: src/blocks/confirm-figure-block/edit.js:417
-#: src/blocks/contactmail-sender/edit.js:476
-#: src/blocks/custom-login/edit.js:180
+#: src/blocks/contactmail-sender/edit.js:475
+#: src/blocks/custom-login/edit.js:191
 #: src/blocks/member-register/edit.js:703
-#: build/blocks/confirm-figure-block/index.js:536
-#: build/blocks/contactmail-sender/index.js:559
-#: build/blocks/custom-login/index.js:285
-#: build/blocks/member-register/index.js:835
 msgid "Padding settings(desk top)"
 msgstr ""
 
@@ -321,495 +291,459 @@ msgstr ""
 #: build/blocks/member-register/index.js:16
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/confirm-figure-block/edit.js:439
-#: src/blocks/contactmail-sender/edit.js:504
-#: src/blocks/custom-login/edit.js:208
-#: src/blocks/input-figure-block/edit.js:502
+#: src/blocks/contactmail-sender/edit.js:503
+#: src/blocks/custom-login/edit.js:219
+#: src/blocks/input-figure-block/edit.js:504
 #: src/blocks/member-register/edit.js:731
-#: src/blocks/thanks-figure-block/edit.js:405
-#: build/blocks/confirm-figure-block/index.js:558
-#: build/blocks/contactmail-sender/index.js:587
-#: build/blocks/custom-login/index.js:313
-#: build/blocks/input-figure-block/index.js:656
-#: build/blocks/member-register/index.js:863
-#: build/blocks/thanks-figure-block/index.js:565
+#: src/blocks/thanks-figure-block/edit.js:444
 msgid "Is Shadow"
 msgstr ""
 
-#: build/blocks/confirm-figure-block/index.js:18
-#: src/blocks/confirm-figure-block/index.js:15
-#: build/blocks/confirm-figure-block/index.js:600
-msgid "This block is displayed to confirm the information entered in the form."
-msgstr ""
-
-#: build/blocks/confirm-figure-block/index.js:18
-#: src/blocks/confirm-figure-block/index.js:20
-#: build/blocks/confirm-figure-block/index.js:605
-msgid "confirmation"
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:16
+msgid "This is a block for setting up an inquiry form."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:111
-#: build/blocks/contactmail-sender/index.js:194
+#: src/blocks/contactmail-sender/index.js:21
+msgid "We have received an inquiry."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:25
+msgid "We have received an inquiry regarding the following information."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:29
+msgid "Thank you for contacting us."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/index.js:33
+msgid "We have received your inquiry with the following details."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js:16
+#: src/blocks/contactmail-sender/edit.js:110
 msgid "The person in charge has been notified of your inquiry. Please wait for a while until we reply."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:115
-#: build/blocks/contactmail-sender/index.js:198
+#: src/blocks/contactmail-sender/edit.js:114
 msgid "Email notification to the person in charge failed."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:119
-#: build/blocks/contactmail-sender/index.js:202
+#: src/blocks/contactmail-sender/edit.js:118
 msgid "We have sent an automatic response email to you, so please check it."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:123
-#: build/blocks/contactmail-sender/index.js:206
+#: src/blocks/contactmail-sender/edit.js:122
 msgid "Failed to send automatic response email to you."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:163
-#: build/blocks/contactmail-sender/index.js:246
+#: src/blocks/contactmail-sender/edit.js:162
 msgid "Inquiry information notification email"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:172
+#: src/blocks/contactmail-sender/edit.js:171
 #: src/blocks/member-register/edit.js:228
-#: build/blocks/contactmail-sender/index.js:255
-#: build/blocks/member-register/index.js:360
 msgid "Notification email address (Master)"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:186
+#: src/blocks/contactmail-sender/edit.js:185
 #: src/blocks/member-register/edit.js:242
-#: build/blocks/contactmail-sender/index.js:269
-#: build/blocks/member-register/index.js:374
 msgid "The notification email address is blank or has an invalid format. "
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:203
+#: src/blocks/contactmail-sender/edit.js:202
 #: src/blocks/member-register/edit.js:204
-#: build/blocks/contactmail-sender/index.js:286
-#: build/blocks/member-register/index.js:336
 msgid "Master Name"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:210
+#: src/blocks/contactmail-sender/edit.js:209
 #: src/blocks/member-register/edit.js:211
-#: build/blocks/contactmail-sender/index.js:293
-#: build/blocks/member-register/index.js:343
 msgid "Do not leave the master name blank. "
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:227
-#: build/blocks/contactmail-sender/index.js:310
+#: src/blocks/contactmail-sender/edit.js:226
 msgid "Notification email subject"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:234
-#: src/blocks/contactmail-sender/edit.js:361
-#: src/blocks/contactmail-sender/edit.js:388
+#: src/blocks/contactmail-sender/edit.js:233
+#: src/blocks/contactmail-sender/edit.js:360
+#: src/blocks/contactmail-sender/edit.js:387
 #: src/blocks/member-register/edit.js:281
 #: src/blocks/member-register/edit.js:381
 #: src/blocks/member-register/edit.js:474
 #: src/blocks/member-register/edit.js:575
-#: build/blocks/contactmail-sender/index.js:317
-#: build/blocks/contactmail-sender/index.js:444
-#: build/blocks/contactmail-sender/index.js:471
-#: build/blocks/member-register/index.js:413
-#: build/blocks/member-register/index.js:513
-#: build/blocks/member-register/index.js:606
-#: build/blocks/member-register/index.js:707
 msgid "Do not leave the subject of the notification email blank. "
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:251
-#: build/blocks/contactmail-sender/index.js:334
+#: src/blocks/contactmail-sender/edit.js:250
 msgid "Notification email body"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:258
+#: src/blocks/contactmail-sender/edit.js:257
 #: src/blocks/member-register/edit.js:310
 #: src/blocks/member-register/edit.js:410
 #: src/blocks/member-register/edit.js:503
 #: src/blocks/member-register/edit.js:604
-#: build/blocks/contactmail-sender/index.js:341
-#: build/blocks/member-register/index.js:442
-#: build/blocks/member-register/index.js:542
-#: build/blocks/member-register/index.js:635
-#: build/blocks/member-register/index.js:736
 msgid "Do not leave the body of the notification email blank. "
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:299
-#: build/blocks/contactmail-sender/index.js:382
+#: src/blocks/contactmail-sender/edit.js:298
 msgid "Automatic response email"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:305
-#: build/blocks/contactmail-sender/index.js:388
+#: src/blocks/contactmail-sender/edit.js:304
 msgid "Send automatic response email"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:314
-#: build/blocks/contactmail-sender/index.js:397
+#: src/blocks/contactmail-sender/edit.js:313
 msgid "Reply to email address"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:351
-#: build/blocks/contactmail-sender/index.js:434
+#: src/blocks/contactmail-sender/edit.js:350
 msgid "Automatic response email title"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:378
-#: build/blocks/contactmail-sender/index.js:461
+#: src/blocks/contactmail-sender/edit.js:377
 msgid "Automatic response email body"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:402
-#: build/blocks/contactmail-sender/index.js:485
+#: src/blocks/contactmail-sender/edit.js:401
 msgid "Click on the input field below to quote it in the text."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/edit.js:433
-#: build/blocks/contactmail-sender/index.js:516
+#: src/blocks/contactmail-sender/edit.js:432
 msgid "Save response contents to DB"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:445
-#: src/blocks/custom-login/edit.js:149
+#: src/blocks/contactmail-sender/edit.js:444
+#: src/blocks/custom-login/edit.js:160
 #: src/blocks/member-register/edit.js:672
-#: build/blocks/contactmail-sender/index.js:528
-#: build/blocks/custom-login/index.js:254
-#: build/blocks/member-register/index.js:804
 msgid "Space settings"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:16
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/member-register/index.js:16
-#: src/blocks/contactmail-sender/edit.js:499
-#: src/blocks/custom-login/edit.js:203
+#: src/blocks/contactmail-sender/edit.js:498
+#: src/blocks/custom-login/edit.js:214
 #: src/blocks/member-register/edit.js:726
-#: build/blocks/contactmail-sender/index.js:582
-#: build/blocks/custom-login/index.js:308
-#: build/blocks/member-register/index.js:858
 msgid "Shadow settings"
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:16
-#: build/blocks/contactmail-sender/index.js:629
-msgid "This is a block for setting up an inquiry form."
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:21
-#: build/blocks/contactmail-sender/index.js:634
-msgid "We have received an inquiry."
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:25
-#: build/blocks/contactmail-sender/index.js:638
-msgid "We have received an inquiry regarding the following information."
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:29
-#: build/blocks/contactmail-sender/index.js:642
-msgid "Thank you for contacting us."
-msgstr ""
-
-#: build/blocks/contactmail-sender/index.js:16
-#: src/blocks/contactmail-sender/index.js:33
-#: build/blocks/contactmail-sender/index.js:646
-msgid "We have received your inquiry with the following details."
-msgstr ""
-
-#: build/blocks/custom-login/index.js:16
-#: src/blocks/custom-login/edit.js:111
-#: build/blocks/custom-login/index.js:216
-msgid "Custom Login Setting"
-msgstr ""
-
-#: build/blocks/custom-login/index.js:16
-#: src/blocks/custom-login/edit.js:116
-#: build/blocks/custom-login/index.js:221
-msgid "Select redirect destination when loged in"
-msgstr ""
-
-#: build/blocks/custom-login/index.js:16
-#: src/blocks/custom-login/edit.js:135
-#: build/blocks/custom-login/index.js:240
-msgid "Stay logged in"
 msgstr ""
 
 #: build/blocks/custom-login/index.js:16
 #: src/blocks/custom-login/index.js:15
-#: build/blocks/custom-login/index.js:354
 msgid "This block provides the functionality to display a customized login screen."
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:116
-#: src/blocks/input-figure-block/edit.js:164
-#: build/blocks/input-figure-block/index.js:270
-#: build/blocks/input-figure-block/index.js:318
-msgid "Name"
+#: build/blocks/custom-login/index.js:16
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/custom-login/edit.js:100
+#: src/blocks/thanks-figure-block/edit.js:271
+msgid "Logon Error"
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:117
-#: src/blocks/input-figure-block/edit.js:127
-#: src/blocks/input-figure-block/edit.js:137
-#: src/blocks/input-figure-block/edit.js:165
-#: src/blocks/input-figure-block/edit.js:175
-#: src/blocks/input-figure-block/edit.js:185
-#: src/blocks/input-figure-block/edit.js:214
-#: src/blocks/input-figure-block/edit.js:224
-#: build/blocks/input-figure-block/index.js:271
-#: build/blocks/input-figure-block/index.js:281
-#: build/blocks/input-figure-block/index.js:291
-#: build/blocks/input-figure-block/index.js:319
-#: build/blocks/input-figure-block/index.js:329
-#: build/blocks/input-figure-block/index.js:339
-#: build/blocks/input-figure-block/index.js:368
-#: build/blocks/input-figure-block/index.js:378
-msgid "Required"
+#: build/blocks/custom-login/index.js:16
+#: src/blocks/custom-login/edit.js:101
+msgid "Login failed for the following reasons:"
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:118
-#: src/blocks/input-figure-block/edit.js:166
-#: src/blocks/input-figure-block/edit.js:215
-#: build/blocks/input-figure-block/index.js:272
-#: build/blocks/input-figure-block/index.js:320
-#: build/blocks/input-figure-block/index.js:369
-msgid "Please enter your name"
+#: build/blocks/custom-login/index.js:16
+#: src/blocks/custom-login/edit.js:122
+msgid "Custom Login Setting"
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:125
-#: src/blocks/input-figure-block/edit.js:173
-#: build/blocks/input-figure-block/index.js:279
-#: build/blocks/input-figure-block/index.js:327
-msgid "E-mail Address"
+#: build/blocks/custom-login/index.js:16
+#: src/blocks/custom-login/edit.js:127
+msgid "Select redirect destination when loged in success"
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:128
-#: src/blocks/input-figure-block/edit.js:176
-#: build/blocks/input-figure-block/index.js:282
-#: build/blocks/input-figure-block/index.js:330
-msgid "Please enter your e-mail address"
+#: build/blocks/custom-login/index.js:16
+#: src/blocks/custom-login/edit.js:146
+msgid "Stay logged in"
 msgstr ""
 
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:135
-#: build/blocks/input-figure-block/index.js:289
-msgid "Inquiry details"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:138
-#: build/blocks/input-figure-block/index.js:292
-msgid "Please enter inquiry"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:144
-#: src/blocks/input-figure-block/edit.js:192
-#: src/blocks/input-figure-block/edit.js:231
-#: build/blocks/input-figure-block/index.js:298
-#: build/blocks/input-figure-block/index.js:346
-#: build/blocks/input-figure-block/index.js:385
-msgid "Agree to the privacy policy and send."
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:154
-#: build/blocks/input-figure-block/index.js:308
-msgid "To confirmation screen"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:183
-#: src/blocks/input-figure-block/edit.js:222
-#: build/blocks/input-figure-block/index.js:337
-#: build/blocks/input-figure-block/index.js:376
-msgid "PassWord"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:186
-#: src/blocks/input-figure-block/edit.js:225
-#: build/blocks/input-figure-block/index.js:340
-#: build/blocks/input-figure-block/index.js:379
-msgid "Please enter Password"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:202
-#: build/blocks/input-figure-block/index.js:356
-msgid "Sending a confirmation email"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:213
-#: build/blocks/input-figure-block/index.js:367
-msgid "ID or email"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:240
-#: build/blocks/input-figure-block/index.js:394
-msgid "If you haven't registered yet, click here"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:253
-#: build/blocks/input-figure-block/index.js:407
-msgid "Login"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:358
-#: build/blocks/input-figure-block/index.js:512
-msgid "Transmission form information setting"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:384
-#: build/blocks/input-figure-block/index.js:538
-msgid "Form Name"
-msgstr ""
-
-#: build/blocks/input-figure-block/index.js:18
-#: src/blocks/input-figure-block/edit.js:386
-#: build/blocks/input-figure-block/index.js:540
-msgid "This is the name used to identify it as a data source."
+#: build/blocks/custom-login/index.js:16
+#: src/blocks/custom-login/edit.js:148
+msgid "Remember Me"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:18
 #: src/blocks/input-figure-block/index.js:15
-#: build/blocks/input-figure-block/index.js:699
 msgid "This is a block for collecting and displaying input elements in a form."
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:18
 #: src/blocks/input-figure-block/index.js:20
-#: build/blocks/input-figure-block/index.js:704
 msgid "Information input"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:118
+#: src/blocks/input-figure-block/edit.js:166
+msgid "Name"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:119
+#: src/blocks/input-figure-block/edit.js:129
+#: src/blocks/input-figure-block/edit.js:139
+#: src/blocks/input-figure-block/edit.js:167
+#: src/blocks/input-figure-block/edit.js:177
+#: src/blocks/input-figure-block/edit.js:187
+#: src/blocks/input-figure-block/edit.js:216
+#: src/blocks/input-figure-block/edit.js:226
+msgid "Required"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:120
+#: src/blocks/input-figure-block/edit.js:168
+#: src/blocks/input-figure-block/edit.js:217
+msgid "Please enter your name"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:127
+#: src/blocks/input-figure-block/edit.js:175
+msgid "E-mail Address"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:130
+#: src/blocks/input-figure-block/edit.js:178
+msgid "Please enter your e-mail address"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:137
+msgid "Inquiry details"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:140
+msgid "Please enter inquiry"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:146
+#: src/blocks/input-figure-block/edit.js:194
+#: src/blocks/input-figure-block/edit.js:233
+msgid "Agree to the privacy policy and send."
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:156
+msgid "To confirmation screen"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:185
+#: src/blocks/input-figure-block/edit.js:224
+msgid "PassWord"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:188
+#: src/blocks/input-figure-block/edit.js:227
+msgid "Please enter Password"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:204
+msgid "Sending a confirmation email"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:215
+msgid "ID or email"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:242
+msgid "If you haven't registered yet, click here"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:255
+#: src/blocks/input-figure-block/edit.js:377
+msgid "Login"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:360
+msgid "Transmission form information setting"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:368
+msgid "Input Form Type"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:371
+#: src/blocks/thanks-figure-block/edit.js:259
+msgid "Inquiry"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:373
+msgid "Membership Registration"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:386
+msgid "Form Name"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js:18
+#: src/blocks/input-figure-block/edit.js:388
+msgid "This is the name used to identify it as a data source."
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:15
+msgid "This block sends a verification email to register members and registers them as WordPress members depending on the response."
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/member-register/index.js:23
+#: src/blocks/thanks-figure-block/edit.js:112
+msgid "Thank you for your provisional registration"
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:30
+msgid "Provisional registration has been completed. To complete your registration, please access the following URL."
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:37
+msgid "Provisional registration completion notice"
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:44
+msgid "Your provisional registration application has been accepted."
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:51
+msgid "This registration is complete"
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:55
+msgid "Registration is now complete. You can log in with the user ID below or the email address and password you entered."
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:62
+msgid "Notification of completion of registration"
+msgstr ""
+
+#: build/blocks/member-register/index.js:16
+#: src/blocks/member-register/index.js:69
+msgid "The registration process has been completed and the new user has been added."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:113
-#: build/blocks/member-register/index.js:245
 msgid "Provisional registration input"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:120
-#: build/blocks/member-register/index.js:252
 msgid "Official Registration"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:121
-#: build/blocks/member-register/index.js:253
 msgid "Your provisional registration has been processed successfully. We have sent you an email, so please access the URL in the email to complete your registration."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:125
-#: build/blocks/member-register/index.js:257
 msgid "The provisional registration process has failed. Please check your email address and try again."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:135
-#: build/blocks/member-register/index.js:267
 msgid "Registration complete"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:136
-#: build/blocks/member-register/index.js:268
 msgid "Your registration has been processed successfully. Thank you for registering."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:140
-#: build/blocks/member-register/index.js:272
 msgid "We are sorry, but please try again with temporary registration."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:144
-#: build/blocks/member-register/index.js:276
 msgid "We have sent you an email confirming your registration. Please check the details."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:148
-#: build/blocks/member-register/index.js:280
 msgid "The email confirming your registration could not be sent."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:198
-#: build/blocks/member-register/index.js:330
 msgid "Administrator notification settings"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:259
-#: build/blocks/member-register/index.js:391
 msgid "Notification of provisional registration application"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:271
 #: src/blocks/member-register/edit.js:464
-#: build/blocks/member-register/index.js:403
-#: build/blocks/member-register/index.js:596
 msgid "Provisional registration email subject"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:300
 #: src/blocks/member-register/edit.js:493
-#: build/blocks/member-register/index.js:432
-#: build/blocks/member-register/index.js:625
 msgid "Provisional registration email body"
 msgstr ""
 
@@ -818,234 +752,176 @@ msgstr ""
 #: src/blocks/member-register/edit.js:426
 #: src/blocks/member-register/edit.js:519
 #: src/blocks/member-register/edit.js:620
-#: build/blocks/member-register/index.js:458
-#: build/blocks/member-register/index.js:558
-#: build/blocks/member-register/index.js:651
-#: build/blocks/member-register/index.js:752
 msgid "Click the input item displayed below to quote it in the text."
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:359
-#: build/blocks/member-register/index.js:491
 msgid "Notification of official registration"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:371
 #: src/blocks/member-register/edit.js:565
-#: build/blocks/member-register/index.js:503
-#: build/blocks/member-register/index.js:697
 msgid "Official registration email subject"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:400
 #: src/blocks/member-register/edit.js:594
-#: build/blocks/member-register/index.js:532
-#: build/blocks/member-register/index.js:726
 msgid "Official registration email body"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:458
-#: build/blocks/member-register/index.js:590
 msgid "User notification settings"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:551
-#: build/blocks/member-register/index.js:683
 msgid "An email will be sent to confirm your registration"
 msgstr ""
 
 #: build/blocks/member-register/index.js:16
 #: src/blocks/member-register/edit.js:659
-#: build/blocks/member-register/index.js:791
 msgid "Automatic logon after registration"
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:15
-#: build/blocks/member-register/index.js:904
-msgid "This block sends a verification email to register members and registers them as WordPress members depending on the response."
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/member-register/index.js:23
-#: src/blocks/thanks-figure-block/edit.js:112
-#: build/blocks/member-register/index.js:912
-#: build/blocks/thanks-figure-block/index.js:272
-msgid "Thank you for your provisional registration"
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:30
-#: build/blocks/member-register/index.js:919
-msgid "Provisional registration has been completed. To complete your registration, please access the following URL."
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:37
-#: build/blocks/member-register/index.js:926
-msgid "Provisional registration completion notice"
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:44
-#: build/blocks/member-register/index.js:933
-msgid "Your provisional registration application has been accepted."
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:51
-#: build/blocks/member-register/index.js:940
-msgid "This registration is complete"
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:55
-#: build/blocks/member-register/index.js:944
-msgid "Registration is now complete. You can log in with the user ID below or the email address and password you entered."
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:62
-#: build/blocks/member-register/index.js:951
-msgid "Notification of completion of registration"
-msgstr ""
-
-#: build/blocks/member-register/index.js:16
-#: src/blocks/member-register/index.js:69
-#: build/blocks/member-register/index.js:958
-msgid "The registration process has been completed and the new user has been added."
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:110
-#: build/blocks/thanks-figure-block/index.js:270
-msgid "Thank you for your inquiry."
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:114
-#: build/blocks/thanks-figure-block/index.js:274
-msgid "Proceed to registration"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:119
-#: build/blocks/thanks-figure-block/index.js:279
-msgid "Go to home screen"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:121
-#: build/blocks/thanks-figure-block/index.js:281
-msgid "Open the Mail app"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:123
-#: build/blocks/thanks-figure-block/index.js:283
-msgid "To members only page"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:127
-#: build/blocks/thanks-figure-block/index.js:287
-msgid "Notification email sending success display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:129
-#: build/blocks/thanks-figure-block/index.js:289
-msgid "Notification email provision success display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:131
-#: build/blocks/thanks-figure-block/index.js:291
-msgid "Notification email register success display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:135
-#: build/blocks/thanks-figure-block/index.js:295
-msgid "Notification email sending error display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:137
-#: build/blocks/thanks-figure-block/index.js:297
-msgid "Notification email provision error display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:139
-#: build/blocks/thanks-figure-block/index.js:299
-msgid "Notification email register error display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:143
-#: build/blocks/thanks-figure-block/index.js:303
-msgid "Response email sending success display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:145
-#: build/blocks/thanks-figure-block/index.js:305
-msgid "Response email provision  display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:147
-#: build/blocks/thanks-figure-block/index.js:307
-msgid "Response email register success display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:151
-#: build/blocks/thanks-figure-block/index.js:311
-msgid "Response email sending error display"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:165
-#: build/blocks/thanks-figure-block/index.js:325
-msgid "The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid."
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:226
-#: build/blocks/thanks-figure-block/index.js:386
-msgid "Completion form information settings"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:286
-#: build/blocks/thanks-figure-block/index.js:446
-msgid "Select redirect destination when exiting"
-msgstr ""
-
-#: build/blocks/thanks-figure-block/index.js:18
-#: src/blocks/thanks-figure-block/edit.js:325
-#: build/blocks/thanks-figure-block/index.js:485
-msgid "Choose Background color"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/thanks-figure-block/index.js:14
-#: build/blocks/thanks-figure-block/index.js:607
 msgid "It is a block that displays to convey gratitude when processing is completed"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:18
 #: src/blocks/thanks-figure-block/index.js:22
-#: build/blocks/thanks-figure-block/index.js:615
 msgid "Processing completed"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:110
+msgid "Thank you for your inquiry."
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:114
+msgid "Proceed to registration"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:116
+msgid "Logon failed"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:121
+#: src/blocks/thanks-figure-block/edit.js:123
+#: src/blocks/thanks-figure-block/edit.js:127
+msgid "Go to home screen"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:125
+msgid "To members only page"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:131
+msgid "Notification screen and email sending success display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:136
+msgid "Notification screen and email provision success display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:141
+msgid "Notification screen and email register success display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:148
+msgid "Notification screen and email sending error display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:153
+msgid "Notification screen and email provision error display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:158
+msgid "Notification screen and email register error display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:163
+msgid "Notification screen login error display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:167
+msgid "Response email sending success display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:169
+msgid "Response email provision  display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:171
+msgid "Response email register success display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:175
+msgid "Response email sending error display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:177
+msgid "Response email provision error display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:179
+msgid "Response email register error display"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:189
+msgid "The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid."
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:250
+msgid "Completion form information settings"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:255
+msgid "Infomation Type"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:263
+msgid "Provisional registration"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:267
+msgid "Registration"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:325
+msgid "Select redirect destination when exiting"
+msgstr ""
+
+#: build/blocks/thanks-figure-block/index.js:18
+#: src/blocks/thanks-figure-block/edit.js:364
+msgid "Choose Background color"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/block.json

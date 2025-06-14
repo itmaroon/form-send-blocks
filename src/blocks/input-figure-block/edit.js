@@ -365,16 +365,16 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 					className="form_setteing_ctrl"
 				>
 					<SelectControl
-						label={__("Input Form Type", "block-collections")}
+						label={__("Input Form Type", "form-send-blocks")}
 						value={form_type}
 						options={[
-							{ label: __("Inquiry", "block-collections"), value: "inquiry" },
+							{ label: __("Inquiry", "form-send-blocks"), value: "inquiry" },
 							{
-								label: __("Membership Registration", "block-collections"),
+								label: __("Membership Registration", "form-send-blocks"),
 								value: "member",
 							},
 							{
-								label: __("Login", "block-collections"),
+								label: __("Login", "form-send-blocks"),
 								value: "login",
 							},
 						]}
