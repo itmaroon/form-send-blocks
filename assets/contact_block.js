@@ -334,6 +334,7 @@ jQuery(function ($) {
 		expired: __("The token has expired.", "form-send-blocks"),
 		user_fail: __("User registration failed.", "form-send-blocks"),
 		no_data: __("Input data missing", "form-send-blocks"),
+		missing_email: __("No email address entered", "form-send-blocks"),
 		invalid_mail: __(
 			"The email address format is invalid.",
 			"form-send-blocks",
@@ -352,6 +353,7 @@ jQuery(function ($) {
 			"The email containing the provisional registration results could not be sent.",
 			"form-send-blocks",
 		),
+		invite_failed: __("Failed to send email.", "form-send-blocks"),
 	};
 
 	// クエリパラメータによる処理(本登録の処理)
@@ -433,9 +435,10 @@ jQuery(function ($) {
 					.addClass("error")
 					.text($("#to_regist_page").data("info_mail_error"));
 				result_disp.append(p);
-				let err_msg = `--------------------\nerror content : ${
-					errorMap[urlParams.get("error_code")]
-				}`;
+				let err_msg = `--------------------\n${__(
+					"error content",
+					"form-send-blocks",
+				)} : ${errorMap[urlParams.get("error_code")]}`;
 				let err_p = $("<p></p>")
 					.addClass("error")
 					.html(err_msg.replace(/\n/g, "<br>"));
@@ -671,6 +674,26 @@ jQuery(function ($) {
 		window.location.href = updatedHref;
 	});
 
+	// Ajax 送信用 共通関数
+
+	function sendRegistrationAjax(url, postData, isRest = false) {
+		const ajaxOptions = {
+			url: url,
+			type: "POST",
+			data: isRest ? JSON.stringify(postData) : postData,
+			contentType: isRest ? "application/json" : undefined,
+			dataType: "json",
+		};
+
+		if (isRest) {
+			ajaxOptions.headers = {
+				"X-WP-Nonce": postData.nonce,
+			};
+		}
+
+		return $.ajax(ajaxOptions);
+	}
+
 	//会員仮登録の処理と本登録メールの送信
 	$("#send_confirm_form").on("submit", function (e) {
 		e.preventDefault();
@@ -683,7 +706,7 @@ jQuery(function ($) {
 
 		//親ブロックの情報取得
 		let parent_block = $(this).parents(".wp-block-itmar-member-register");
-
+		//ブロックの情報
 		const block_info_obj = {
 			master_email: parent_block.data("master_mail"),
 			master_name: parent_block.data("master_name"),
@@ -693,41 +716,64 @@ jQuery(function ($) {
 			is_logon: parent_block.data("is_logon"),
 		};
 
+		//フォーム内のインプットデータ
+		const $form = $(this);
+		const formDataObj = {};
+		$form.serializeArray().forEach((item) => {
+			formDataObj[item.name] = item.value;
+		});
+
 		//現在のページ
 		const pageUrl = window.location.href;
 
-		//ローディングマークを出す
-		dispLoading(__("sending...", "form-send-blocks"), $("#send_confirm_form"));
-
-		//noceの取得
-		const nonce = itmar_form_send_option.nonce;
-
-		//ajaxの送り先
-		const ajaxUrl = itmar_form_send_option.ajaxURL;
-
-		const $form = $(this);
-		const formData = $form.serialize();
-
+		//受け渡しのパラメータ
+		let targetUrl = "";
+		let postData = {};
+		let isRest = false;
 		const ajax_result = {};
 
-		$.ajax({
-			url: ajaxUrl,
-
-			type: "POST",
-			data: {
+		//フォーム別にパラメータを生成
+		if (parent_block.data("register_type") === "origin") {
+			targetUrl = itmar_form_send_option.ajaxURL;
+			postData = {
 				action: "itmar_register_send_token",
-				nonce: nonce,
-				redirect_to: pageUrl, // ← 現在のURLを追加
-				form_data: formData,
+				nonce: itmar_form_send_option.nonce,
+				redirect_to: pageUrl,
+				form_data: $form.serialize(),
 				...block_info_obj,
-			},
-			dataType: "json",
-		})
+			};
+			isRest = false;
+		} else if (parent_block.data("register_type") === "shopify") {
+			targetUrl = "/wp-json/itmar-ec-relate/v1/shopify-create-customer";
+			const formDataObj = {};
+			$form.serializeArray().forEach((item) => {
+				formDataObj[item.name] = item.value;
+			});
+			postData = {
+				nonce: itmar_form_send_option.rest_nonce, //RestAPI用のnonce
+				form_data: formDataObj,
+			};
+			isRest = true;
+		} else if (parent_block.data("register_type") === "stripe") {
+			targetUrl = "/wp-json/itmar-ec-relate/v1/stripe-create-customer";
+			const formDataObj = {};
+			$form.serializeArray().forEach((item) => {
+				formDataObj[item.name] = item.value;
+			});
+			postData = {
+				nonce: itmar_form_send_option.rest_nonce, //RestAPI用のnonce
+				form_data: formDataObj,
+			};
+			isRest = true;
+		}
+
+		//ローディングマークを出す
+		dispLoading(__("sending...", "form-send-blocks"), $("#send_confirm_form"));
+		sendRegistrationAjax(targetUrl, postData, isRest)
 			.done(function (response) {
 				//表示エリアに表示
 				let result_disp = $("#to_mail p");
 				result_disp.empty();
-
 				if (response.success) {
 					// ✅ wp_send_json_success の場合
 					//let message = $("#to_home").data(`${key}_${value.status}`);
@@ -842,10 +888,17 @@ jQuery(function ($) {
 		})
 			.done(function (response) {
 				if (response.success) {
+					//リダイレクトパラメータ
+					const redirectUrl =
+						new URLSearchParams(window.location.search).get("redirect_to") ||
+						"/";
+
 					// [home_url]をhomeUrlに置き換え
-					let updatedHref = formParent
-						.data("redirect_url")
-						.replace("[home_url]", form_send_blocks.home_url);
+					let updatedHref = redirectUrl
+						? redirectUrl //リダイレクトパラメータを優先
+						: formParent
+								.data("redirect_url")
+								.replace("[home_url]", form_send_blocks.home_url);
 					window.location.href = updatedHref;
 				} else {
 					//表示エリアに表示

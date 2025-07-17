@@ -6,7 +6,7 @@
  * Description:       This is a block that summarizes the display screen when submitting a form.
  * Requires at least: 6.4
  * Requires PHP:      8.2.10
- * Version:           1.3.0
+ * Version:           1.3.1
  * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -68,6 +68,7 @@ function itmar_contact_block_add_js()
 		//jsで使えるようにnonceとadmin_urlをローカライズ
 		wp_localize_script('contact_js_handle', 'itmar_form_send_option', array(
 			'nonce' => wp_create_nonce('contact_send_nonce'),
+			'rest_nonce' => wp_create_nonce('wp_rest'),
 			'ajaxURL' => esc_url(admin_url('admin-ajax.php', __FILE__)),
 			'home_url' => home_url()
 		));
@@ -304,7 +305,7 @@ function itmar_create_pending_users_table_if_not_exists()
 			email VARCHAR(255) NOT NULL,
 			name VARCHAR(255),
 			password VARCHAR(255),
-			token VARCHAR(64) NOT NULL,
+			token VARCHAR(64) NULL,
 			created_at DATETIME NOT NULL,
 			is_used TINYINT(1) DEFAULT 0,
 			PRIMARY KEY (id),

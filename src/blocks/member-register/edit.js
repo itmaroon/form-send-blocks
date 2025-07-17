@@ -21,6 +21,7 @@ import {
 	TextareaControl,
 	Notice,
 	TextControl,
+	SelectControl,
 	__experimentalBoxControl as BoxControl,
 } from "@wordpress/components";
 
@@ -53,6 +54,7 @@ const units = [
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 	const {
+		register_type,
 		default_pos,
 		mobile_pos,
 		is_shadow,
@@ -194,6 +196,30 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 	return (
 		<>
 			<InspectorControls group="settings">
+				<PanelBody
+					title={__("Registration Type settings", "form-send-blocks")}
+					initialOpen={true}
+					className="mailinfo_ctrl"
+				>
+					<SelectControl
+						label={__("Select Registration Type", "form-send-blocks")}
+						value={register_type}
+						options={[
+							{ label: __("Original", "form-send-blocks"), value: "origin" },
+							{
+								label: __("Shopify", "form-send-blocks"),
+								value: "shopify",
+							},
+							{
+								label: __("Stripe", "form-send-blocks"),
+								value: "stripe",
+							},
+						]}
+						onChange={(newName) => {
+							setAttributes({ register_type: newName });
+						}}
+					/>
+				</PanelBody>
 				<PanelBody
 					title={__("Administrator notification settings", "form-send-blocks")}
 					initialOpen={true}
@@ -454,217 +480,208 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								})}
 						</>
 					)}
-					<PanelBody
-						title={__("User notification settings", "form-send-blocks")}
-						initialOpen={true}
-						className="mailinfo_ctrl"
-					>
-						<PanelRow>
-							<TextControl
-								label={__(
-									"Provisional registration email subject",
-									"form-send-blocks",
-								)}
-								value={subject_prov_editing}
-								onChange={(newVal) => setSubjectProvValue(newVal)} // 一時的な編集値として保存する
-								onBlur={() => {
-									if (subject_prov_editing.length == 0) {
-										dispatch("core/notices").createNotice(
-											"error",
-											__(
-												"Do not leave the subject of the notification email blank. ",
-												"form-send-blocks",
-											),
-											{ type: "snackbar", isDismissible: true },
-										);
-										// バリデーションエラーがある場合、編集値を元の値にリセットする
-										setSubjectProvValue(subject_provision);
-									} else {
-										// バリデーションが成功した場合、編集値を確定する
-										setAttributes({
-											subject_provision: subject_prov_editing,
-										});
-									}
-								}}
-							/>
-						</PanelRow>
-						<PanelRow>
-							<TextareaControl
-								label={__(
-									"Provisional registration email body",
-									"form-send-blocks",
-								)}
-								value={message_prov_editing}
-								onChange={(newVal) => setMessageProvValue(newVal)} // 一時的な編集値として保存する
-								onBlur={() => {
-									if (message_prov_editing.length == 0) {
-										dispatch("core/notices").createNotice(
-											"error",
-											__(
-												"Do not leave the body of the notification email blank. ",
-												"form-send-blocks",
-											),
-											{ type: "snackbar", isDismissible: true },
-										);
-										// バリデーションエラーがある場合、編集値を元の値にリセットする
-										setMessageProvValue(message_provision);
-									} else {
-										// バリデーションが成功した場合、編集値を確定する
-										setAttributes({
-											message_provision: message_prov_editing,
-										});
-									}
-								}}
-								rows="5"
-								help={__(
-									"Click the input item displayed below to quote it in the text.",
-									"form-send-blocks",
-								)}
-							/>
-						</PanelRow>
-						{inputInnerBlocks
-							.filter(
-								(block) =>
-									block.name !== "itmar/design-checkbox" &&
-									block.name !== "itmar/design-button",
-							)
-							.map((input_elm, index) => {
-								const actions = [
-									{
-										label: "👆",
-										onClick: () => {
-											const newVal = `${message_provision}[${input_elm.attributes.inputName}]`;
-											setMessageProvValue(newVal);
-											setAttributes({ message_provision: newVal });
-										},
-									},
-								];
-								return (
-									<Notice key={index} actions={actions} isDismissible={false}>
-										<p>{input_elm.attributes.labelContent}</p>
-									</Notice>
-								);
-							})}
-
-						<PanelRow>
-							<ToggleControl
-								label={__(
-									"An email will be sent to confirm your registration",
-									"form-send-blocks",
-								)}
-								checked={is_success_mail}
-								onChange={(newVal) =>
-									setAttributes({ is_success_mail: newVal })
+				</PanelBody>
+				<PanelBody
+					title={__("User notification settings", "form-send-blocks")}
+					initialOpen={true}
+					className="mailinfo_ctrl"
+				>
+					<PanelRow>
+						<TextControl
+							label={__(
+								"Provisional registration email subject",
+								"form-send-blocks",
+							)}
+							value={subject_prov_editing}
+							onChange={(newVal) => setSubjectProvValue(newVal)} // 一時的な編集値として保存する
+							onBlur={() => {
+								if (subject_prov_editing.length == 0) {
+									dispatch("core/notices").createNotice(
+										"error",
+										__(
+											"Do not leave the subject of the notification email blank. ",
+											"form-send-blocks",
+										),
+										{ type: "snackbar", isDismissible: true },
+									);
+									// バリデーションエラーがある場合、編集値を元の値にリセットする
+									setSubjectProvValue(subject_provision);
+								} else {
+									// バリデーションが成功した場合、編集値を確定する
+									setAttributes({
+										subject_provision: subject_prov_editing,
+									});
 								}
-							/>
-						</PanelRow>
-						{is_success_mail && (
-							<>
-								<PanelRow>
-									<TextControl
-										label={__(
-											"Official registration email subject",
+							}}
+						/>
+					</PanelRow>
+					<PanelRow>
+						<TextareaControl
+							label={__(
+								"Provisional registration email body",
+								"form-send-blocks",
+							)}
+							value={message_prov_editing}
+							onChange={(newVal) => setMessageProvValue(newVal)} // 一時的な編集値として保存する
+							onBlur={() => {
+								if (message_prov_editing.length == 0) {
+									dispatch("core/notices").createNotice(
+										"error",
+										__(
+											"Do not leave the body of the notification email blank. ",
 											"form-send-blocks",
-										)}
-										value={subject_reg_editing}
-										onChange={(newVal) => setSubjectRegValue(newVal)} // 一時的な編集値として保存する
-										onBlur={() => {
-											if (subject_reg_editing.length == 0) {
-												dispatch("core/notices").createNotice(
-													"error",
-													__(
-														"Do not leave the subject of the notification email blank. ",
-														"form-send-blocks",
-													),
-													{ type: "snackbar", isDismissible: true },
-												);
-												// バリデーションエラーがある場合、編集値を元の値にリセットする
-												setSubjectRegValue(subject_register);
-											} else {
-												// バリデーションが成功した場合、編集値を確定する
-												setAttributes({
-													subject_register: subject_reg_editing,
-												});
-											}
-										}}
-									/>
-								</PanelRow>
-								<PanelRow>
-									<TextareaControl
-										label={__(
-											"Official registration email body",
-											"form-send-blocks",
-										)}
-										value={message_reg_editing}
-										onChange={(newVal) => setMessageRegValue(newVal)} // 一時的な編集値として保存する
-										onBlur={() => {
-											if (message_reg_editing.length == 0) {
-												dispatch("core/notices").createNotice(
-													"error",
-													__(
-														"Do not leave the body of the notification email blank. ",
-														"form-send-blocks",
-													),
-													{ type: "snackbar", isDismissible: true },
-												);
-												// バリデーションエラーがある場合、編集値を元の値にリセットする
-												setMessageRegValue(message_register);
-											} else {
-												// バリデーションが成功した場合、編集値を確定する
-												setAttributes({
-													message_register: message_reg_editing,
-												});
-											}
-										}}
-										rows="5"
-										help={__(
-											"Click the input item displayed below to quote it in the text.",
-											"form-send-blocks",
-										)}
-									/>
-								</PanelRow>
-								{inputInnerBlocks
-									.filter(
-										(block) =>
-											block.name !== "itmar/design-checkbox" &&
-											block.name !== "itmar/design-button",
-									)
-									.map((input_elm, index) => {
-										const actions = [
-											{
-												label: "👆",
-												onClick: () => {
-													const newVal = `${message_register}[${input_elm.attributes.inputName}]`;
-													setMessageRegValue(newVal);
-													setAttributes({ message_register: newVal });
-												},
-											},
-										];
-										return (
-											<Notice
-												key={index}
-												actions={actions}
-												isDismissible={false}
-											>
-												<p>{input_elm.attributes.labelContent}</p>
-											</Notice>
-										);
-									})}
-							</>
-						)}
-					</PanelBody>
+										),
+										{ type: "snackbar", isDismissible: true },
+									);
+									// バリデーションエラーがある場合、編集値を元の値にリセットする
+									setMessageProvValue(message_provision);
+								} else {
+									// バリデーションが成功した場合、編集値を確定する
+									setAttributes({
+										message_provision: message_prov_editing,
+									});
+								}
+							}}
+							rows="5"
+							help={__(
+								"Click the input item displayed below to quote it in the text.",
+								"form-send-blocks",
+							)}
+						/>
+					</PanelRow>
+					{inputInnerBlocks
+						.filter(
+							(block) =>
+								block.name !== "itmar/design-checkbox" &&
+								block.name !== "itmar/design-button",
+						)
+						.map((input_elm, index) => {
+							const actions = [
+								{
+									label: "👆",
+									onClick: () => {
+										const newVal = `${message_provision}[${input_elm.attributes.inputName}]`;
+										setMessageProvValue(newVal);
+										setAttributes({ message_provision: newVal });
+									},
+								},
+							];
+							return (
+								<Notice key={index} actions={actions} isDismissible={false}>
+									<p>{input_elm.attributes.labelContent}</p>
+								</Notice>
+							);
+						})}
 
 					<PanelRow>
 						<ToggleControl
 							label={__(
-								"Automatic logon after registration",
+								"An email will be sent to confirm your registration",
 								"form-send-blocks",
 							)}
-							checked={is_logon}
-							onChange={(newVal) => setAttributes({ is_logon: newVal })}
+							checked={is_success_mail}
+							onChange={(newVal) => setAttributes({ is_success_mail: newVal })}
 						/>
 					</PanelRow>
+					{is_success_mail && (
+						<>
+							<PanelRow>
+								<TextControl
+									label={__(
+										"Official registration email subject",
+										"form-send-blocks",
+									)}
+									value={subject_reg_editing}
+									onChange={(newVal) => setSubjectRegValue(newVal)} // 一時的な編集値として保存する
+									onBlur={() => {
+										if (subject_reg_editing.length == 0) {
+											dispatch("core/notices").createNotice(
+												"error",
+												__(
+													"Do not leave the subject of the notification email blank. ",
+													"form-send-blocks",
+												),
+												{ type: "snackbar", isDismissible: true },
+											);
+											// バリデーションエラーがある場合、編集値を元の値にリセットする
+											setSubjectRegValue(subject_register);
+										} else {
+											// バリデーションが成功した場合、編集値を確定する
+											setAttributes({
+												subject_register: subject_reg_editing,
+											});
+										}
+									}}
+								/>
+							</PanelRow>
+							<PanelRow>
+								<TextareaControl
+									label={__(
+										"Official registration email body",
+										"form-send-blocks",
+									)}
+									value={message_reg_editing}
+									onChange={(newVal) => setMessageRegValue(newVal)} // 一時的な編集値として保存する
+									onBlur={() => {
+										if (message_reg_editing.length == 0) {
+											dispatch("core/notices").createNotice(
+												"error",
+												__(
+													"Do not leave the body of the notification email blank. ",
+													"form-send-blocks",
+												),
+												{ type: "snackbar", isDismissible: true },
+											);
+											// バリデーションエラーがある場合、編集値を元の値にリセットする
+											setMessageRegValue(message_register);
+										} else {
+											// バリデーションが成功した場合、編集値を確定する
+											setAttributes({
+												message_register: message_reg_editing,
+											});
+										}
+									}}
+									rows="5"
+									help={__(
+										"Click the input item displayed below to quote it in the text.",
+										"form-send-blocks",
+									)}
+								/>
+							</PanelRow>
+							{inputInnerBlocks
+								.filter(
+									(block) =>
+										block.name !== "itmar/design-checkbox" &&
+										block.name !== "itmar/design-button",
+								)
+								.map((input_elm, index) => {
+									const actions = [
+										{
+											label: "👆",
+											onClick: () => {
+												const newVal = `${message_register}[${input_elm.attributes.inputName}]`;
+												setMessageRegValue(newVal);
+												setAttributes({ message_register: newVal });
+											},
+										},
+									];
+									return (
+										<Notice key={index} actions={actions} isDismissible={false}>
+											<p>{input_elm.attributes.labelContent}</p>
+										</Notice>
+									);
+								})}
+						</>
+					)}
 				</PanelBody>
+
+				<PanelRow>
+					<ToggleControl
+						label={__("Automatic logon after registration", "form-send-blocks")}
+						checked={is_logon}
+						onChange={(newVal) => setAttributes({ is_logon: newVal })}
+					/>
+				</PanelRow>
 			</InspectorControls>
 
 			<InspectorControls group="styles">

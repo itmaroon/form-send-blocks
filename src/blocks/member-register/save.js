@@ -5,6 +5,7 @@ import { StyleComp } from "./StyleMemberRegister";
 
 export default function save({ attributes }) {
 	const {
+		register_type,
 		master_mail,
 		master_name,
 		ret_mail,
@@ -38,6 +39,7 @@ export default function save({ attributes }) {
 		<>
 			<div
 				{...blockProps}
+				data-register_type={register_type}
 				data-master_mail={master_mail}
 				data-master_name={master_name}
 				data-subject_prov={subject_provision}

@@ -16,6 +16,10 @@
     }
   },
   "attributes": {
+    "register_type": {
+      "type": "string",
+      "default": "origin"
+    },
     "default_pos": {
       "type": "object",
       "default": {

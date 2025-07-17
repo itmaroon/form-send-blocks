@@ -3,7 +3,7 @@ Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.4
 Tested up to:      6.8
-Stable tag:        1.3.0
+Stable tag:        1.3.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,9 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 1.3.1 =
+- Changed to prioritize redirect destination after processing custom login form if there is a redirect_to option in the redirect destination
+  
 = 1.3.0 =
 - Add a block that handles everything from user registration forms to WordPress user registration.
 - Added a block that displays a login screen separate from the built-in login screen and provides functions such as directing users to specific pages after logging in.  
