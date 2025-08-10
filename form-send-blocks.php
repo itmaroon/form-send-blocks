@@ -56,10 +56,10 @@ function itmar_contact_block_add_js()
 
 	//管理画面以外（フロントエンド側でのみ読み込む）
 	if (!is_admin()) {
-		$script_path = plugin_dir_path(__FILE__) . 'assets/contact_block.js';
+		$script_path = plugin_dir_path(__FILE__) . 'build/contact_block.js';
 		wp_enqueue_script(
 			'contact_js_handle',
-			plugins_url('/assets/contact_block.js', __FILE__),
+			plugins_url('build/contact_block.js', __FILE__),
 			array('jquery'),
 			filemtime($script_path),
 			true
@@ -208,7 +208,9 @@ function itmar_register_send_token()
 	$redirect_to = isset($_POST['redirect_to']) ? esc_url_raw(wp_unslash($_POST['redirect_to'])) : home_url();
 
 	$email = sanitize_email($form['email'] ?? '');
-	$name = sanitize_text_field($form['memberName'] ?? '');
+	$first_name = sanitize_text_field($form['memberFirstName'] ?? '');
+	$last_name = sanitize_text_field($form['memberLastName'] ?? '');
+	$name = $form['memberDisplayName'] ? sanitize_text_field($form['memberFirstName'] ?? '') : $first_name . $last_name;
 	$password = $form['password'] ?? '';
 
 	if (empty($email) || !is_email($email)) {
@@ -238,12 +240,14 @@ function itmar_register_send_token()
 		[
 			'email' => $email,
 			'name' => $name,
-			'password' => password_hash($password, PASSWORD_DEFAULT), // パスワードはハッシュ化
+			'first_name' => $first_name,
+			'last_name' => $last_name,
+			'password' => $password,
 			'token' => $token,
 			'created_at' => current_time('mysql'),
 			'is_used' => 0,
 		],
-		['%s', '%s', '%s', '%s', '%s', '%d']
+		['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d']
 	);
 
 	if (!$result) {
@@ -304,6 +308,8 @@ function itmar_create_pending_users_table_if_not_exists()
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			email VARCHAR(255) NOT NULL,
 			name VARCHAR(255),
+			first_name VARCHAR(255),
+			last_name VARCHAR(255),
 			password VARCHAR(255),
 			token VARCHAR(64) NULL,
 			created_at DATETIME NOT NULL,
@@ -410,7 +416,9 @@ function itmar_process_token_registration($token, $is_logon)
 
 	$email = sanitize_email($row['email']);
 	$display_name = sanitize_text_field($row['name']);
-	$hashed_password = $row['password'];
+	$first_name = sanitize_text_field($row['first_name']);
+	$last_name = sanitize_text_field($row['last_name']);
+	$password = sanitize_text_field($row['password']);
 
 	// user_login を自動生成
 	$base = 'user_' . substr(md5($email), 0, 8);
@@ -423,26 +431,21 @@ function itmar_process_token_registration($token, $is_logon)
 	// ユーザー作成
 	$user_id = wp_insert_user([
 		'user_login'   => $username,
-		'user_pass'    => wp_generate_password(),
+		'user_pass'    => $password,
 		'user_email'   => $email,
 		'display_name' => $display_name,
 		'nickname'     => $display_name,
 		'role'         => 'subscriber',
 	]);
-
+	//エラーの場合はここで返す
 	if (is_wp_error($user_id)) {
 		return ['success' => false, 'error_code' => 'user_fail'];
 	}
 
-	// パスワードを仮登録のハッシュで上書き
-	ItmarDbCache::update_and_clear_cache(
-		$wpdb->users,
-		['user_pass' => $hashed_password],
-		['ID' => $user_id],
-		['%s'],
-		['%d'],
-		['user_cache_' . $user_id]
-	);
+	// first_name / last_name をユーザーメタに保存
+	update_user_meta($user_id, 'first_name', $first_name);
+	update_user_meta($user_id, 'last_name', $last_name);
+
 
 	// 仮登録情報を削除
 	ItmarDbCache::delete_and_clear_cache(
@@ -460,7 +463,25 @@ function itmar_process_token_registration($token, $is_logon)
 	}
 
 	//成功を返す
-	return ['success' => true, 'user_name' => $username, 'mail_to' => $email];
+	return ['success' => true, 'user_ID' => $user_id, 'user_name' => $username, 'mail_to' => $email];
+}
+
+//仮登録状態のチェック
+function itmar_pending_user_check($username)
+{
+	//仮登録状態かどうかをチェック
+	global $wpdb;
+	$table = $wpdb->prefix . 'pending_users';
+
+	// メールアドレス or ユーザー名を照合
+	$pending_user = $wpdb->get_row(
+		$wpdb->prepare(
+			"SELECT * FROM {$table} WHERE (email = %s OR name = %s) AND is_used = 0 LIMIT 1",
+			$username,
+			$username
+		)
+	);
+	return $pending_user;
 }
 
 //カスタムログインの処理
@@ -495,11 +516,22 @@ function itmar_custom_login()
 	$user = wp_signon($creds, false);
 
 	if (is_wp_error($user)) {
-		wp_send_json_error(['message' => $user->get_error_message()]);
+		//仮登録ユーザーの取得
+		$pending_user = itmar_pending_user_check($username);
+
+		if ($pending_user) {
+			wp_send_json_success([
+				'result' => 'pending_user',
+				'message' => '仮登録が確認できました',
+			]);
+		} else {
+			wp_send_json_error(['message' => $user->get_error_message()]);
+		}
 	}
 
 	// ✅ 正常ログイン時 → JSONで成功 + リダイレクト先を渡す
 	wp_send_json_success([
+		'result' => 'login_ok',
 		'message' => 'ログインに成功しました',
 	]);
 }

@@ -1,3 +1,8 @@
+import {
+	checkCustomerLoginState,
+	redirectCustomerAuthorize,
+} from "itmar-block-packages";
+
 /* ------------------------------
 Loading イメージ表示関数
 引数： msg 画面に表示する文言
@@ -53,7 +58,9 @@ function removeLoading(dispMsg, target) {
 jQuery(function ($) {
 	//確認画面遷移のボタンの有効化
 	$(document).ready(function () {
-		$target_form = $("#send_confirm_form, #to_login_form, #to_confirm_form");
+		let $target_form = $(
+			"#send_confirm_form, #to_login_form, #to_confirm_form",
+		);
 		// チェックボックスの状態を評価してsubmitボタンの状態を更新する関数
 		function evaluateCheckboxes() {
 			// 全てのチェックボックスが選択されているかチェック
@@ -700,6 +707,20 @@ jQuery(function ($) {
 
 		//アニメーション中ならリターン
 		if (animating) return false;
+
+		//cancelの処理
+		const click_key = e.originalEvent.submitter?.dataset.key;
+		if (click_key === "cancel_key") {
+			const params = new URLSearchParams(window.location.search);
+			const redirectUrl = params.get("redirect_to");
+			if (redirectUrl) {
+				window.location.href = redirectUrl;
+			} else {
+				window.history.back();
+			}
+			return;
+		}
+
 		//必須のバリデーションチェック
 		if (require_check($(this))) return;
 		animating = true;
@@ -744,7 +765,7 @@ jQuery(function ($) {
 			};
 			isRest = false;
 		} else if (parent_block.data("register_type") === "shopify") {
-			targetUrl = "/wp-json/itmar-ec-relate/v1/shopify-create-customer";
+			targetUrl = "/wp-json/itmar-ec-relate/v1/shopify-create-customer-form";
 			const formDataObj = {};
 			$form.serializeArray().forEach((item) => {
 				formDataObj[item.name] = item.value;
@@ -852,9 +873,21 @@ jQuery(function ($) {
 	//カスタムログインの処理
 	$("#to_login_form").on("submit", function (e) {
 		e.preventDefault();
-
 		//アニメーション中ならリターン
 		if (animating) return false;
+
+		//cancelの処理
+		const click_key = e.originalEvent.submitter?.dataset.key;
+		if (click_key === "cancel_key") {
+			const params = new URLSearchParams(window.location.search);
+			const redirectUrl = params.get("redirect_to");
+			if (redirectUrl) {
+				window.location.href = redirectUrl;
+			} else {
+				window.history.back();
+			}
+			return;
+		}
 
 		//必須のバリデーションチェック
 		if (require_check($(this))) return;
@@ -888,18 +921,35 @@ jQuery(function ($) {
 		})
 			.done(function (response) {
 				if (response.success) {
-					//リダイレクトパラメータ
-					const redirectUrl =
-						new URLSearchParams(window.location.search).get("redirect_to") ||
-						"/";
+					const urlParams = new URLSearchParams(window.location.search);
 
-					// [home_url]をhomeUrlに置き換え
-					let updatedHref = redirectUrl
-						? redirectUrl //リダイレクトパラメータを優先
-						: formParent
-								.data("redirect_url")
-								.replace("[home_url]", form_send_blocks.home_url);
-					window.location.href = updatedHref;
+					// リダイレクト先URL（指定がなければルートに戻す）
+					const redirectUrl = urlParams.get("redirect_to") || "/";
+
+					// Shopify 関連のパラメータ
+					const shopId = urlParams.get("shop_id") || "";
+					const headlessId = urlParams.get("headless_id") || "";
+					const authCalllbackUrl = formParent
+						.data("redirect_url")
+						.replace("[home_url]", form_send_blocks.home_url);
+
+					// Shopify の認証が必要であればここで実行
+					if (shopId && headlessId) {
+						redirectCustomerAuthorize(
+							shopId,
+							headlessId,
+							authCalllbackUrl,
+							redirectUrl,
+						);
+					} else {
+						// [home_url]をhomeUrlに置き換え
+						let updatedHref = formParent.data("redirect_url")
+							? formParent
+									.data("redirect_url")
+									.replace("[home_url]", form_send_blocks.home_url) //指定したリダイレクト先を優先
+							: redirectUrl;
+						window.location.href = updatedHref;
+					}
 				} else {
 					//表示エリアに表示
 					let result_disp = $("#error_to_home p");

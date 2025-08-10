@@ -105,37 +105,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		[clientId],
 	); // clientIdが変わるたびに監視対象のstateを更新する
 
-	//タイトル属性の監視（最初のitmar/design-title）
-	// const titleBlockAttributes = useSelect(
-	// 	(select) => {
-	// 		const blocks = select("core/block-editor").getBlocks(clientId);
-	// 		//タイトル属性の取得・初期化
-	// 		const titleBlock = blocks.find(
-	// 			(block) => block.name === "itmar/design-title",
-	// 		);
-	// 		return titleBlock
-	// 			? titleBlock.attributes
-	// 			: {
-	// 					headingContent: __("Please check your entries", "form-send-blocks"),
-	// 					headingType: "H3",
-	// 			  };
-	// 	},
-	// 	[clientId],
-	// );
-
-	//テーブル属性の監視（最初のitmar/design-table）
-	// const tableBlockAttributes = useSelect(
-	// 	(select) => {
-	// 		const blocks = select("core/block-editor").getBlocks(clientId);
-	// 		//タイトル属性の取得・初期化
-	// 		const tableBlock = blocks.find(
-	// 			(block) => block.name === "itmar/design-table",
-	// 		);
-	// 		return tableBlock ? tableBlock.attributes : {};
-	// 	},
-	// 	[clientId],
-	// );
-
 	//ブロックの監視
 	const {
 		titleBlockAttributes,
@@ -211,7 +180,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				  }
 				: {
 						buttonType: "submit",
-						buttonId: "btn_id_send",
+						buttonKey: "btn_id_send",
 						labelContent: __("Send", "form-send-blocks"),
 				  },
 		);
@@ -223,7 +192,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				  }
 				: {
 						buttonType: "submit",
-						buttonId: "btn_id_cancel",
+						buttonKey: "btn_id_cancel",
 						labelContent: __("Return to send screen", "form-send-blocks"),
 				  },
 		);
@@ -258,8 +227,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			[button1, button2],
 		);
 		//ボタンのIDをcomfirm-figure-blockに登録
-		setAttributes({ send_id: button1.attributes.buttonId });
-		setAttributes({ cancel_id: button2.attributes.buttonId });
+		setAttributes({ send_id: button1.attributes.buttonKey });
+		setAttributes({ cancel_id: button2.attributes.buttonKey });
 
 		const newInnerBlocks = [
 			createBlock("itmar/design-title", { ...setTitleAttributes }),
@@ -273,7 +242,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const click_id = e.nativeEvent.submitter.id;
+		const click_id = e.nativeEvent.submitter.dataset.key;
 		// 親ブロックのstate_process属性を更新
 		if (click_id === send_id) {
 			updateBlockAttributes(parentClientId, { state_process: "thanks" });

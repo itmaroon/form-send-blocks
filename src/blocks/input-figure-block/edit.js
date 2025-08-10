@@ -162,10 +162,19 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		[
 			"itmar/design-text-ctrl",
 			{
-				inputName: "memberName",
-				labelContent: __("Name", "form-send-blocks"),
+				inputName: "memberLastName",
+				labelContent: __("Last Name", "form-send-blocks"),
 				required: { flg: true, display: __("Required", "form-send-blocks") },
-				placeFolder: __("Please enter your name", "form-send-blocks"),
+				placeFolder: __("Please enter your last name", "form-send-blocks"),
+			},
+		],
+		[
+			"itmar/design-text-ctrl",
+			{
+				inputName: "memberFirstName",
+				labelContent: __("First Name", "form-send-blocks"),
+				required: { flg: true, display: __("Required", "form-send-blocks") },
+				placeFolder: __("Please enter your first name", "form-send-blocks"),
 			},
 		],
 		[
@@ -198,12 +207,51 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			},
 		],
 		[
-			"itmar/design-button",
+			"itmar/design-group",
 			{
-				buttonType: "submit",
-				labelContent: __("Sending a confirmation email", "form-send-blocks"),
-				align: "center",
+				default_val: {
+					direction: "horizen",
+					inner_align: "center",
+					outer_align: "center",
+					width_val: "fit",
+					max_width: "fit",
+					reverse: false,
+					wrap: false,
+					outer_vertical: "center",
+					height_val: "fit",
+				},
+				mobile_val: {
+					direction: "horizen",
+					inner_align: "center",
+					outer_align: "center",
+					width_val: "fit",
+					max_width: "fit",
+					reverse: false,
+					wrap: false,
+					outer_vertical: "center",
+					height_val: "fit",
+				},
 			},
+			[
+				[
+					"itmar/design-button",
+					{
+						buttonType: "submit",
+						labelContent: __("Send a confirmation email", "form-send-blocks"),
+						align: "center",
+						buttonKey: "submit_key",
+					},
+				],
+				[
+					"itmar/design-button",
+					{
+						buttonType: "submit",
+						labelContent: __("Cancel", "form-send-blocks"),
+						align: "center",
+						buttonKey: "cancel_key",
+					},
+				],
+			],
 		],
 	];
 
@@ -248,13 +296,53 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				is_underLine: true,
 			},
 		],
+
 		[
-			"itmar/design-button",
+			"itmar/design-group",
 			{
-				buttonType: "submit",
-				labelContent: __("Login", "form-send-blocks"),
-				align: "center",
+				default_val: {
+					direction: "horizen",
+					inner_align: "center",
+					outer_align: "center",
+					width_val: "fit",
+					max_width: "fit",
+					reverse: false,
+					wrap: false,
+					outer_vertical: "center",
+					height_val: "fit",
+				},
+				mobile_val: {
+					direction: "horizen",
+					inner_align: "center",
+					outer_align: "center",
+					width_val: "fit",
+					max_width: "fit",
+					reverse: false,
+					wrap: false,
+					outer_vertical: "center",
+					height_val: "fit",
+				},
 			},
+			[
+				[
+					"itmar/design-button",
+					{
+						buttonType: "submit",
+						labelContent: __("Login", "form-send-blocks"),
+						align: "center",
+						buttonKey: "submit_key",
+					},
+				],
+				[
+					"itmar/design-button",
+					{
+						buttonType: "submit",
+						labelContent: __("Cancel", "form-send-blocks"),
+						align: "center",
+						buttonKey: "cancel_key",
+					},
+				],
+			],
 		],
 	];
 
@@ -295,7 +383,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			(block) =>
 				block.name !== "itmar/design-checkbox" &&
 				block.name !== "itmar/design-button" &&
-				block.name !== "itmar/design-title",
+				block.name !== "itmar/design-title" &&
+				block.name !== "itmar/design-group",
 		);
 		const maxNum = filteredBlocks.reduce((max, block) => {
 			//必須項目の表示を設定

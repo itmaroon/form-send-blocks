@@ -359,6 +359,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								.filter(
 									(block) =>
 										block.name !== "itmar/design-checkbox" &&
+										block.name !== "itmar/design-group" &&
 										block.name !== "itmar/design-button",
 								)
 								.map((input_elm, index) => {
@@ -459,6 +460,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 								.filter(
 									(block) =>
 										block.name !== "itmar/design-checkbox" &&
+										block.name !== "itmar/design-group" &&
 										block.name !== "itmar/design-button",
 								)
 								.map((input_elm, index) => {
@@ -553,6 +555,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 						.filter(
 							(block) =>
 								block.name !== "itmar/design-checkbox" &&
+								block.name !== "itmar/design-group" &&
 								block.name !== "itmar/design-button",
 						)
 						.map((input_elm, index) => {
