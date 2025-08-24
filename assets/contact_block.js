@@ -929,6 +929,11 @@ jQuery(function ($) {
 					// Shopify 関連のパラメータ
 					const shopId = urlParams.get("shop_id") || "";
 					const headlessId = urlParams.get("headless_id") || "";
+					const form_data = {};
+					$form.serializeArray().forEach((item) => {
+						form_data[item.name] = item.value;
+					});
+					const userMail = form_data.userID; //入力されたメールアドレス
 					const authCalllbackUrl = formParent
 						.data("redirect_url")
 						.replace("[home_url]", form_send_blocks.home_url);
@@ -938,6 +943,7 @@ jQuery(function ($) {
 						redirectCustomerAuthorize(
 							shopId,
 							headlessId,
+							userMail,
 							authCalllbackUrl,
 							redirectUrl,
 						);
