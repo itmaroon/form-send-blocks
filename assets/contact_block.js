@@ -765,7 +765,7 @@ jQuery(function ($) {
 			};
 			isRest = false;
 		} else if (parent_block.data("register_type") === "shopify") {
-			targetUrl = "/wp-json/itmar-ec-relate/v1/shopify-create-customer-form";
+			targetUrl = "/wp-json/itmar-ec-relate/v1/customer/create";
 			const formDataObj = {};
 			$form.serializeArray().forEach((item) => {
 				formDataObj[item.name] = item.value;
