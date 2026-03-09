@@ -13,7 +13,7 @@ import { ReactComponent as Thanks } from "./thanks.svg";
 registerBlockType(metadata.name, {
 	description: __(
 		"It is a block that displays to convey gratitude when processing is completed",
-		"form-send-blocks"
+		"form-send-blocks",
 	),
 	attributes: {
 		...metadata.attributes,
@@ -23,7 +23,7 @@ registerBlockType(metadata.name, {
 		},
 		selectedPageUrl: {
 			type: "string",
-			default: form_send_blocks.home_url,
+			default: itmar_option.home_url,
 		},
 	},
 	icon: <Thanks />,

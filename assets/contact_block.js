@@ -1,7 +1,4 @@
-import {
-	checkCustomerLoginState,
-	redirectCustomerAuthorize,
-} from "itmar-block-packages";
+import { redirectCustomerAuthorize } from "itmar-block-packages";
 
 /* ------------------------------
 Loading イメージ表示関数
@@ -675,7 +672,7 @@ jQuery(function ($) {
 		// href属性の[home_url]をhomeUrlに置き換え
 		let updatedHref = $(this)
 			.data("selected_page")
-			.replace("[home_url]", form_send_blocks.home_url);
+			.replace("[home_url]", itmar_option.home_url);
 
 		//リダイレクト
 		window.location.href = updatedHref;
@@ -702,7 +699,7 @@ jQuery(function ($) {
 	}
 
 	//会員仮登録の処理と本登録メールの送信
-	$("#send_confirm_form").on("submit", function (e) {
+	$("#send_confirm_form").on("submit", async function (e) {
 		e.preventDefault();
 
 		//アニメーション中ならリターン
@@ -749,6 +746,7 @@ jQuery(function ($) {
 
 		//受け渡しのパラメータ
 		let targetUrl = "";
+		let pendingRecUrl = "";
 		let postData = {};
 		let isRest = false;
 		const ajax_result = {};
@@ -766,17 +764,7 @@ jQuery(function ($) {
 			isRest = false;
 		} else if (parent_block.data("register_type") === "shopify") {
 			targetUrl = "/wp-json/itmar-ec-relate/v1/customer/create";
-			const formDataObj = {};
-			$form.serializeArray().forEach((item) => {
-				formDataObj[item.name] = item.value;
-			});
-			postData = {
-				nonce: itmar_form_send_option.rest_nonce, //RestAPI用のnonce
-				form_data: formDataObj,
-			};
-			isRest = true;
-		} else if (parent_block.data("register_type") === "stripe") {
-			targetUrl = "/wp-json/itmar-ec-relate/v1/stripe-create-customer";
+			pendingRecUrl = "/wp-json/itmar-ec-relate/v1/customer/pending-upsert";
 			const formDataObj = {};
 			$form.serializeArray().forEach((item) => {
 				formDataObj[item.name] = item.value;
@@ -787,7 +775,117 @@ jQuery(function ($) {
 			};
 			isRest = true;
 		}
+		// else if (parent_block.data("register_type") === "stripe") {
+		// 	targetUrl = "/wp-json/itmar-ec-relate/v1/stripe-create-customer";
+		// 	const formDataObj = {};
+		// 	$form.serializeArray().forEach((item) => {
+		// 		formDataObj[item.name] = item.value;
+		// 	});
+		// 	postData = {
+		// 		nonce: itmar_form_send_option.rest_nonce, //RestAPI用のnonce
+		// 		form_data: formDataObj,
+		// 	};
+		// 	isRest = true;
+		// }
+		//ローディングマークを出す
+		dispLoading(__("sending...", "form-send-blocks"), $("#send_confirm_form"));
+		try {
+			if (pendingRecUrl) {
+				//先行してペンディングレコードの生成
+				const response = await sendRegistrationAjax(
+					pendingRecUrl,
+					postData,
+					isRest,
+				);
+				console.log(response);
+			}
+			//ユーザー本登録
+			const response = await sendRegistrationAjax(targetUrl, postData, isRest);
+			//表示エリアに表示
+			let result_disp = $("#to_mail p");
+			result_disp.empty();
+			if (response.success) {
+				// ✅ wp_send_json_success の場合
+				//let message = $("#to_home").data(`${key}_${value.status}`);
+				let p = $("<p></p>")
+					.addClass("success")
+					.text($("#to_mail").data("info_mail_success"));
+				result_disp.append(p);
+				ajax_result.status = "success";
+			} else {
+				// ❌ wp_send_json_error の場合
+				let p = $("<p></p>")
+					.addClass("error")
+					.text($("#to_mail").data("info_mail_error"));
+				result_disp.append(p);
+				let err_msg = `--------------------\nerror content : ${
+					errorMap[response.data.err_code]
+				}`;
+				let err_p = $("<p></p>")
+					.addClass("error")
+					.html(err_msg.replace(/\n/g, "<br>"));
+				result_disp.append(err_p);
+				//ボタンを消す
+				$("#to_mail").find(".wp-block-itmar-design-button").hide();
+				//結果の記録
+				ajax_result.status = "error";
+				ajax_result.error_code = response.data.err_code;
+			}
+		} catch (err) {
+			// jqXHR が飛んでくることが多い
+			const msg =
+				err?.responseJSON?.message ||
+				err?.responseText ||
+				err?.statusText ||
+				"Request failed";
+			console.error(msg, err);
 
+			// UIに表示など
+		}
+
+		//管理者への通知メール
+		if (parent_block.data("is_prov_notice")) {
+			let master_email = parent_block.data("master_mail");
+			let master_name = parent_block.data("master_name");
+			let subject_ret_prov = parent_block.data("subject_ret_prov");
+			let message_ret_prov = parent_block.data("message_ret_prov");
+			//message_retの再構築
+			message_ret_prov = `${message_rebuild(
+				message_ret_prov,
+			)}\n\n-------------------------------------------------\n${__(
+				"Provisional registration results",
+				"form-send-blocks",
+			)} : ${ajax_result.status}`;
+			//エラーの原因を通知
+			if (ajax_result.status === "error") {
+				message_ret_prov = `${message_ret_prov}\n${__(
+					"Provisional registration error cause",
+					"form-send-blocks",
+				)} : ${errorMap[ajax_result.error_code]}`;
+			}
+			//メールの送信
+			sendMail_ajax(
+				master_email,
+				subject_ret_prov,
+				message_ret_prov,
+				master_email,
+				master_name,
+				false,
+				true,
+			);
+		}
+		//ローディングマーク消去
+		removeLoading("", $("#send_confirm_form"));
+		//アニメーションの実行
+		processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(1), true);
+		//プログレスエリアの処理
+		process_change(
+			$form.parent().parent().nextAll(".figure_fieldset").first(),
+			true,
+		);
+	});
+
+	function fetch_form_restAPI(targetUrl, postData, isRest) {
 		//ローディングマークを出す
 		dispLoading(__("sending...", "form-send-blocks"), $("#send_confirm_form"));
 		sendRegistrationAjax(targetUrl, postData, isRest)
@@ -825,6 +923,7 @@ jQuery(function ($) {
 			})
 			.fail(function (xhr, status, error) {
 				ajax_result.status = "error";
+				console.error(xhr, status, error);
 			})
 			.always(function () {
 				//管理者への通知メール
@@ -868,7 +967,7 @@ jQuery(function ($) {
 					true,
 				);
 			});
-	});
+	}
 
 	//カスタムログインの処理
 	$("#to_login_form").on("submit", function (e) {
@@ -936,7 +1035,7 @@ jQuery(function ($) {
 					const userMail = form_data.userID; //入力されたメールアドレス
 					const authCalllbackUrl = formParent
 						.data("redirect_url")
-						.replace("[home_url]", form_send_blocks.home_url);
+						.replace("[home_url]", itmar_option.home_url);
 
 					// Shopify の認証が必要であればここで実行
 					if (shopId && headlessId) {
@@ -952,7 +1051,7 @@ jQuery(function ($) {
 						let updatedHref = formParent.data("redirect_url")
 							? formParent
 									.data("redirect_url")
-									.replace("[home_url]", form_send_blocks.home_url) //指定したリダイレクト先を優先
+									.replace("[home_url]", itmar_option.home_url) //指定したリダイレクト先を優先
 							: redirectUrl;
 						window.location.href = updatedHref;
 					}
@@ -991,7 +1090,7 @@ jQuery(function ($) {
 		// href属性の[home_url]をhomeUrlに置き換え
 		let updatedHref = $(this)
 			.data("selected_page")
-			.replace("[home_url]", form_send_blocks.home_url);
+			.replace("[home_url]", itmar_option.home_url);
 		console.log(updatedHref);
 		//リダイレクト
 		window.location.href = updatedHref;

@@ -20,7 +20,7 @@ registerBlockType(metadata.name, {
 		...metadata.attributes,
 		redirectUrl: {
 			type: "string",
-			default: form_send_blocks.home_url,
+			default: itmar_option.home_url,
 		},
 	},
 
