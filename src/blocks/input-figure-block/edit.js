@@ -13,8 +13,8 @@ import {
 	TextControl,
 	ToggleControl,
 	SelectControl,
-	__experimentalBoxControl as BoxControl,
-	__experimentalBorderBoxControl as BorderBoxControl,
+	BoxControl,
+	BorderBoxControl,
 } from "@wordpress/components";
 
 import "./editor.scss";
@@ -75,6 +75,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		default_pos,
 		mobile_pos,
 		stage_info,
+		isLastStep,
 		shadow_element,
 		is_shadow,
 	} = attributes;
@@ -82,30 +83,72 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ブロックの背景色
 	const blockStyle = { background: bgColor };
 
-	//ブロック情報取得ツールの取得
-	const { getBlockRootClientId } = useSelect(
-		(select) => select("core/block-editor"),
+	//親のcontextから今のステップ数を取得
+	const currentStep = context["itmar/current_step"];
+
+	//ブロック情報の取得
+	const {
+		parentClientId,
+		thisBlockIndex,
+		thisInputIndex,
+		totalInput,
+		innerBlocks,
+	} = useSelect(
+		(select) => {
+			const { getBlockRootClientId, getBlock, getBlocks } =
+				select("core/block-editor");
+
+			// 1. 親の clientId を取得
+			const parentId = getBlockRootClientId(clientId);
+
+			// 2. 親の直下にある全ブロックを取得し、"figure-block" を含むものの中での順番を特定
+			const parentBlock = getBlock(parentId);
+			const siblings = parentBlock ? parentBlock.innerBlocks : [];
+			const figureBlockSiblings = siblings.filter((block) =>
+				block.name.includes("figure-block"),
+			);
+			const index = figureBlockSiblings.findIndex(
+				(block) => block.clientId === clientId,
+			);
+			const inputBlockSiblings = siblings.filter((block) =>
+				block.name.includes("input-figure-block"),
+			);
+			const inputIndex = inputBlockSiblings.findIndex(
+				(block) => block.clientId === clientId,
+			);
+
+			// 3. 自分自身（this block）の直下のインナーブロックを取得
+			const thisInnerBlocks = getBlocks(clientId) || [];
+
+			return {
+				parentClientId: parentId,
+				thisBlockIndex: index,
+				innerBlocks: thisInnerBlocks,
+				thisInputIndex: inputIndex,
+				totalInput: inputBlockSiblings.length,
+			};
+		},
 		[clientId],
 	);
-	// 親ブロックのclientIdを取得
-	const parentClientId = getBlockRootClientId(clientId);
+
 	// dispatch関数を取得
 	const { updateBlockAttributes } = useDispatch("core/block-editor");
 
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		const click_id = e.nativeEvent.submitter.dataset.key;
 
-		const new_state =
-			form_type === "inquiry"
-				? "confirm"
-				: form_type === "member"
-				? "provision"
-				: form_type === "login"
-				? "logonErr"
-				: "";
-		// 親ブロックのstate_process属性を更新
-		updateBlockAttributes(parentClientId, { state_process: new_state });
+		// 親ブロックのcurrent_step属性を更新
+		if (click_id === "foword_id") {
+			updateBlockAttributes(parentClientId, {
+				current_step: currentStep + 1,
+			});
+		} else if (click_id === "back_id") {
+			updateBlockAttributes(parentClientId, {
+				current_step: currentStep - 1,
+			});
+		}
 	};
 
 	//インナーブロックの制御
@@ -364,16 +407,11 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 				"itmar/design-button",
 				"itmar/design-select",
 				"itmar/design-title",
+				"itmar/design-group",
 			],
 			template: input_template,
 			templateLock: false,
 		},
-	);
-
-	//インナーブロックを取得
-	const innerBlocks = useSelect(
-		(select) => select("core/block-editor").getBlocks(clientId),
-		[clientId],
 	);
 
 	//インナーブロックのラベル幅を取得
@@ -418,7 +456,8 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		ref: blockRef, // ここで参照を blockProps に渡しています
 		style: blockStyle,
 		className: `figure_fieldset ${
-			context["itmar/state_process"] === "input" ? "appear" : ""
+			//context["itmar/state_process"] === "input" ? "appear" : ""
+			context["itmar/current_step"] === thisBlockIndex ? "appear" : ""
 		}`,
 		name: form_name,
 	});
@@ -438,6 +477,21 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 			}
 		}
 	}, [baseColor]);
+
+	//最後のブロックかどうかを判定したフラグを格納しておく
+	useEffect(() => {
+		const isLast = thisInputIndex === totalInput - 1 && totalInput > 0;
+		setAttributes({
+			inputIndex: thisInputIndex,
+		});
+		// ✅ 「最後かどうか」が変わった、または「自分の番号」が変わった場合に更新
+		if (isLast !== isLastStep) {
+			setAttributes({
+				isLastStep: isLast,
+			});
+		}
+		// ✅ 依存配列に現在の属性値も含めることで、不整合を防ぎます
+	}, [thisInputIndex, totalInput]);
 
 	//サイトエディタの場合はiframeにスタイルをわたす。
 	useStyleIframe(StyleComp, attributes);

@@ -20,7 +20,7 @@ import {
 	TextareaControl,
 	Notice,
 	TextControl,
-	__experimentalBoxControl as BoxControl,
+	BoxControl,
 } from "@wordpress/components";
 
 import "./editor.scss";
@@ -65,6 +65,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		message_ret,
 		is_retmail,
 		is_dataSave,
+		save_post_type,
 	} = attributes;
 
 	//モバイルの判定
@@ -91,6 +92,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 			}
 		}
 	}, [baseColor]);
+
+	//current_stepの初期化（マウント時だけ）
+	useEffect(() => {
+		setAttributes({ current_step: 0 });
+	}, []);
 
 	//サイトエディタの場合はiframeにスタイルをわたす。
 	useStyleIframe(StyleComp, attributes);
@@ -130,19 +136,36 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		{},
 		{
 			template: TEMPLATE,
-			templateLock: true,
+			templateLock: false,
 		},
 	);
 
 	//インナーブロックを取得
-	const innerBlocks = useSelect(
-		(select) => select("core/block-editor").getBlocks(clientId),
+	const { inputInnerBlocks } = useSelect(
+		(select) => {
+			const blocks = select("core/block-editor").getBlocks(clientId) || [];
+
+			// 1. 特定の itmar/input-figure-block をすべて抽出
+			const inputFigureBlocks = blocks.filter(
+				(block) => block.name === "itmar/input-figure-block",
+			);
+
+			// 2. それらすべてのインナーブロックを平坦化して結合
+			const allInnerBlocks = inputFigureBlocks.flatMap(
+				(block) => block.innerBlocks || [],
+			);
+			const inputInnerBlocks = allInnerBlocks.filter(
+				(block) =>
+					block.name !== "itmar/design-checkbox" &&
+					block.name !== "itmar/design-button" &&
+					block.name !== "itmar/design-group",
+			);
+			return {
+				inputInnerBlocks,
+			};
+		},
 		[clientId],
 	);
-	const inputFigureBlock = innerBlocks.find(
-		(block) => block.name === "itmar/input-figure-block",
-	);
-	const inputInnerBlocks = inputFigureBlock ? inputFigureBlock.innerBlocks : [];
 
 	//Emailのバリデーション正規表現
 	const mail_pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -270,29 +293,23 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 							rows="5"
 						/>
 					</PanelRow>
-					{inputInnerBlocks
-						.filter(
-							(block) =>
-								block.name !== "itmar/design-checkbox" &&
-								block.name !== "itmar/design-button",
-						)
-						.map((input_elm, index) => {
-							const actions = [
-								{
-									label: "👆",
-									onClick: () => {
-										const newVal = `${message_info}[${input_elm.attributes.inputName}]`;
-										setMessageInfoValue(newVal);
-										setAttributes({ message_info: newVal });
-									},
+					{inputInnerBlocks.map((input_elm, index) => {
+						const actions = [
+							{
+								label: "👆",
+								onClick: () => {
+									const newVal = `${message_info}[${input_elm.attributes.inputName}]`;
+									setMessageInfoValue(newVal);
+									setAttributes({ message_info: newVal });
 								},
-							];
-							return (
-								<Notice key={index} actions={actions} isDismissible={false}>
-									<p>{input_elm.attributes.labelContent}</p>
-								</Notice>
-							);
-						})}
+							},
+						];
+						return (
+							<Notice key={index} actions={actions} isDismissible={false}>
+								<p>{input_elm.attributes.labelContent}</p>
+							</Notice>
+						);
+					})}
 				</PanelBody>
 				<PanelBody
 					title={__("Automatic response email", "form-send-blocks")}
@@ -316,35 +333,25 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 									onChange={(newVal) => setAttributes({ ret_mail: newVal })}
 								/>
 							</PanelRow>
-							{inputInnerBlocks
-								.filter(
-									(block) =>
-										block.name !== "itmar/design-checkbox" &&
-										block.name !== "itmar/design-button",
-								)
-								.map((input_elm, index) => {
-									if (input_elm.attributes.inputType === "email") {
-										const actions = [
-											{
-												label: "👆",
-												onClick: () => {
-													setAttributes({
-														ret_mail: input_elm.attributes.inputName,
-													});
-												},
+							{inputInnerBlocks.map((input_elm, index) => {
+								if (input_elm.attributes.inputType === "email") {
+									const actions = [
+										{
+											label: "👆",
+											onClick: () => {
+												setAttributes({
+													ret_mail: input_elm.attributes.inputName,
+												});
 											},
-										];
-										return (
-											<Notice
-												key={index}
-												actions={actions}
-												isDismissible={false}
-											>
-												<p>{input_elm.attributes.labelContent}</p>
-											</Notice>
-										);
-									}
-								})}
+										},
+									];
+									return (
+										<Notice key={index} actions={actions} isDismissible={false}>
+											<p>{input_elm.attributes.labelContent}</p>
+										</Notice>
+									);
+								}
+							})}
 							<PanelRow>
 								<TextControl
 									label={__(
@@ -427,14 +434,29 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 										</Notice>
 									);
 								})}
-							<PanelRow>
-								<ToggleControl
-									label={__("Save response contents to DB", "form-send-blocks")}
-									checked={is_dataSave}
-									onChange={(newVal) => setAttributes({ is_dataSave: newVal })}
-								/>
-							</PanelRow>
 						</>
+					)}
+				</PanelBody>
+				<PanelBody
+					title={__("Send Data Save setting", "form-send-blocks")}
+					initialOpen={true}
+					className="form_setteing_ctrl"
+				>
+					<ToggleControl
+						label={__("Save response contents to DB", "form-send-blocks")}
+						checked={is_dataSave}
+						onChange={(newVal) => setAttributes({ is_dataSave: newVal })}
+					/>
+					{is_dataSave && (
+						<TextControl
+							label={__("Save Post Type", "form-send-blocks")}
+							value={save_post_type}
+							help={__(
+								"Please enter the post type name to identify the data you want to save.",
+								"form-send-blocks",
+							)}
+							onChange={(newVal) => setAttributes({ save_post_type: newVal })}
+						/>
 					)}
 				</PanelBody>
 			</InspectorControls>

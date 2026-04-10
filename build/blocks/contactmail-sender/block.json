@@ -102,16 +102,31 @@
       "type": "boolean",
       "default": true
     },
+    "save_post_type": {
+      "type": "string",
+      "default": "gcb_contact"
+    },
     "state_process": {
       "type": "string",
       "default": "input"
+    },
+    "process_count": {
+      "type": "number",
+      "default": 0
+    },
+    "current_step": {
+      "type": "number",
+      "default": 0
     }
   },
   "providesContext": {
-    "itmar/state_process": "state_process"
+    "itmar/state_process": "state_process",
+    "itmar/process_count": "process_count",
+    "itmar/current_step": "current_step"
   },
   "textdomain": "form-send-blocks",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css"
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
 }

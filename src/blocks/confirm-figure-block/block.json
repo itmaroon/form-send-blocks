@@ -9,6 +9,15 @@
 		"html": false
 	},
 	"attributes": {
+		"sel_form_names":{
+			"type": "array",
+			"default":[]
+		},
+		
+		"blockTableMapping": {
+			"type": "array",
+			"default": [] 
+		},
 		"bgColor": {
 			"type": "string",
 			"default": "var(--wp--preset--color--content-back)"
@@ -106,10 +115,13 @@
 		}
 	},
 	"usesContext": [
-		"itmar/state_process"
+		"itmar/state_process",
+		"itmar/process_count",
+		"itmar/current_step"
 	],
 	"textdomain": "form-send-blocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css"
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
 }

@@ -22,7 +22,7 @@ import {
 	Notice,
 	TextControl,
 	SelectControl,
-	__experimentalBoxControl as BoxControl,
+	BoxControl,
 } from "@wordpress/components";
 
 import "./editor.scss";
@@ -158,7 +158,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 		{},
 		{
 			template: TEMPLATE,
-			templateLock: true,
+			templateLock: false,
 		},
 	);
 

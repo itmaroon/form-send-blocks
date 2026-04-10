@@ -107,16 +107,27 @@
 		"is_shadow": {
 			"type": "boolean",
 			"default": false
+		},
+		"inputIndex": {
+			"type": "number",
+			"default":0
+		},
+		"isLastStep": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"providesContext": {
 		"itmar/label_width": "label_width"
 	},
 	"usesContext": [
-		"itmar/state_process"
+		"itmar/state_process",
+		"itmar/process_count",
+		"itmar/current_step"
 	],
 	"textdomain": "form-send-blocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css"
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
 }

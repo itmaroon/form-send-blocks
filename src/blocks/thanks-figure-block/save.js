@@ -31,24 +31,12 @@ export default function save({ attributes }) {
 	const classMatch = html.match(/class="([^"]+)"/);
 	const className = classMatch ? classMatch[1] : "";
 
-	//form_typeでフォームのIDを決定
-	const info_id =
-		info_type === "inquiry"
-			? "to_home"
-			: info_type === "provision"
-			? "to_mail"
-			: info_type === "register"
-			? "to_regist_page"
-			: info_type === "logonErr"
-			? "error_to_home"
-			: "";
-
 	return (
 		<>
 			<div {...blockProps}>
 				<div className={className}>
 					<form
-						id={info_id}
+						id="itmar_thanks"
 						data-info_mail_success={infomail_success}
 						data-info_mail_error={infomail_faile}
 						data-ret_mail_success={retmail_success}

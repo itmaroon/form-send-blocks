@@ -4,12 +4,17 @@ import { renderToString } from "react-dom/server";
 import { StyleComp } from "./StyleInputFigure";
 
 export default function save({ attributes }) {
-	const { form_type, form_name, bgColor } = attributes;
+	const { form_type, form_name, isLastStep, inputIndex, bgColor } = attributes;
+	//問い合わせの場合は最後のフォームかどうかでIDを変える
+	const inpuery_id = isLastStep
+		? "to_confirm_form"
+		: `to_input_next_${inputIndex}`;
+	const appear_flg = inputIndex === 0 ? "appear" : "";
 
 	//form_typeでフォームのIDを決定
 	const form_id =
 		form_type === "inquiry"
-			? "to_confirm_form"
+			? inpuery_id
 			: form_type === "member"
 			? "send_confirm_form"
 			: form_type === "login"
@@ -21,7 +26,7 @@ export default function save({ attributes }) {
 
 	const blockProps = useBlockProps.save({
 		style: blockStyle,
-		className: `figure_fieldset ${form_type} appear first_appear`,
+		className: `figure_fieldset ${form_type} ${appear_flg}`,
 		name: form_name,
 	});
 

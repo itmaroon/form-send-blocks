@@ -17,7 +17,7 @@
 		}
 	}
 
-	#to_confirm_form {
+	#to_confirm_form ,[id^="to_input_next_"]{
 		.err_msg {
 			position: absolute;
 			font-size: 0.8em;

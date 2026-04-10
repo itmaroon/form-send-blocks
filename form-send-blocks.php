@@ -55,27 +55,27 @@ function itmar_contact_block_add_js()
 	}
 
 	//管理画面以外（フロントエンド側でのみ読み込む）
-	if (!is_admin()) {
-		$script_path = plugin_dir_path(__FILE__) . 'build/contact_block.js';
-		wp_enqueue_script(
-			'contact_js_handle',
-			plugins_url('build/contact_block.js', __FILE__),
-			array('jquery'),
-			filemtime($script_path),
-			true
-		);
+	// if (!is_admin()) {
+	// 	// $script_path = plugin_dir_path(__FILE__) . 'build/contact_block.js';
+	// 	// wp_enqueue_script(
+	// 	// 	'contact_js_handle',
+	// 	// 	plugins_url('build/contact_block.js', __FILE__),
+	// 	// 	array('jquery'),
+	// 	// 	filemtime($script_path),
+	// 	// 	true
+	// 	// );
 
-		//jsで使えるようにnonceとadmin_urlをローカライズ
-		wp_localize_script('contact_js_handle', 'itmar_form_send_option', array(
-			'nonce' => wp_create_nonce('contact_send_nonce'),
-			'rest_nonce' => wp_create_nonce('wp_rest'),
-			'ajaxURL' => esc_url(admin_url('admin-ajax.php', __FILE__)),
-			'home_url' => home_url()
-		));
+	// 	//jsで使えるようにnonceとadmin_urlをローカライズ
+	// 	wp_localize_script('contact_js_handle', 'itmar_form_send_option', array(
+	// 		'nonce' => wp_create_nonce('contact_send_nonce'),
+	// 		'rest_nonce' => wp_create_nonce('wp_rest'),
+	// 		'ajaxURL' => esc_url(admin_url('admin-ajax.php', __FILE__)),
+	// 		'home_url' => home_url()
+	// 	));
 
-		// スクリプトの翻訳をセット
-		wp_set_script_translations('contact_js_handle', 'form-send-blocks', plugin_dir_path(__FILE__) . 'languages');
-	}
+	// 	// スクリプトの翻訳をセット
+	// 	wp_set_script_translations('contact_js_handle', 'form-send-blocks', plugin_dir_path(__FILE__) . 'languages');
+	// }
 }
 
 
@@ -86,18 +86,20 @@ function itmar_contact_send_ajax()
 {
 	$nonce = isset($_REQUEST['nonce']) ? sanitize_key($_REQUEST['nonce']) : '';
 
-	if (wp_verify_nonce($nonce, 'contact_send_nonce')) {
+	//レスポンス用の配列を用意
+	$response = array();
 
+	if (wp_verify_nonce($nonce, 'wp_rest')) {
 		// メールの設定(無害化処理)
 		$to = sanitize_email(wp_unslash($_POST['email'] ?? ''));
 		$subject = sanitize_text_field(wp_unslash($_POST['subject'] ?? ''));
-		$user_name = sanitize_text_field(wp_unslash($_POST['userName'] ?? ''));
+		//$user_name = sanitize_text_field(wp_unslash($_POST['userName'] ?? ''));
 		$message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
 		$reply = sanitize_email(wp_unslash($_POST['reply_address'] ?? ''));
 		$reply_name = sanitize_text_field(wp_unslash($_POST['reply_name'] ?? ''));
 		$is_dataSave = filter_var(wp_unslash($_POST['is_dataSave'] ?? ''), FILTER_VALIDATE_BOOLEAN);
 		$is_retMail = filter_var(wp_unslash($_POST['is_retMail'] ?? ''), FILTER_VALIDATE_BOOLEAN);
-
+		$save_post_type = sanitize_text_field(wp_unslash($_POST['save_post_type'] ?? ''));
 		$headers = 'From: ' . $reply_name . '<' . $reply . '>' . "\r\n";
 
 		// バリデーション
@@ -107,34 +109,7 @@ function itmar_contact_send_ajax()
 			die();
 		}
 
-		//レスポンス用の配列を用意
-		$response = array();
 
-		//データの格納
-		if ($is_dataSave) {
-			//ユーザーの登録
-			//既に登録されているかの確認
-			$user_id = email_exists($to);
-			if (!$user_id) {
-				$user_data = array(
-					'user_email' => $to,
-					'user_login' => $to,
-					'display_name' => $user_name,
-					'role' => 'subscriber'
-				);
-				$user_id = wp_insert_user($user_data);
-				if (is_wp_error($user_id)) {
-					// ユーザーの作成に失敗した場合、エラーを処理します
-					$response['save'] = array('status' => 'error', 'message' => $user_id->get_error_message());
-				} else {
-					//コンタクトデータを登録
-					$response['save'] = itmar_contact_save($user_id, $message);
-				}
-			} else {
-				//コンタクトデータを登録
-				$response['save'] = itmar_contact_save($user_id, $message);
-			}
-		}
 
 		// メールを送信
 		if (wp_mail($to, $subject, $message, $headers)) {
@@ -150,6 +125,31 @@ function itmar_contact_send_ajax()
 				$response['info_mail'] = array('status' => 'error', 'message' =>  __('Failed to notify site administrator.', 'form-send-blocks'));
 			}
 		}
+
+		//データの格納
+		if ($is_dataSave) {
+			// 2. 投稿の作成（投稿者は管理者に固定するか、0 にする）
+			$new_post = array(
+				'post_type'   => $save_post_type,
+				'post_status' => 'private',
+				'post_title'  => 'Inquiry: ' . $to,
+				'post_author' => 1, // または特定の管理者ID
+			);
+
+			$post_id = wp_insert_post($new_post, true);
+
+			if (is_wp_error($post_id)) {
+				// 投稿の作成に失敗した場合、エラーを処理します
+				$response['save'] = array('status' => 'error', 'message' => $post_id->get_error_message());
+			} else {
+				update_post_meta($post_id, 'user_email', $to);
+				//update_post_meta($post_id, 'user_name', $user_name);
+				update_post_meta($post_id, 'message', $message);
+				update_post_meta($post_id, 'send_date', current_time('mysql'));
+
+				$response['save'] = array('status' => 'success', 'message' =>  __('Receipt processing completed successfully.', 'form-send-blocks'));
+			}
+		}
 	} else {
 		$response['error'] = array('status' => 'error', 'message' =>  __('Invalid request.', 'form-send-blocks'));
 	}
@@ -160,32 +160,12 @@ function itmar_contact_send_ajax()
 add_action('wp_ajax_itmar_contact_send', 'itmar_contact_send_ajax');
 add_action('wp_ajax_nopriv_itmar_contact_send', 'itmar_contact_send_ajax');
 
-function itmar_contact_save($user_id, $message)
-{
-	//コンタクトデータを登録
-	$new_post = array(
-		'post_type'   => 'gcb_contact', //登録するカスタム投稿タイプ
-		'post_status' => 'private', //公開ステータス（ここは個人情報なので非公開に）
-		'post_title'  =>  __('Inquiry Data', 'form-send-blocks'), //タイトルは分かりやすいものに
-		'post_author' =>  $user_id
-	);
-	$post_id = wp_insert_post($new_post, true);
 
-	if (is_wp_error($post_id)) {
-		// 投稿の作成に失敗した場合、エラーを処理します
-		return array('status' => 'error', 'message' => $post_id->get_error_message());
-	} else {
-		update_post_meta($post_id, 'send_date', current_time('mysql'));
-		update_post_meta($post_id, 'message', $message);
-
-		return array('status' => 'success', 'message' =>  __('Receipt processing completed successfully.', 'form-send-blocks'));
-	}
-}
 
 //仮登録の処理とトークンのメール送信
 function itmar_register_send_token()
 {
-	check_ajax_referer('contact_send_nonce', 'nonce');
+	check_ajax_referer('wp_rest', 'nonce');
 
 	// 必要に応じて仮登録のテーブル作成
 	itmar_create_pending_users_table_if_not_exists();
@@ -199,7 +179,7 @@ function itmar_register_send_token()
 	$form_data = wp_unslash($_POST['form_data'] ?? '');
 	parse_str($form_data, $form);
 	//その他のデータ
-	$master_email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+	$master_email = sanitize_email(wp_unslash($_POST['master_email'] ?? ''));
 	$master_name = sanitize_text_field(wp_unslash($_POST['master_name'] ?? ''));
 	$subject_prov = sanitize_text_field(wp_unslash($_POST['subject_prov'] ?? ''));
 	$message_prov = sanitize_textarea_field(wp_unslash($_POST['message_prov'] ?? ''));
@@ -487,7 +467,7 @@ function itmar_pending_user_check($username)
 //カスタムログインの処理
 function itmar_custom_login()
 {
-	check_ajax_referer('contact_send_nonce', 'nonce');
+	check_ajax_referer('wp_rest', 'nonce');
 
 	if (!isset($_POST['form_data'])) {
 		wp_send_json_error(['message' => 'フォームデータが不正です']);

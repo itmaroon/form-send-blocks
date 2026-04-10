@@ -14,8 +14,8 @@ import {
 	TextareaControl,
 	TextControl,
 	SelectControl,
-	__experimentalBoxControl as BoxControl,
-	__experimentalBorderBoxControl as BorderBoxControl,
+	BoxControl,
+	BorderBoxControl,
 } from "@wordpress/components";
 
 import "./editor.scss";
@@ -80,27 +80,53 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ブロックのスタイル設定
 	const blockStyle = { background: bgColor };
 
+	//親のcontextから今のステップ数を取得
+	const currentStep = context["itmar/current_step"];
+
 	//ブロック情報取得ツールの取得
-	const { getBlockRootClientId } = useSelect(
-		(select) => select("core/block-editor"),
+	const { parentClientId, thisBlockIndex } = useSelect(
+		(select) => {
+			const { getBlockRootClientId, getBlocks } = select("core/block-editor");
+			// 親ブロックのclientIdを取得
+			const parentClientId = getBlockRootClientId(clientId);
+
+			// 兄弟ブロックを取得
+			const siblings = getBlocks(parentClientId);
+
+			//兄弟のfigure-blockを取得し、その順番を返す
+			const figureBlockSiblings = siblings.filter((block) =>
+				block.name.includes("figure-block"),
+			);
+			const index = figureBlockSiblings.findIndex(
+				(block) => block.clientId === clientId,
+			);
+			return { parentClientId: parentClientId, thisBlockIndex: index };
+		},
 		[clientId],
 	);
 	// 親ブロックのclientIdを取得
-	const parentClientId = getBlockRootClientId(clientId);
+
 	// dispatch関数を取得
 	const { updateBlockAttributes } = useDispatch("core/block-editor");
 
 	//Submitによるプロセス変更
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		const next_state =
-			info_type == "inquiry"
-				? "input"
-				: info_type === "provision"
-				? "register"
-				: "input";
+		const click_id = e.nativeEvent.submitter.dataset.key;
+		// const next_state =
+		// 	info_type == "inquiry"
+		// 		? "input"
+		// 		: info_type === "provision"
+		// 		? "register"
+		// 		: "input";
 		// 親ブロックのstate_process属性を更新
-		updateBlockAttributes(parentClientId, { state_process: next_state });
+		if (click_id === "foword_id") {
+			updateBlockAttributes(parentClientId, {
+				current_step: currentStep + 1,
+			});
+		} else {
+			updateBlockAttributes(parentClientId, { current_step: 0 });
+		}
 	};
 
 	//info typeごとのデフォルトの標題
@@ -205,7 +231,7 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		{},
 		{
 			template: TEMPLATE,
-			templateLock: true,
+			templateLock: false,
 		},
 	);
 
@@ -215,12 +241,13 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 	//ブロックの参照
 	const blockRef = useRef(null);
 	//ルート要素にスタイルとクラスを付加
-	const appear_state = info_type == "inquiry" ? "thanks" : info_type;
+	//const appear_state = info_type == "inquiry" ? "thanks" : info_type;
 	const blockProps = useBlockProps({
 		ref: blockRef, // ここで参照を blockProps に渡しています
 		style: blockStyle,
 		className: `figure_fieldset ${
-			context["itmar/state_process"] === appear_state ? "appear" : ""
+			//context["itmar/state_process"] === appear_state ? "appear" : ""
+			context["itmar/current_step"] === thisBlockIndex ? "appear" : ""
 		}`,
 	});
 

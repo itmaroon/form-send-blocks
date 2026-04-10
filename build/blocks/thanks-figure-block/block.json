@@ -124,10 +124,11 @@
     }
   },
   "usesContext": [
-    "itmar/state_process"
+    "itmar/current_step"
   ],
   "textdomain": "form-send-blocks",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css"
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
 }

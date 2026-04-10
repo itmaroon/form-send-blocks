@@ -6,6 +6,7 @@
 .mailinfo_ctrl .components-notice {
   padding-right: 0;
   background-color: #dbf5f1;
+  margin: 5px 0;
 }
 .mailinfo_ctrl .components-notice .components-notice__content {
   margin: 0;
@@ -17,11 +18,7 @@
   box-shadow: none;
 }
 
-.components-base-control {
-  width: 100%;
-}
-
-.wp-block-itmar-member-register {
+.wp-block-itmar-contactmail-sender {
   border: 1px dotted #f00;
 }
 /*# sourceMappingURL=editor.css.map */

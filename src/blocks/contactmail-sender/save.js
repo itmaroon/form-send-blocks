@@ -1,8 +1,7 @@
-
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
-import { ServerStyleSheet } from 'styled-components';
-import { renderToString } from 'react-dom/server';
-import { StyleComp } from './StyleContactMail';
+import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
+import { ServerStyleSheet } from "styled-components";
+import { renderToString } from "react-dom/server";
+import { StyleComp } from "./StyleContactMail";
 
 export default function save({ attributes }) {
 	const {
@@ -14,16 +13,17 @@ export default function save({ attributes }) {
 		subject_ret,
 		message_ret,
 		is_retmail,
-		is_dataSave
+		is_dataSave,
+		save_post_type,
 	} = attributes;
 
 	const blockProps = useBlockProps.save();
 
 	//styled-componentsのHTML化
 	const sheet = new ServerStyleSheet();
-	const html = renderToString(sheet.collectStyles(
-		<StyleComp attributes={attributes} />
-	));
+	const html = renderToString(
+		sheet.collectStyles(<StyleComp attributes={attributes} />),
+	);
 	const styleTags = sheet.getStyleTags();
 	// 正規表現で styled-components のクラス名を取得
 	const classMatch = html.match(/class="([^"]+)"/);
@@ -31,7 +31,8 @@ export default function save({ attributes }) {
 
 	return (
 		<>
-			<div {...blockProps}
+			<div
+				{...blockProps}
 				data-master_mail={master_mail}
 				data-master_name={master_name}
 				data-subject_info={subject_info}
@@ -41,6 +42,7 @@ export default function save({ attributes }) {
 				data-message_ret={message_ret}
 				data-is_retmail={is_retmail}
 				data-is_datasave={is_dataSave}
+				data-save_post_type={save_post_type}
 			>
 				<div className={className}>
 					<InnerBlocks.Content />

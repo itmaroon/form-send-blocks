@@ -11,7 +11,7 @@ const newEntryConfig = async () => {
 
 	return {
 		...originalEntry,
-		contact_block: path.resolve(__dirname, "./assets/contact_block.js"),
+		//contact_block: path.resolve(__dirname, "./assets/contact_block.js"),
 	};
 };
 

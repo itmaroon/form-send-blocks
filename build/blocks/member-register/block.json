@@ -110,16 +110,17 @@
       "type": "boolean",
       "default": true
     },
-    "state_process": {
-      "type": "string",
-      "default": "input"
+    "current_step": {
+      "type": "number",
+      "default": 0
     }
   },
   "providesContext": {
-    "itmar/state_process": "state_process"
+    "itmar/current_step": "current_step"
   },
   "textdomain": "form-send-blocks",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css"
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
 }
