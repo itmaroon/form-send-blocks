@@ -6,7 +6,7 @@
  * Description:       This is a block that summarizes the display screen when submitting a form.
  * Requires at least: 6.4
  * Requires PHP:      8.2.10
- * Version:           1.3.1
+ * Version:           2.0.0
  * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -519,3 +519,64 @@ function itmar_custom_login()
 
 add_action('wp_ajax_itmar_custom_login', 'itmar_custom_login');
 add_action('wp_ajax_nopriv_itmar_custom_login', 'itmar_custom_login');
+
+// 問い合わせデータのCSV出力
+add_action('wp_ajax_export_inquiry_csv', 'export_inquiry_csv');
+
+function export_inquiry_csv()
+{
+	// 権限チェック
+	if (!current_user_can('manage_options')) {
+		wp_die('Unauthorized');
+	}
+
+	$post_type = isset($_GET['post_type']) ? sanitize_text_field($_GET['post_type']) : 'post';
+
+	// CSVのヘッダー設定
+	header('Content-Type: text/csv; charset=utf-8');
+	header('Content-Disposition: attachment; filename=inquiry_export_' . date('Y-m-d') . '.csv');
+
+	// 出力バッファを開く
+	$output = fopen('php://output', 'w');
+
+	// Excelでの文字化け防止用BOM
+	fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+	// CSVの見出し行
+	fputcsv($output, array('ID', 'Date', 'Title', 'Content'));
+
+	// データの取得
+	$args = array(
+		'post_type'      => $post_type,
+		'post_status'    => 'private',
+		'posts_per_page' => -1,
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+	);
+
+	$query = new WP_Query($args);
+
+	if ($query->have_posts()) {
+		while ($query->have_posts()) {
+			$query->the_post();
+			$post_id = get_the_ID();
+
+			// メタデータから各項目を取得
+			$user_email = get_post_meta($post_id, 'user_email', true);
+			$user_message = get_post_meta($post_id, 'message', true);
+			$send_date = get_post_meta($post_id, 'send_date', true);
+
+			fputcsv($output, array(
+				$post_id,
+				$send_date ? $send_date : get_the_date('Y-m-d H:i:s'), // メタデータがあれば優先
+				$user_email,
+				get_the_title(),
+				strip_tags($user_message) // 投稿本文ではなくメタデータのメッセージを出力
+			));
+		}
+	}
+	wp_reset_postdata();
+
+	fclose($output);
+	exit;
+}
