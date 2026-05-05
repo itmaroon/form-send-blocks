@@ -37,7 +37,6 @@ jQuery(function ($) {
 
 	//ページのセット
 	let fieldset_objs = parent_block.find(".figure_fieldset");
-	console.log(fieldset_objs);
 
 	// テーブルの表示を書き換えるヘルパー関数
 

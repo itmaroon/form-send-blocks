@@ -35,6 +35,7 @@ const StyledDiv = styled.div<{ $attr: Attributes }>`
 
 		//単色かグラデーションかの選択
 		const bgFormColor = bgColor_form || bgGradient_form;
+
 		//スペースの設定
 		const default_margin_prm = space_prm(default_pos.margin_form);
 		const default_padding_prm = space_prm(default_pos.padding_form);

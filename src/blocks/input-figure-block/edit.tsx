@@ -591,7 +591,9 @@ export default function Edit({
 
 								label: __("Choose Form Background color", "form-send-blocks"),
 								onColorChange: (newValue?: string) =>
-									setAttributes({ bgColor_form: newValue }),
+									setAttributes({
+										bgColor_form: newValue,
+									}),
 								onGradientChange: (newValue?: string) =>
 									setAttributes({ bgGradient_form: newValue }),
 							},
