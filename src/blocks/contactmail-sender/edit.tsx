@@ -9,6 +9,7 @@ import {
 	ShadowStyle,
 	ShadowElm,
 	useStyleIframe,
+	flattenBlocks,
 } from "itmar-block-packages";
 import {
 	useBlockProps,
@@ -28,6 +29,7 @@ import {
 	Notice,
 	TextControl,
 	BoxControl,
+	RadioControl,
 	Button,
 } from "@wordpress/components";
 
@@ -71,12 +73,11 @@ export default function Edit({
 		shadow_element,
 		master_mail,
 		master_name,
-		subject_info,
-		message_info,
 		ret_mail,
-		subject_ret,
-		message_ret,
 		is_retmail,
+		is_footer,
+		footer_content,
+		mailAddressType,
 		is_dataSave,
 		save_post_type,
 	} = attributes;
@@ -185,14 +186,15 @@ export default function Edit({
 			);
 
 			// 2. それらすべてのインナーブロックを平坦化して結合
-			const allInnerBlocks = inputFigureBlocks.flatMap(
-				(block: BlockInstance) => block.innerBlocks || [],
+			const allInnerBlocks = inputFigureBlocks.flatMap((block: BlockInstance) =>
+				flattenBlocks(block.innerBlocks || []),
 			);
 			const inputInnerBlocks = allInnerBlocks.filter(
 				(block: BlockInstance) =>
-					block.name !== "itmar/design-checkbox" &&
+					//block.name !== "itmar/design-checkbox" &&
 					block.name !== "itmar/design-button" &&
-					block.name !== "itmar/design-group",
+					block.name !== "itmar/design-group" &&
+					(block.name !== "itmar/design-title" || block.attributes.uniqueID),
 			);
 			return {
 				inputInnerBlocks,
@@ -207,10 +209,17 @@ export default function Edit({
 	//編集中の値を確保するための状態変数
 	const [master_mail_editing, setMasterMailValue] = useState(master_mail);
 	const [master_name_editing, setMasterNameValue] = useState(master_name);
-	const [subject_info_editing, setSubjectInfoValue] = useState(subject_info);
-	const [message_info_editing, setMessageInfoValue] = useState(message_info);
-	const [subject_ret_editing, setSubjectRetValue] = useState(subject_ret);
-	const [message_ret_editing, setMessageRetValue] = useState(message_ret);
+
+	const footerOption = [
+		{
+			label: __("Master Name", "block-collections"),
+			value: master_name,
+		},
+		{
+			label: __("Master Mail", "block-collections"),
+			value: master_mail,
+		},
+	];
 
 	return (
 		<>
@@ -278,72 +287,6 @@ export default function Edit({
 							}}
 						/>
 					</PanelRow>
-					<PanelRow>
-						<TextControl
-							label={__("Notification email subject", "form-send-blocks")}
-							value={subject_info_editing}
-							onChange={(newVal) => setSubjectInfoValue(newVal)} // 一時的な編集値として保存する
-							onBlur={() => {
-								if (subject_info_editing.length == 0) {
-									(dispatch("core/notices") as any).createNotice(
-										"error",
-										__(
-											"Do not leave the subject of the notification email blank. ",
-											"form-send-blocks",
-										),
-										{ type: "snackbar", isDismissible: true },
-									);
-									// バリデーションエラーがある場合、編集値を元の値にリセットする
-									setSubjectInfoValue(subject_info);
-								} else {
-									// バリデーションが成功した場合、編集値を確定する
-									setAttributes({ subject_info: subject_info_editing });
-								}
-							}}
-						/>
-					</PanelRow>
-					<PanelRow>
-						<TextareaControl
-							label={__("Notification email body", "form-send-blocks")}
-							value={message_info_editing}
-							onChange={(newVal) => setMessageInfoValue(newVal)} // 一時的な編集値として保存する
-							onBlur={() => {
-								if (message_info_editing.length == 0) {
-									(dispatch("core/notices") as any).createNotice(
-										"error",
-										__(
-											"Do not leave the body of the notification email blank. ",
-											"form-send-blocks",
-										),
-										{ type: "snackbar", isDismissible: true },
-									);
-									// バリデーションエラーがある場合、編集値を元の値にリセットする
-									setMessageInfoValue(message_info);
-								} else {
-									// バリデーションが成功した場合、編集値を確定する
-									setAttributes({ message_info: message_info_editing });
-								}
-							}}
-							rows={5}
-						/>
-					</PanelRow>
-					{inputInnerBlocks.map((input_elm: BlockInstance, index: number) => {
-						const actions = [
-							{
-								label: "👆",
-								onClick: () => {
-									const newVal = `${message_info}[${input_elm.attributes.inputName}]`;
-									setMessageInfoValue(newVal);
-									setAttributes({ message_info: newVal });
-								},
-							},
-						];
-						return (
-							<Notice key={index} actions={actions} isDismissible={false}>
-								<p>{input_elm.attributes.labelContent}</p>
-							</Notice>
-						);
-					})}
 				</PanelBody>
 				<PanelBody
 					title={__("Automatic response email", "form-send-blocks")}
@@ -359,122 +302,105 @@ export default function Edit({
 					</PanelRow>
 					{is_retmail && (
 						<>
-							<PanelRow>
-								<TextControl
-									label={__("Reply to email address", "form-send-blocks")}
-									value={ret_mail}
-									onChange={(newVal) => setAttributes({ ret_mail: newVal })}
-								/>
-							</PanelRow>
-							{inputInnerBlocks.map(
-								(input_elm: BlockInstance, index: number) => {
-									if (input_elm.attributes.inputType === "email") {
-										const actions = [
-											{
-												label: "👆",
-												onClick: () => {
-													setAttributes({
-														ret_mail: input_elm.attributes.inputName,
-													});
-												},
-											},
-										];
-										return (
-											<Notice
-												key={index}
-												actions={actions}
-												isDismissible={false}
-											>
-												<p>{input_elm.attributes.labelContent}</p>
-											</Notice>
-										);
-									}
-								},
-							)}
-							<PanelRow>
-								<TextControl
-									label={__(
-										"Automatic response email title",
-										"form-send-blocks",
-									)}
-									value={subject_ret_editing}
-									onChange={(newVal) => setSubjectRetValue(newVal)} // 一時的な編集値として保存する
-									onBlur={() => {
-										if (subject_ret_editing.length == 0) {
-											(dispatch("core/notices") as any).createNotice(
-												"error",
-												__(
-													"Do not leave the subject of the notification email blank. ",
-													"form-send-blocks",
-												),
-												{ type: "snackbar", isDismissible: true },
-											);
-											// バリデーションエラーがある場合、編集値を元の値にリセットする
-											setSubjectRetValue(subject_ret);
-										} else {
-											// バリデーションが成功した場合、編集値を確定する
-											setAttributes({ subject_ret: subject_ret_editing });
-										}
-									}}
-								/>
-							</PanelRow>
-							<PanelRow>
-								<TextareaControl
-									label={__(
-										"Automatic response email body",
-										"form-send-blocks",
-									)}
-									value={message_ret_editing}
-									onChange={(newVal) => setMessageRetValue(newVal)} // 一時的な編集値として保存する
-									onBlur={() => {
-										if (message_ret_editing.length == 0) {
-											(dispatch("core/notices") as any).createNotice(
-												"error",
-												__(
-													"Do not leave the subject of the notification email blank. ",
-													"form-send-blocks",
-												),
-												{ type: "snackbar", isDismissible: true },
-											);
-											// バリデーションエラーがある場合、編集値を元の値にリセットする
-											setMessageRetValue(message_info);
-										} else {
-											// バリデーションが成功した場合、編集値を確定する
-											setAttributes({ message_ret: message_ret_editing });
-										}
-									}}
-									rows={5}
-									help={__(
-										"Click on the input field below to quote it in the text.",
-										"form-send-blocks",
-									)}
-								/>
-							</PanelRow>
-							{inputInnerBlocks
-								.filter(
-									(block: BlockInstance) =>
-										block.name !== "itmar/design-checkbox" &&
-										block.name !== "itmar/design-button",
-								)
-								.map((input_elm: BlockInstance, index: number) => {
-									const actions = [
+							<PanelRow className="itmar_select_row">
+								<RadioControl
+									selected={mailAddressType}
+									options={[
 										{
-											label: "👆",
-											onClick: () => {
-												const newVal = `${message_ret}[${input_elm.attributes.inputName}]`;
-												setMessageRetValue(newVal);
-												setAttributes({ message_ret: newVal });
-											},
+											label: __("Input Value", "block-collections"),
+											value: "inputVal",
 										},
-									];
-									return (
-										<Notice key={index} actions={actions} isDismissible={false}>
-											<p>{input_elm.attributes.labelContent}</p>
-										</Notice>
-									);
-								})}
+										{
+											label: __("Logon User", "block-collections"),
+											value: "logonUser",
+										},
+									]}
+									onChange={(changeOption) => {
+										setAttributes({ mailAddressType: changeOption });
+									}}
+								/>
+							</PanelRow>
+
+							{mailAddressType === "inputVal" && (
+								<PanelRow>
+									<TextControl
+										label={__("Reply to email address", "form-send-blocks")}
+										value={ret_mail}
+										onChange={(newVal) => setAttributes({ ret_mail: newVal })}
+									/>
+								</PanelRow>
+							)}
+							{mailAddressType === "inputVal" &&
+								inputInnerBlocks.map(
+									(input_elm: BlockInstance, index: number) => {
+										if (input_elm.attributes.inputType === "email") {
+											const actions = [
+												{
+													label: "👆",
+													onClick: () => {
+														setAttributes({
+															ret_mail: input_elm.attributes.inputName,
+														});
+													},
+												},
+											];
+											return (
+												<Notice
+													key={index}
+													actions={actions}
+													isDismissible={false}
+												>
+													<p>{input_elm.attributes.labelContent}</p>
+												</Notice>
+											);
+										}
+									},
+								)}
 						</>
 					)}
+					<PanelRow>
+						<ToggleControl
+							label={__("Add Mail Footer", "form-send-blocks")}
+							checked={is_footer}
+							onChange={(newVal) => setAttributes({ is_footer: newVal })}
+						/>
+					</PanelRow>
+
+					{is_footer && (
+						<PanelRow>
+							<TextareaControl
+								label={__("Footer Content", "form-send-blocks")}
+								value={footer_content}
+								onChange={(newVal) => {
+									setAttributes({
+										footer_content: newVal,
+									});
+								}}
+								rows={5}
+							/>
+						</PanelRow>
+					)}
+					{is_footer &&
+						footerOption.map((option, index: number) => {
+							const actions = [
+								{
+									label: "👆",
+									onClick: () => {
+										const newVal = `${footer_content ?? ""} \n ${
+											option.value ?? ""
+										}`;
+										setAttributes({
+											footer_content: newVal,
+										});
+									},
+								},
+							];
+							return (
+								<Notice key={index} actions={actions} isDismissible={false}>
+									<p>{option.label}</p>
+								</Notice>
+							);
+						})}
 				</PanelBody>
 				<PanelBody
 					title={__("Send Data Save setting", "form-send-blocks")}

@@ -22,16 +22,18 @@ export default function save({ attributes }: { attributes: Attributes }) {
 
 	return (
 		<div {...blockProps}>
-			<form
-				id="itmar_thanks"
-				data-info_mail_success={infomail_success}
-				data-info_mail_error={infomail_faile}
-				data-ret_mail_success={retmail_success}
-				data-ret_mail_error={retmail_faile}
-				data-selected_page={selectedPageUrl}
-			>
-				<InnerBlocks.Content />
-			</form>
+			<div className="itmar-wrap">
+				<form
+					id="itmar_thanks"
+					data-info_mail_success={infomail_success}
+					data-info_mail_error={infomail_faile}
+					data-ret_mail_success={retmail_success}
+					data-ret_mail_error={retmail_faile}
+					data-selected_page={selectedPageUrl}
+				>
+					<InnerBlocks.Content />
+				</form>
+			</div>
 		</div>
 	);
 }

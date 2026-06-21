@@ -9,7 +9,9 @@ export default function save({ attributes }: { attributes: Attributes }) {
 
 	return (
 		<div {...blockProps}>
-			<InnerBlocks.Content />
+			<div className="itmar-wrap">
+				<InnerBlocks.Content />
+			</div>
 		</div>
 	);
 }

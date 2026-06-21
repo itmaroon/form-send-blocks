@@ -29,6 +29,7 @@ const StyledDiv = styled.div<{ $attr: Attributes }>`
 		// 共通のスタイルをここで定義します
 		const commonStyle = css`
       position: relative;
+	  box-sizing: border-box;
       margin: ${default_margin_prm};
       padding: ${default_padding_prm};
       

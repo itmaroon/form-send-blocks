@@ -94,9 +94,21 @@
 			"type": "string",
 			"default": ""
 		},
+		"is_footer": {
+			"type": "boolean",
+			"default": true
+		},
+		"footer_content": {
+			"type": "string",
+			"default": ""
+		},
 		"is_retmail": {
 			"type": "boolean",
 			"default": true
+		},
+		"mailAddressType": {
+			"type": "string",
+			"default": "inputVal"
 		},
 		"is_dataSave": {
 			"type": "boolean",

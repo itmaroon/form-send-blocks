@@ -9,25 +9,9 @@
     "html": false
   },
   "attributes": {
-    "info_type": {
-      "type": "string",
-      "default": "inquiry"
-    },
-    "infomail_success": {
-      "type": "string",
-      "default": ""
-    },
-    "infomail_faile": {
-      "type": "string",
-      "default": ""
-    },
-    "retmail_success": {
-      "type": "string",
-      "default": ""
-    },
-    "retmail_faile": {
-      "type": "string",
-      "default": ""
+    "displayMapping": {
+      "type": "object",
+      "default": {}
     },
     "bgColor": {
       "type": "string",

@@ -15,7 +15,10 @@ import { StyleComp } from "./StyleCustomLogin";
 import { Attributes } from "./type";
 
 //styled_conponentの適用
-styleComponentApply<Attributes>(StyleComp, ".wp-block-itmar-coustom-login");
+styleComponentApply<Attributes>(StyleComp, ".wp-block-itmar-coustom-login", {
+	selector: ".itmar-wrap",
+	target: "inner",
+});
 
 jQuery(function ($) {
 	//アニメーション関連パラメータ
@@ -30,7 +33,7 @@ jQuery(function ($) {
 	}
 	// 2. オブジェクトに変換
 	const attributes = JSON.parse(rawAttributes);
-	const { redirectUrl, isRemember } = attributes;
+	const { isRemember } = attributes;
 
 	//ページのセット
 	let fieldset_objs = login_block.find(".figure_fieldset");
@@ -48,7 +51,8 @@ jQuery(function ($) {
 
 		//cancelの処理
 		const click_key = e.originalEvent.submitter?.dataset.key;
-		if (click_key === "cancel_key") {
+		const back_key = e.originalEvent.submitter?.dataset.back;
+		if (click_key === "cancel_key" || back_key === "back") {
 			const params = new URLSearchParams(window.location.search);
 			const redirectUrl = params.get("redirect_to");
 			if (redirectUrl) {
@@ -127,20 +131,24 @@ jQuery(function ($) {
 						window.location.href = updatedHref;
 					}
 				} else {
-					//表示エリアに表示
-					let result_disp = fieldset_objs.eq(1).find("form p");
-					result_disp.empty();
+					//表示エリアに結果表示
+					const thank_block = login_block.find(
+						".wp-block-itmar-thanks-figure-block",
+					);
 
-					let p = $("<p></p>")
-						.addClass("error")
-						.text(fieldset_objs.eq(1).find("form").data("info_mail_error"));
-					result_disp.append(p);
-					let err_msg = `--------------------\n${response.data.message}`;
-					let err_p = $("<p></p>")
-						.addClass("error")
-						.html(err_msg.replace(/\n/g, "<br>"));
-					result_disp.append(err_p);
-					//alert("ログインエラー: " + response.data.message);
+					//ブロックに属性を付けてトリガー
+					const thank_result = {
+						status: response.success,
+						message: response.data.message,
+						error_code: response.data.error_code,
+						lost_password_url: response.data.lost_password_url,
+					};
+
+					thank_block
+						.attr("data-click-button-id", click_key)
+						.attr("data-send-result", JSON.stringify(thank_result))
+						.trigger("clickButtonIdChanged", [click_key]);
+
 					//アニメーションの実行
 					processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(1), true);
 				}

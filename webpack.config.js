@@ -48,5 +48,14 @@ module.exports = {
 			".js",
 			".jsx",
 		],
+		symlinks: false,
+		alias: {
+			...(defaultConfig.resolve?.alias || {}),
+
+			"styled-components": path.resolve(
+				__dirname,
+				"../../node_modules/styled-components",
+			),
+		},
 	},
 };

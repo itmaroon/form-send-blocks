@@ -38,6 +38,9 @@ import {
 	BlockInstance,
 	TemplateArray,
 } from "@wordpress/blocks";
+
+import { usePreventEditorFormSubmit } from "../front_common";
+
 import type { Attributes } from "./type";
 
 //スペースのリセットバリュー
@@ -113,6 +116,7 @@ export default function Edit({
 		thisBlockIndex,
 		thisInputIndex,
 		totalInput,
+		buttonBlocks,
 		innerBlocks,
 	} = useSelect(
 		(select) => {
@@ -129,6 +133,10 @@ export default function Edit({
 			const figureBlockSiblings = siblings.filter((block: BlockInstance) =>
 				block.name.includes("figure-block"),
 			);
+			const buttonBlocks = getBlocks(clientId).filter(
+				(block: BlockInstance) => block.name === "itmar/design-button",
+			);
+
 			const index = figureBlockSiblings.findIndex(
 				(block: BlockInstance) => block.clientId === clientId,
 			);
@@ -147,6 +155,7 @@ export default function Edit({
 				thisBlockIndex: index,
 				innerBlocks: thisInnerBlocks,
 				thisInputIndex: inputIndex,
+				buttonBlocks: buttonBlocks,
 				totalInput: inputBlockSiblings.length,
 			};
 		},
@@ -156,22 +165,12 @@ export default function Edit({
 	// dispatch関数を取得
 	const { updateBlockAttributes } = useDispatch("core/block-editor");
 
-	//Submitによるプロセス変更
-	const handleSubmit = (e: any) => {
-		e.preventDefault();
-		const click_id = e.nativeEvent.submitter.dataset.key;
-
-		// 親ブロックのcurrent_step属性を更新
-		if (click_id === "foword_id") {
-			updateBlockAttributes(parentClientId, {
-				current_step: currentStep + 1,
-			});
-		} else if (click_id === "back_id") {
-			updateBlockAttributes(parentClientId, {
-				current_step: currentStep - 1,
-			});
-		}
-	};
+	//フォームをサブミットする処理をOnSubmitより早く処理する
+	const formRef = usePreventEditorFormSubmit({
+		parentClientId,
+		currentStep,
+		updateBlockAttributes,
+	});
 
 	//インナーブロックの制御
 
@@ -692,7 +691,7 @@ export default function Edit({
 			<div {...blockProps}>
 				{styledEditorContent}
 				<StyleComp attributes={attributes}>
-					<form onSubmit={handleSubmit}>
+					<form ref={formRef}>
 						<div {...innerBlocksProps}></div>
 					</form>
 				</StyleComp>
