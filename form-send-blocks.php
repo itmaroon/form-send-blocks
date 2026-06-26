@@ -100,16 +100,28 @@ function itmar_contact_send_ajax()
 		$is_dataSave = filter_var(wp_unslash($_POST['is_dataSave'] ?? ''), FILTER_VALIDATE_BOOLEAN);
 		$is_retMail = filter_var(wp_unslash($_POST['is_retMail'] ?? ''), FILTER_VALIDATE_BOOLEAN);
 		$save_post_type = sanitize_text_field(wp_unslash($_POST['save_post_type'] ?? ''));
+		$address_type = sanitize_text_field(wp_unslash($_POST['address_type'] ?? ''));
 		$headers = 'From: ' . $reply_name . '<' . $reply . '>' . "\r\n";
-
+		//メールアドレスタイプがログオンユーザーならアドレスを置き換え
+		if ($address_type === 'logonUser') {
+			$current_user = wp_get_current_user();
+			$user_email   = $current_user->user_email ?? '';
+			$to = $user_email;
+		}
+		$res_type = $is_retMail ? 'ret_mail' : 'info_mail';
 		// バリデーション
-		if (!is_email($to) || !is_email($reply) || empty($subject) || empty($message)) {
-			$response['error'] = array('status' => 'error', 'message' =>  __('The server detected an error in the input item. Registration process was interrupted. ', 'form-send-blocks'));
+		if (!is_email($to) || !is_email($reply)) {
+
+			$response[$res_type] = array('status' => 'error', 'message' =>  __('The email address format is invalid. ', 'form-send-blocks'));
 			echo wp_json_encode($response);
 			die();
 		}
 
-
+		if (empty($subject) || empty($message)) {
+			$response[$res_type] = array('status' => 'error', 'message' =>  __('The subject or body of the email is blank. ', 'form-send-blocks'));
+			echo wp_json_encode($response);
+			die();
+		}
 
 		// メールを送信
 		if (wp_mail($to, $subject, $message, $headers)) {
@@ -184,8 +196,19 @@ function itmar_register_send_token()
 	$subject_prov = sanitize_text_field(wp_unslash($_POST['subject_prov'] ?? ''));
 	$message_prov = sanitize_textarea_field(wp_unslash($_POST['message_prov'] ?? ''));
 	$is_logon = filter_var(wp_unslash($_POST['is_logon'] ?? ''), FILTER_VALIDATE_BOOLEAN);
+	$clickKey = sanitize_text_field(wp_unslash($_POST['click_key'] ?? ''));
 	//リダイレクト先
-	$redirect_to = isset($_POST['redirect_to']) ? esc_url_raw(wp_unslash($_POST['redirect_to'])) : home_url();
+	$redirect_to = isset($_POST['redirect_to'])
+		? esc_url_raw(wp_unslash($_POST['redirect_to']))
+		: home_url();
+
+	if ($clickKey !== '') {
+		$redirect_to = add_query_arg(
+			'clickKey',
+			$clickKey,
+			$redirect_to
+		);
+	}
 
 	$email = sanitize_email($form['email'] ?? '');
 	$first_name = sanitize_text_field($form['memberFirstName'] ?? '');
@@ -237,8 +260,8 @@ function itmar_register_send_token()
 	// メール送信
 	$confirm_url = add_query_arg([
 		'token'       => $token,
-		'redirect_to' => rawurlencode($redirect_to), // リダイレクト先
-		'is_logon' => $is_logon,
+		'redirect_to' => $redirect_to, // リダイレクト先
+		'is_logon' => $is_logon
 	], site_url('/register-confirm'));
 
 	$subject = $subject_prov;
@@ -505,7 +528,11 @@ function itmar_custom_login()
 				'message' => '仮登録が確認できました',
 			]);
 		} else {
-			wp_send_json_error(['message' => $user->get_error_message()]);
+			wp_send_json_error([
+				'message' =>  wp_strip_all_tags($user->get_error_message()),
+				'error_code' => $user->get_error_code(),
+				'lost_password_url' => wp_lostpassword_url(),
+			]);
 		}
 	}
 

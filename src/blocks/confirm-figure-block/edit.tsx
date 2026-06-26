@@ -1,10 +1,10 @@
 import { __ } from "@wordpress/i18n";
 import "./editor.scss";
-import { useSelect, useDispatch } from "@wordpress/data";
+import { useSelect, useDispatch, dispatch } from "@wordpress/data";
 import { store as blockEditorStore } from "@wordpress/block-editor";
-import { useEffect, useRef, useState } from "@wordpress/element";
+import { useEffect, useRef, useState, useMemo } from "@wordpress/element";
 import { StyleComp } from "./StyleConfirmFigure";
-//import { useStyleIframe } from "../iframeFooks";
+import { usePreventEditorFormSubmit } from "../front_common";
 import {
 	useElementBackgroundColor,
 	useIsIframeMobile,
@@ -28,10 +28,13 @@ import {
 } from "@wordpress/blocks";
 import {
 	PanelBody,
+	PanelRow,
 	ToggleControl,
 	TextControl,
+	TextareaControl,
 	ComboboxControl,
 	BoxControl,
+	Notice,
 	BorderBoxControl,
 } from "@wordpress/components";
 
@@ -75,7 +78,9 @@ export default function Edit({
 		mobile_pos,
 		stage_info,
 		blockTableMapping,
+		displayMapping,
 		is_shadow,
+		isSendPause,
 	} = attributes;
 	const shadow_element = attributes.shadow_element as ShadowState;
 
@@ -93,6 +98,7 @@ export default function Edit({
 		inputFigureBlocks,
 		tableBlocks,
 		tableOption,
+		attentionBlocksOption,
 		tableDataFormStates,
 	} = useSelect(
 		(select) => {
@@ -135,6 +141,17 @@ export default function Edit({
 					value: block.attributes.defineID,
 					label: block.attributes.defineID,
 				}));
+			//注意書きtitleブロックの選択オプション
+			const attentionBlocksOption = flatBlocks
+				.filter(
+					(block: BlockInstance) =>
+						block.name === "itmar/design-title" && block.attributes.uniqueID,
+				)
+				.map((block) => ({
+					value: block.attributes.uniqueID,
+					label: block.attributes.uniqueID,
+				}));
+
 			// tableBlocks の中身（属性）の変化を監視するための値を生成 ---
 			const tableDataFormStates = JSON.stringify(
 				tableBlocks.map((block) => ({
@@ -149,6 +166,7 @@ export default function Edit({
 				inputFigureBlocks: inputFigureBlocks,
 				tableBlocks: tableBlocks,
 				tableOption: tableOption,
+				attentionBlocksOption: attentionBlocksOption,
 				tableDataFormStates: tableDataFormStates,
 			};
 		},
@@ -172,13 +190,7 @@ export default function Edit({
 	}
 	const cellObjectsForm = (inputFigureInnerBlocks: BlockInstance[]) => {
 		//'itmar/design-checkbox''itmar/design-button'を除外
-		const filteredBlocks = inputFigureInnerBlocks.filter(
-			(block) =>
-				block.name !== "itmar/design-checkbox" &&
-				block.name !== "itmar/design-group" &&
-				block.name !== "itmar/design-button",
-		);
-		return filteredBlocks.map((input_elm) => {
+		return inputFigureInnerBlocks.map((input_elm) => {
 			//design-selectで選択された要素を抽出
 			const sel_content = input_elm.attributes.selectValues
 				? input_elm.attributes.selectValues.filter((obj: SelectOption) =>
@@ -190,10 +202,18 @@ export default function Edit({
 				? sel_content.map((obj: SelectOption) => obj.label).join(", ")
 				: input_elm.attributes.inputValue;
 
+			const message_label =
+				input_elm.name === "itmar/design-title"
+					? input_elm.attributes.headingContent
+					: input_elm.name === "itmar/design-text-ctrl" ||
+					  input_elm.name === "itmar/design-checkbox"
+					? input_elm.attributes.labelContent
+					: "";
+
 			return {
 				cells: [
 					{
-						content: input_elm.attributes.labelContent,
+						content: message_label,
 						tag: "th",
 					},
 					{
@@ -234,7 +254,16 @@ export default function Edit({
 
 			// このブロック自身のインナーブロックを抽出して tableSource を生成
 			// (cellObjectsForm は個別のブロックの innerBlocks を引数に取ると想定)
-			const tableSource = cellObjectsForm(block.innerBlocks || []);
+			const allInnerBlocks = flattenBlocks(block.innerBlocks || []);
+			const inputInnerBlocks = allInnerBlocks.filter(
+				(block: BlockInstance) =>
+					//block.name !== "itmar/design-checkbox" &&
+					block.name !== "itmar/design-button" &&
+					block.name !== "itmar/design-group" &&
+					(block.name !== "itmar/design-title" || block.attributes.uniqueID),
+			);
+
+			const tableSource = cellObjectsForm(inputInnerBlocks || []);
 
 			// テーブルIDとソースデータを紐付けたオブジェクトを返す
 			return {
@@ -312,21 +341,12 @@ export default function Edit({
 		},
 	);
 
-	//Submitによるプロセス変更
-	const handleSubmit = (e: any) => {
-		e.preventDefault();
-		const click_id = e.nativeEvent.submitter.dataset.key;
-		// 親ブロックのstate_process属性を更新
-		if (click_id === "foword_id") {
-			updateBlockAttributes(parentClientId, {
-				current_step: currentStep + 1,
-			});
-		} else if (click_id === "back_id") {
-			updateBlockAttributes(parentClientId, {
-				current_step: currentStep - 1,
-			});
-		}
-	};
+	//フォームをサブミットする処理をOnSubmitより早く処理する
+	const formRef = usePreventEditorFormSubmit({
+		parentClientId,
+		currentStep,
+		updateBlockAttributes,
+	});
 
 	//モバイルの判定
 	const isMobile = useIsIframeMobile();
@@ -361,30 +381,340 @@ export default function Edit({
 
 	//サイトエディタの場合はiframeにスタイルをわたす。
 	const styledEditorContent = useStyleIframe(StyleComp, attributes);
+
+	//メール文書編成用のNoticeを返す関数
+	const createMailNotice = (
+		input_elm: BlockInstance,
+		index: number,
+		targetMessage: string,
+		targetButton: string,
+		targetAttributeKey: string,
+	) => {
+		const message_value =
+			input_elm.name === "itmar/design-title"
+				? input_elm.attributes.uniqueID
+				: input_elm.name === "itmar/design-text-ctrl" ||
+				  input_elm.name === "itmar/design-checkbox"
+				? input_elm.attributes.inputName
+				: "";
+		const message_label =
+			input_elm.name === "itmar/design-title"
+				? input_elm.attributes.headingContent
+				: input_elm.name === "itmar/design-text-ctrl" ||
+				  input_elm.name === "itmar/design-checkbox"
+				? input_elm.attributes.labelContent
+				: "";
+		const actions = [
+			{
+				label: "👆",
+				onClick: () => {
+					const newVal = `${targetMessage ?? ""}[${message_value ?? ""}]`;
+					setAttributes({
+						displayMapping: {
+							...displayMapping,
+							[targetButton]: {
+								...(displayMapping?.[targetButton] || {}),
+								[targetAttributeKey]: newVal,
+							},
+						},
+					});
+				},
+			},
+		];
+		return (
+			<Notice key={index} actions={actions} isDismissible={false}>
+				<p>{message_label}</p>
+			</Notice>
+		);
+	};
+
+	//ボタンに割り当てるインナーブロック
+	const inputBlocksByButtonKey: Record<string, BlockInstance[]> =
+		useMemo(() => {
+			const result: Record<string, BlockInstance[]> = {};
+			let accumulatedInputBlocks: BlockInstance[] = [];
+
+			inputFigureBlocks.forEach((figureBlock: BlockInstance) => {
+				const allInnerBlocks = flattenBlocks(figureBlock.innerBlocks || []);
+
+				const buttonBlocks = allInnerBlocks.filter(
+					(innerBlock: BlockInstance) =>
+						innerBlock.name === "itmar/design-button" &&
+						innerBlock.attributes?.buttonKey,
+				);
+
+				const inputInnerBlocks = allInnerBlocks.filter(
+					(innerBlock: BlockInstance) =>
+						innerBlock.name !== "itmar/design-button" &&
+						innerBlock.name !== "itmar/design-group" &&
+						(innerBlock.name !== "itmar/design-title" ||
+							innerBlock.attributes.uniqueID),
+				);
+
+				const currentInputBlocks = [
+					...accumulatedInputBlocks,
+					...inputInnerBlocks,
+				];
+
+				if (buttonBlocks.length > 0) {
+					buttonBlocks.forEach((buttonBlock: BlockInstance) => {
+						const buttonKey = buttonBlock.attributes.buttonKey;
+
+						if (buttonKey) {
+							result[buttonKey] = currentInputBlocks;
+						}
+					});
+
+					accumulatedInputBlocks = [];
+					return;
+				}
+
+				accumulatedInputBlocks = currentInputBlocks;
+			});
+
+			return result;
+		}, [inputFigureBlocks]);
+
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title={__("Step-Table Mapping", "itmar")}>
-					{inputFigureBlocks.map((block: BlockInstance, index: number) => {
+				<PanelBody title={__("Input Figure Mapping", "itmar")}>
+					{inputFigureBlocks.map((block: BlockInstance) => {
 						const attrs = block.attributes as { form_name: string };
 						// 現在このブロックに紐付いているテーブルIDを探す
 						const currentMapping = blockTableMapping.find(
 							(m) => m.blockId === attrs.form_name,
 						);
 
+						//インプットフィギュアごとにデザインボタンブロックを取得（buttonKeyを持つもの）
+						const buttonBlocks = flattenBlocks(block.innerBlocks || []).filter(
+							(fb) =>
+								fb.name === "itmar/design-button" && fb.attributes?.buttonKey,
+						);
+
 						return (
-							<ComboboxControl
-								key={block.clientId}
-								label={`Step ${index + 1}: ${
-									block.attributes.form_name || "No Name"
-								}`}
-								value={currentMapping?.tableId}
-								options={tableOption}
-								onChange={(newTableId) =>
-									updateMapping(block.attributes.form_name, newTableId || "")
-								}
-								help={__("Select which table this step outputs to.", "itmar")}
-							/>
+							<div key={block.clientId}>
+								<ComboboxControl
+									label={block.attributes.form_name || "No Name"}
+									value={currentMapping?.tableId}
+									options={tableOption}
+									onChange={(newTableId) =>
+										updateMapping(block.attributes.form_name, newTableId || "")
+									}
+									help={__(
+										"Select which table this figure outputs to.",
+										"form-send-blocks",
+									)}
+								/>
+
+								{buttonBlocks.map((btnBlock: BlockInstance) => {
+									const buttonKey = btnBlock.attributes.buttonKey;
+									const currentObj = displayMapping?.[buttonKey];
+
+									const inputMessageBlocks = buttonKey
+										? inputBlocksByButtonKey[buttonKey] || []
+										: [];
+									return (
+										<PanelBody
+											title={`${btnBlock.attributes.buttonKey || ""} ${__(
+												"Button Mapping",
+												"form-send-blocks",
+											)}`}
+											initialOpen={false}
+										>
+											<TextControl
+												key={btnBlock.clientId}
+												label={__("Confirm Button Label", "form-send-blocks")}
+												value={currentObj?.button_label || ""}
+												onChange={(newVal) => {
+													if (buttonKey) {
+														setAttributes({
+															displayMapping: {
+																...displayMapping,
+																[buttonKey]: {
+																	...(displayMapping?.[buttonKey] || {}),
+																	button_label: newVal,
+																},
+															},
+														});
+													}
+												}}
+											/>
+											<TextControl
+												key={btnBlock.clientId}
+												label={__(
+													"Confirm Attention Message",
+													"form-send-blocks",
+												)}
+												value={currentObj?.attention_mess || ""}
+												onChange={(newVal) => {
+													if (buttonKey) {
+														setAttributes({
+															displayMapping: {
+																...displayMapping,
+																[buttonKey]: {
+																	...(displayMapping?.[buttonKey] || {}),
+																	attention_mess: newVal,
+																},
+															},
+														});
+													}
+												}}
+											/>
+											<ComboboxControl
+												label={__("Attention Display ID", "form-send-blocks")}
+												value={currentObj?.attention_Id || ""}
+												options={attentionBlocksOption}
+												onChange={(newVal) => {
+													if (buttonKey) {
+														setAttributes({
+															displayMapping: {
+																...displayMapping,
+																[buttonKey]: {
+																	...(displayMapping?.[buttonKey] || {}),
+																	attention_Id: newVal,
+																},
+															},
+														});
+													}
+												}}
+											/>
+											<PanelBody
+												title={__(
+													"Inquiry information notification email Content",
+													"form-send-blocks",
+												)}
+												initialOpen={true}
+												className="mailinfo_ctrl"
+											>
+												<PanelRow>
+													<TextControl
+														label={__(
+															"Notification email subject",
+															"form-send-blocks",
+														)}
+														value={currentObj?.notice_subject || ""}
+														onChange={(newVal) => {
+															if (buttonKey) {
+																setAttributes({
+																	displayMapping: {
+																		...displayMapping,
+																		[buttonKey]: {
+																			...(displayMapping?.[buttonKey] || {}),
+																			notice_subject: newVal,
+																		},
+																	},
+																});
+															}
+														}} // 一時的な編集値として保存する
+													/>
+												</PanelRow>
+												<PanelRow>
+													<TextareaControl
+														label={__(
+															"Notification email body",
+															"form-send-blocks",
+														)}
+														value={currentObj?.notice_content || ""}
+														onChange={(newVal) => {
+															if (buttonKey) {
+																setAttributes({
+																	displayMapping: {
+																		...displayMapping,
+																		[buttonKey]: {
+																			...(displayMapping?.[buttonKey] || {}),
+																			notice_content: newVal,
+																		},
+																	},
+																});
+															}
+														}} // 一時的な編集値として保存する
+														rows={5}
+													/>
+												</PanelRow>
+												{inputMessageBlocks.map(
+													(input_elm: BlockInstance, index: number) =>
+														createMailNotice(
+															input_elm,
+															index,
+															currentObj?.notice_content || "",
+															buttonKey,
+															"notice_content",
+														),
+												)}
+											</PanelBody>
+											<PanelBody
+												title={__(
+													"Automatic response email Content",
+													"form-send-blocks",
+												)}
+												initialOpen={true}
+												className="mailinfo_ctrl"
+											>
+												<PanelRow>
+													<TextControl
+														label={__(
+															"Automatic response email title",
+															"form-send-blocks",
+														)}
+														value={currentObj?.response_subject || ""}
+														onChange={(newVal) => {
+															if (buttonKey) {
+																setAttributes({
+																	displayMapping: {
+																		...displayMapping,
+																		[buttonKey]: {
+																			...(displayMapping?.[buttonKey] || {}),
+																			response_subject: newVal,
+																		},
+																	},
+																});
+															}
+														}} // 一時的な編集値として保存する
+													/>
+												</PanelRow>
+												<PanelRow>
+													<TextareaControl
+														label={__(
+															"Automatic response email body",
+															"form-send-blocks",
+														)}
+														value={currentObj?.response_content || ""}
+														onChange={(newVal) => {
+															if (buttonKey) {
+																setAttributes({
+																	displayMapping: {
+																		...displayMapping,
+																		[buttonKey]: {
+																			...(displayMapping?.[buttonKey] || {}),
+																			response_content: newVal,
+																		},
+																	},
+																});
+															}
+														}} // 一時的な編集値として保存する
+														rows={5}
+														help={__(
+															"Click on the input field below to quote it in the text.",
+															"form-send-blocks",
+														)}
+													/>
+												</PanelRow>
+												{inputMessageBlocks.map(
+													(input_elm: BlockInstance, index: number) =>
+														createMailNotice(
+															input_elm,
+															index,
+															currentObj?.response_content || "",
+															buttonKey,
+															"response_content",
+														),
+												)}
+											</PanelBody>
+										</PanelBody>
+									);
+								})}
+							</div>
 						);
 					})}
 				</PanelBody>
@@ -404,6 +734,19 @@ export default function Edit({
 							"form-send-blocks",
 						)}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
+					/>
+				</PanelBody>
+				<PanelBody
+					title={__("Pause Mail Send", "form-send-blocks")}
+					initialOpen={true}
+					className="form_setteing_ctrl"
+				>
+					<ToggleControl
+						label={__("Is Pause Send", "form-send-blocks")}
+						checked={isSendPause}
+						onChange={(newVal) => {
+							setAttributes({ isSendPause: newVal });
+						}}
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -528,7 +871,7 @@ export default function Edit({
 			<div {...blockProps}>
 				{styledEditorContent}
 				<StyleComp attributes={attributes}>
-					<form onSubmit={handleSubmit}>
+					<form ref={formRef}>
 						<div {...innerBlocksProps}></div>
 					</form>
 				</StyleComp>

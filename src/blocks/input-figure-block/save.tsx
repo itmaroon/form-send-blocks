@@ -31,9 +31,11 @@ export default function save({ attributes }: { attributes: Attributes }) {
 
 	return (
 		<div {...blockProps}>
-			<form id={form_id}>
-				<InnerBlocks.Content />
-			</form>
+			<div className="itmar-wrap">
+				<form id={form_id}>
+					<InnerBlocks.Content />
+				</form>
+			</div>
 		</div>
 	);
 }

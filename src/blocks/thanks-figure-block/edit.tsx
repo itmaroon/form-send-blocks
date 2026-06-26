@@ -13,7 +13,7 @@ import {
 	ToggleControl,
 	TextareaControl,
 	TextControl,
-	SelectControl,
+	ComboboxControl,
 	BoxControl,
 	BorderBoxControl,
 } from "@wordpress/components";
@@ -30,8 +30,11 @@ import {
 	ShadowStyle,
 	ShadowElm,
 	PageSelectControl,
+	flattenBlocks,
 	useStyleIframe,
 } from "itmar-block-packages";
+
+import { usePreventEditorFormSubmit } from "../front_common";
 
 import { store as blockEditorStore } from "@wordpress/block-editor";
 import {
@@ -71,11 +74,7 @@ export default function Edit({
 	clientId,
 }: BlockEditProps<Attributes>) {
 	const {
-		info_type,
-		infomail_success,
-		infomail_faile,
-		retmail_success,
-		retmail_faile,
+		displayMapping,
 		bgColor,
 		bgColor_form,
 		bgGradient_form,
@@ -96,13 +95,25 @@ export default function Edit({
 	const currentStep = context["itmar/current_step"] as number;
 
 	//ブロック情報取得ツールの取得
-	const { parentClientId, thisBlockIndex } = useSelect(
+	const {
+		parentClientId,
+		thisBlockIndex,
+		inputFigureBlocks,
+		messageBlocksOption,
+	} = useSelect(
 		(select) => {
 			const { getBlockRootClientId, getBlocks } = select(
 				blockEditorStore,
 			) as any;
 			// 親ブロックのclientIdを取得
 			const parentClientId = getBlockRootClientId(clientId);
+
+			// まず直下のブロックを取得
+			const rootInnerBlocks = getBlocks(clientId) || [];
+
+			// 「孫」まで平坦化
+			// topBlockAttributesなどで使っていたロジックと同じです
+			const flatBlocks = flattenBlocks(rootInnerBlocks);
 
 			// 兄弟ブロックを取得
 			const siblings = getBlocks(parentClientId);
@@ -114,7 +125,26 @@ export default function Edit({
 			const index = figureBlockSiblings.findIndex(
 				(block: BlockInstance) => block.clientId === clientId,
 			);
-			return { parentClientId: parentClientId, thisBlockIndex: index };
+
+			const inputFigureBlocks = siblings.filter(
+				(block: BlockInstance) => block.name === "itmar/input-figure-block",
+			);
+
+			const messageBlocksOption = flatBlocks
+				.filter(
+					(block: BlockInstance) =>
+						block.name === "itmar/design-title" && block.attributes.uniqueID,
+				)
+				.map((block) => ({
+					value: block.attributes.uniqueID,
+					label: block.attributes.uniqueID,
+				}));
+			return {
+				parentClientId: parentClientId,
+				thisBlockIndex: index,
+				inputFigureBlocks: inputFigureBlocks,
+				messageBlocksOption: messageBlocksOption,
+			};
 		},
 		[clientId],
 	);
@@ -123,105 +153,26 @@ export default function Edit({
 	// dispatch関数を取得
 	const { updateBlockAttributes } = useDispatch("core/block-editor");
 
-	//Submitによるプロセス変更
-	const handleSubmit = (e: any) => {
-		e.preventDefault();
-		const click_id = e.nativeEvent.submitter.dataset.key;
-		// const next_state =
-		// 	info_type == "inquiry"
-		// 		? "input"
-		// 		: info_type === "provision"
-		// 		? "register"
-		// 		: "input";
-		// 親ブロックのstate_process属性を更新
-		if (click_id === "foword_id") {
-			updateBlockAttributes(parentClientId, {
-				current_step: currentStep + 1,
-			});
-		} else {
-			updateBlockAttributes(parentClientId, { current_step: 0 });
-		}
-	};
+	//フォームをサブミットする処理をOnSubmitより早く処理する
+	const formRef = usePreventEditorFormSubmit({
+		parentClientId,
+		currentStep,
+		updateBlockAttributes,
+	});
 
 	//info typeごとのデフォルトの標題
 
-	const headingContent =
-		info_type == "inquiry"
-			? __("Thank you for your inquiry.", "form-send-blocks")
-			: info_type === "provision"
-			? __("Thank you for your provisional registration", "form-send-blocks")
-			: info_type === "register"
-			? __("Proceed to registration", "form-send-blocks")
-			: info_type === "logonErr"
-			? __("Logon failed", "form-send-blocks")
-			: "";
-
-	const buttonLabel =
-		info_type == "inquiry"
-			? __("Go to home screen", "form-send-blocks")
-			: info_type === "provision"
-			? __("Go to home screen", "form-send-blocks")
-			: info_type === "register"
-			? __("To members only page", "form-send-blocks")
-			: info_type === "logonErr"
-			? __("Go to home screen", "form-send-blocks")
-			: "";
-	const infoSuccessLabel =
-		info_type == "inquiry"
-			? __(
-					"Notification screen and email sending success display",
-					"form-send-blocks",
-			  )
-			: info_type === "provision"
-			? __(
-					"Notification screen and email provision success display",
-					"form-send-blocks",
-			  )
-			: info_type === "register"
-			? __(
-					"Notification screen and email register success display",
-					"form-send-blocks",
-			  )
-			: "";
-	const infoErrorLabel =
-		info_type == "inquiry"
-			? __(
-					"Notification screen and email sending error display",
-					"form-send-blocks",
-			  )
-			: info_type === "provision"
-			? __(
-					"Notification screen and email provision error display",
-					"form-send-blocks",
-			  )
-			: info_type === "register"
-			? __(
-					"Notification screen and email register error display",
-					"form-send-blocks",
-			  )
-			: info_type === "logonErr"
-			? __("Notification screen login error display", "form-send-blocks")
-			: "";
-	const retSuccessLabel =
-		info_type == "inquiry"
-			? __("Response email sending success display", "form-send-blocks")
-			: info_type === "provision"
-			? __("Response email provision  display", "form-send-blocks")
-			: info_type === "register"
-			? __("Response email register success display", "form-send-blocks")
-			: "";
-	const retErrorLabel =
-		info_type == "inquiry"
-			? __("Response email sending error display", "form-send-blocks")
-			: info_type === "provision"
-			? __("Response email provision error display", "form-send-blocks")
-			: info_type === "register"
-			? __("Response email register error display", "form-send-blocks")
-			: "";
-
 	//インナーブロックの制御
 	const TEMPLATE: TemplateArray = [
-		["itmar/design-title", { headingContent: headingContent }],
+		[
+			"itmar/design-title",
+			{
+				headingContent: __(
+					"The subject line set by the user will be inserted into the sent email.",
+					"form-send-blocks",
+				),
+			},
+		],
 		[
 			"core/paragraph",
 			{
@@ -236,7 +187,6 @@ export default function Edit({
 			"itmar/design-button",
 			{
 				buttonType: "submit",
-				labelContent: buttonLabel,
 				align: "center",
 			},
 		],
@@ -255,7 +205,6 @@ export default function Edit({
 	//ブロックの参照
 	const blockRef = useRef(null);
 	//ルート要素にスタイルとクラスを付加
-	//const appear_state = info_type == "inquiry" ? "thanks" : info_type;
 	const blockProps = useBlockProps({
 		ref: blockRef, // ここで参照を blockProps に渡しています
 		style: blockStyle,
@@ -292,31 +241,6 @@ export default function Edit({
 					initialOpen={true}
 					className="form_setteing_ctrl"
 				>
-					<SelectControl
-						label={__("Infomation Type", "form-send-blocks")}
-						value={info_type as any}
-						options={[
-							{
-								label: __("Inquiry", "form-send-blocks"),
-								value: "inquiry",
-							},
-							{
-								label: __("Provisional registration", "form-send-blocks"),
-								value: "provision",
-							},
-							{
-								label: __("Registration", "form-send-blocks"),
-								value: "register",
-							},
-							{
-								label: __("Logon Error", "form-send-blocks"),
-								value: "logonErr",
-							},
-						]}
-						onChange={(newName) => {
-							setAttributes({ info_type: newName });
-						}}
-					/>
 					<TextControl
 						label={__("Stage information", "form-send-blocks")}
 						value={stage_info}
@@ -326,61 +250,160 @@ export default function Edit({
 						)}
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
-					{info_type !== "logonErr" && (
-						<>
-							<TextareaControl
-								label={infoSuccessLabel}
-								value={infomail_success}
-								onChange={(newVal) =>
-									setAttributes({ infomail_success: newVal })
-								}
-								rows={3}
-							/>
-						</>
-					)}
-					<TextareaControl
-						label={infoErrorLabel}
-						value={infomail_faile}
-						onChange={(newVal) => setAttributes({ infomail_faile: newVal })}
-						rows={3}
-					/>
-					{info_type !== "logonErr" && (
-						<>
-							<TextareaControl
-								label={retSuccessLabel}
-								value={retmail_success}
-								onChange={(newVal) =>
-									setAttributes({ retmail_success: newVal })
-								}
-								rows={3}
-							/>
-							<TextareaControl
-								label={retErrorLabel}
-								value={retmail_faile}
-								onChange={(newVal) => setAttributes({ retmail_faile: newVal })}
-								rows={3}
-							/>
-						</>
-					)}
-					<PanelBody
-						title={__(
-							"Select redirect destination when exiting",
-							"form-send-blocks",
-						)}
-					>
-						<PageSelectControl
-							label={__("Select Redirect Page", "form-send-blocks")}
-							selectedSlug={selectedSlug}
-							homeUrl="[home_url]"
-							onChange={(postInfo) => {
-								if (postInfo) {
-									setAttributes({
-										selectedSlug: postInfo.slug,
-										selectedPageUrl: postInfo.link,
-									});
-								}
-							}}
-						/>
+
+					<PanelBody title={__("Input Figure Mapping", "itmar")}>
+						{inputFigureBlocks.map((block: BlockInstance) => {
+							//インプットフィギュアごとにデザインボタンブロックを取得（buttonKeyを持つもの）
+							const buttonBlocks = flattenBlocks(
+								block.innerBlocks || [],
+							).filter(
+								(fb) =>
+									fb.name === "itmar/design-button" && fb.attributes?.buttonKey,
+							);
+							return (
+								<div key={block.clientId}>
+									{buttonBlocks.map((btnBlock: BlockInstance) => {
+										const buttonKey = btnBlock.attributes.buttonKey;
+										const currentObj = displayMapping?.[buttonKey];
+
+										return (
+											<PanelBody
+												title={`${btnBlock.attributes.buttonKey || ""} ${__(
+													"Button Mapping",
+													"form-send-blocks",
+												)}`}
+												initialOpen={false}
+											>
+												<TextControl
+													key={btnBlock.clientId}
+													label={__("Thanks Main Message", "form-send-blocks")}
+													value={currentObj?.main_mess || ""}
+													onChange={(newVal) => {
+														if (buttonKey) {
+															setAttributes({
+																displayMapping: {
+																	...displayMapping,
+																	[buttonKey]: {
+																		...(displayMapping?.[buttonKey] || {}),
+																		main_mess: newVal,
+																	},
+																},
+															});
+														}
+													}}
+												/>
+												<ComboboxControl
+													label={__(
+														"Main Message Display ID",
+														"form-send-blocks",
+													)}
+													value={currentObj?.message_Id || ""}
+													options={messageBlocksOption}
+													onChange={(newVal) => {
+														if (buttonKey) {
+															setAttributes({
+																displayMapping: {
+																	...displayMapping,
+																	[buttonKey]: {
+																		...(displayMapping?.[buttonKey] || {}),
+																		message_Id: newVal,
+																	},
+																},
+															});
+														}
+													}}
+												/>
+
+												<TextareaControl
+													label={__(
+														"Notificication Success Infomation",
+														"form-send-blocks",
+													)}
+													value={currentObj?.success_notice || ""}
+													onChange={(newVal) => {
+														if (buttonKey) {
+															setAttributes({
+																displayMapping: {
+																	...displayMapping,
+																	[buttonKey]: {
+																		...(displayMapping?.[buttonKey] || {}),
+																		success_notice: newVal,
+																	},
+																},
+															});
+														}
+													}} // 一時的な編集値として保存する
+													rows={5}
+												/>
+												<TextareaControl
+													label={__(
+														"Notificication Error Infomation",
+														"form-send-blocks",
+													)}
+													value={currentObj?.error_notice || ""}
+													onChange={(newVal) => {
+														if (buttonKey) {
+															setAttributes({
+																displayMapping: {
+																	...displayMapping,
+																	[buttonKey]: {
+																		...(displayMapping?.[buttonKey] || {}),
+																		error_notice: newVal,
+																	},
+																},
+															});
+														}
+													}} // 一時的な編集値として保存する
+													rows={5}
+												/>
+												<TextareaControl
+													label={__(
+														"Responce Success Information",
+														"form-send-blocks",
+													)}
+													value={currentObj?.success_responce || ""}
+													onChange={(newVal) => {
+														if (buttonKey) {
+															setAttributes({
+																displayMapping: {
+																	...displayMapping,
+																	[buttonKey]: {
+																		...(displayMapping?.[buttonKey] || {}),
+																		success_responce: newVal,
+																	},
+																},
+															});
+														}
+													}} // 一時的な編集値として保存する
+													rows={5}
+												/>
+												<TextareaControl
+													label={__(
+														"Responce Error Information",
+														"form-send-blocks",
+													)}
+													value={currentObj?.responce_error || ""}
+													onChange={(newVal) => {
+														if (buttonKey) {
+															setAttributes({
+																displayMapping: {
+																	...displayMapping,
+																	[buttonKey]: {
+																		...(displayMapping?.[buttonKey] || {}),
+																		responce_error: newVal,
+																	},
+																},
+															});
+														}
+													}} // 一時的な編集値として保存する
+													rows={5}
+												/>
+											</PanelBody>
+										);
+									})}
+								</div>
+							);
+						})}
 					</PanelBody>
 				</PanelBody>
 			</InspectorControls>
@@ -504,7 +527,7 @@ export default function Edit({
 			<div {...blockProps}>
 				{styledEditorContent}
 				<StyleComp attributes={attributes}>
-					<form onSubmit={handleSubmit}>
+					<form ref={formRef}>
 						<div {...innerBlocksProps}></div>
 					</form>
 				</StyleComp>

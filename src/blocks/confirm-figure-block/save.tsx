@@ -15,9 +15,11 @@ export default function save({ attributes }: { attributes: Attributes }) {
 
 	return (
 		<div {...blockProps}>
-			<form id="itmar_send_exec">
-				<InnerBlocks.Content />
-			</form>
+			<div className="itmar-wrap">
+				<form id="itmar_send_exec">
+					<InnerBlocks.Content />
+				</form>
+			</div>
 		</div>
 	);
 }

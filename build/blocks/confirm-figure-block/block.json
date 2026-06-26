@@ -17,6 +17,18 @@
       "type": "array",
       "default": []
     },
+    "isSendPause": {
+      "type": "boolean",
+      "default": false
+    },
+    "inputValueMapping": {
+      "type": "object",
+      "default": {}
+    },
+    "displayMapping": {
+      "type": "object",
+      "default": {}
+    },
     "bgColor": {
       "type": "string",
       "default": "var(--wp--preset--color--content-back)"

@@ -18,7 +18,10 @@ import { StyleComp } from "./StyleMemberRegister";
 import { Attributes } from "./type";
 
 //styled_conponentの適用
-styleComponentApply<Attributes>(StyleComp, ".wp-block-itmar-member-register");
+styleComponentApply<Attributes>(StyleComp, ".wp-block-itmar-member-register", {
+	selector: ".itmar-wrap",
+	target: "inner",
+});
 
 jQuery(function ($) {
 	//アニメーション関連パラメータ
@@ -66,7 +69,9 @@ jQuery(function ($) {
 
 		//cancelの処理
 		const click_key = e.originalEvent.submitter?.dataset.key;
-		if (click_key === "cancel_key") {
+		const back_key = e.originalEvent.submitter?.dataset.back;
+
+		if (click_key === "cancel_key" || back_key === "back") {
 			const params = new URLSearchParams(window.location.search);
 			const redirectUrl = params.get("redirect_to");
 			if (redirectUrl) {
@@ -122,6 +127,7 @@ jQuery(function ($) {
 				action: "itmar_register_send_token",
 				nonce: itmar_option.nonce,
 				redirect_to: pageUrl,
+				click_key: click_key,
 				form_data: $form.serialize(),
 				...block_info_obj,
 			};
@@ -157,46 +163,30 @@ jQuery(function ($) {
 				postData,
 				isRest as "rest" | "auto",
 			);
-			//表示エリアに表示
-			const $result_disp = fieldset_objs.eq(1).find("form p");
-			console.log($result_disp);
-			$result_disp.empty();
 
 			// response が存在し、success が true の場合
 			if (response?.success) {
-				const successMsg = fieldset_objs
-					.eq(1)
-					.find("form")
-					.data("info_mail_success") as string;
-				const $p = $("<p></p>").addClass("success").text(successMsg);
-
-				$result_disp.append($p);
 				ajax_result.status = "success";
 			} else {
 				const errCode = response?.data?.err_code;
-				const errorText = fieldset_objs
-					.eq(1)
-					.find("form")
-					.data("info_mail_error") as string;
-
-				const $p = $("<p></p>").addClass("error").text(errorText);
-				$result_disp.append($p);
-
-				// errorMap からメッセージを取得（errCode がキーとして妥当かチェック）
-				const mappedError = errCode
-					? (errorMap as any)[errCode]
-					: "Unknown Error";
-				const err_msg = `--------------------\nerror content : ${mappedError}`;
-
-				const $err_p = $("<p></p>")
-					.addClass("error")
-					.html(err_msg.replace(/\n/g, "<br>"));
-				$result_disp.append($err_p);
-
-				// 結果の記録
 				ajax_result.status = "error";
 				ajax_result.error_code = errCode;
 			}
+			//表示エリアに結果表示
+			const thank_block = register_block
+				.find(".wp-block-itmar-thanks-figure-block")
+				.eq(0);
+
+			//ブロックに属性を付けてトリガー
+			const thank_result = {
+				status: response.success,
+				message: ajax_result,
+			};
+
+			thank_block
+				.attr("data-click-button-id", click_key)
+				.attr("data-send-result", JSON.stringify(thank_result))
+				.trigger("clickButtonIdChanged", [click_key]);
 		} catch (err: any) {
 			// ネットワークエラーなどの例外処理
 			const msg =
@@ -253,16 +243,14 @@ jQuery(function ($) {
 		//アニメーションの実行
 		processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(1), true);
 		//プログレスエリアの処理
-		process_change(
-			$form.parent().parent().nextAll(".figure_fieldset").first(),
-			true,
-		);
+		process_change(fieldset_objs.eq(1), true);
 	});
 
 	// クエリパラメータによる処理(本登録の処理)
 	const urlParams = new URLSearchParams(window.location.search);
 	const isRegisteredSuccess = urlParams.get("registered") === "success";
 	const isRegisteredError = urlParams.get("registered") === "error";
+	const clickKey = urlParams.get("clickKey");
 
 	if (register_block.length > 0) {
 		// 1. ajax_result の型を定義
@@ -272,9 +260,6 @@ jQuery(function ($) {
 		}
 		const ajax_result: RegisterResult = {};
 
-		//フィールドセットを取り出す
-		const fieldset_objs = register_block.find(".figure_fieldset");
-
 		if (isRegisteredSuccess || isRegisteredError) {
 			// アニメーションの実行
 			processAnimation(fieldset_objs.eq(0), fieldset_objs.eq(2), true);
@@ -283,24 +268,14 @@ jQuery(function ($) {
 			process_change(fieldset_objs.eq(1), true);
 			process_change(fieldset_objs.eq(2), true);
 
-			// 表示エリアに表示
-			const $result_disp = fieldset_objs.eq(2).find("form p");
-			$result_disp.empty();
+			const thank_block = register_block
+				.find(".wp-block-itmar-thanks-figure-block")
+				.eq(1);
 
 			if (isRegisteredSuccess) {
 				// ✅ 登録成功時
 				const user_name = urlParams.get("user_name") || "";
 				const mail_to = urlParams.get("mail_to") || "";
-
-				const $p = $("<p></p>")
-					.addClass("success")
-					.text(
-						fieldset_objs
-							.eq(2)
-							.find("form")
-							.data("info_mail_success") as string,
-					);
-				$result_disp.append($p);
 
 				// 結果の記録
 				ajax_result.status = "success";
@@ -337,31 +312,23 @@ jQuery(function ($) {
 				}
 			} else if (isRegisteredError) {
 				// ❌ 登録エラー時
-				const $p = $("<p></p>")
-					.addClass("error")
-					.text(
-						fieldset_objs.eq(2).find("form").data("info_mail_error") as string,
-					);
-				$result_disp.append($p);
-
 				const errorCode = urlParams.get("error_code") || "unknown";
-				const errorDetail =
-					(errorMap as any)[errorCode] || "Unknown error occurred";
-
-				const err_msg = `--------------------\n${__(
-					"error content",
-					"form-send-blocks",
-				)} : ${errorDetail}`;
-
-				const $err_p = $("<p></p>")
-					.addClass("error")
-					.html(err_msg.replace(/\n/g, "<br>"));
-				$result_disp.append($err_p);
 
 				// 結果の記録
 				ajax_result.status = "error";
 				ajax_result.content = errorCode;
 			}
+
+			//ブロックに属性を付けてトリガー
+			const thank_result = {
+				status: ajax_result.status,
+				message: ajax_result,
+			};
+
+			thank_block
+				.attr("data-click-button-id", clickKey)
+				.attr("data-send-result", JSON.stringify(thank_result))
+				.trigger("clickButtonIdChanged", [clickKey]);
 
 			// 管理者への通知メール
 			if (is_reg_notice) {
@@ -392,7 +359,7 @@ jQuery(function ($) {
 				sendMail_ajax(
 					master_email,
 					subject_ret_reg,
-					message_ret_reg,
+					message_ret_register,
 					master_email,
 					master_name,
 					false,

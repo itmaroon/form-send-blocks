@@ -7,4 +7,5 @@ import { Attributes } from "./type";
 styleComponentApply<Attributes>(
 	StyleComp,
 	".wp-block-itmar-input-figure-block",
+	{ selector: ".itmar-wrap", target: "inner" },
 );

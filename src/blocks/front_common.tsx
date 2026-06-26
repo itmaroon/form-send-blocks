@@ -1,6 +1,18 @@
 import { __ } from "@wordpress/i18n";
-import { ServerStyleSheet } from "styled-components";
-import { renderToString } from "react-dom/server";
+import { useEffect, useRef } from "@wordpress/element";
+
+type UpdateBlockAttributes = (
+	clientId: string,
+	attributes: Record<string, unknown>,
+) => void;
+
+type UsePreventEditorFormSubmitParams = {
+	parentClientId: string;
+	currentStep: number;
+	updateBlockAttributes: UpdateBlockAttributes;
+	forwardKey?: string;
+	backKey?: string;
+};
 
 // プロセスエリアのセット（最初に見つかった要素を取得）
 const process_area = document.querySelector(
@@ -21,12 +33,20 @@ if (element) {
 // プログレスバーの高さ（マージンを含めた高さの計算）
 let progress_height = 0;
 if (process_area) {
-	const style = window.getComputedStyle(process_area);
-	const marginTop = parseFloat(style.marginTop);
-	const marginBottom = parseFloat(style.marginBottom);
+	const observer = new ResizeObserver((entries) => {
+		const el = entries[0].target as HTMLElement;
+		const style = window.getComputedStyle(el);
+		const marginTop = parseFloat(style.marginTop);
+		const marginBottom = parseFloat(style.marginBottom);
+		const height = el.offsetHeight + marginTop + marginBottom;
 
-	// offsetHeight（ボーダー・パディング含む） + 上下マージン
-	progress_height = process_area.offsetHeight + marginTop + marginBottom;
+		if (height > 0) {
+			progress_height = height;
+			observer.disconnect(); // 取得できたら監視終了
+		}
+	});
+
+	observer.observe(process_area);
 }
 
 export const errorMap = {
@@ -115,6 +135,7 @@ export const sendMail_ajax = (
 	is_dataSave: boolean,
 	is_retMail: boolean,
 	save_post_type = "",
+	address_type = "inputVal",
 ) => {
 	//noceの取得
 	const nonce = itmar_option.nonce;
@@ -140,6 +161,7 @@ export const sendMail_ajax = (
 					reply_name: master_name,
 					is_dataSave: is_dataSave,
 					is_retMail: is_retMail,
+					address_type: address_type,
 				},
 			})
 			.done(function (data) {
@@ -163,7 +185,7 @@ export function evaluateCheckboxes($target_form: JQuery) {
 		'input[type="checkbox"][data-is_proceed="true"]',
 	);
 	const $submitButton = $target_form.find(
-		'button[type="submit"][data-key="foword_id"]',
+		'button[type="submit"][data-back="none"]',
 	);
 
 	// --- A. 実際の判定ロジック ---
@@ -195,7 +217,18 @@ export const processAnimation = (
 	change_fs: JQuery,
 	next: boolean,
 ) => {
-	//show the next fieldset
+	// ① change_fs の高さを非表示のまま計測
+	change_fs.css({ visibility: "hidden", display: "block" });
+	const newHeight = change_fs.outerHeight() ?? 0;
+	change_fs.css({ visibility: "", display: "" });
+
+	// ② 親コンテナの高さを現在値で固定してから新しい高さへアニメーション
+	const $parent = current_fs.parent();
+	$parent
+		.css({ height: $parent.outerHeight() ?? 0 })
+		.animate({ height: newHeight }, { duration: 800, easing: "easeInBack" });
+
+	// ③ 以降は既存処理
 	change_fs.show();
 	if (next) {
 		change_fs.css({ position: "absolute" });
@@ -238,6 +271,8 @@ export const processAnimation = (
 			complete: function () {
 				current_fs.hide();
 				change_fs.css({ position: "static" });
+				// ④ アニメーション完了後に高さ固定を解除（レスポンシブ対応）
+				$parent.css({ height: "" });
 			},
 			//this comes from the custom easing plugin
 			easing: "easeInBack",
@@ -250,24 +285,37 @@ export const message_rebuild = (message: string): string => {
 	const matches = message.match(/\[(.*?)\]/g);
 	if (matches) {
 		matches.forEach((match) => {
-			let rep_elm = jQuery(`[name="${match.slice(1, -1)}"]`);
-			let elm_tag = rep_elm.prop("tagName").toLowerCase();
+			const key = match.slice(1, -1);
+			//ブロック要素を検出し、その内容を取得
+			let $rep_elm = jQuery(`[name="${key}"], [data-unique_id="${key}"]`);
+			if ($rep_elm.length > 0) {
+				let elm_tag = $rep_elm.prop("tagName").toLowerCase();
 
-			let rep_word: string | number | string[] = "";
-			if (elm_tag === "input" || elm_tag === "textarea") {
-				//input要素かtextarea要素の場合
-				rep_word = rep_elm.val() || "";
-			} else if (elm_tag === "select") {
-				//select要素の場合
-				let selectedTexts: string[] = [];
-				rep_elm.find("option:selected").each(function () {
-					// 選択されたoptionのテキストを配列に追加
-					selectedTexts.push($(this).text());
-				});
-				rep_word = selectedTexts.join(",");
+				let rep_word: string | number | string[] = "";
+				if (elm_tag === "input" || elm_tag === "textarea") {
+					//input要素かtextarea要素の場合
+					rep_word = $rep_elm.val() || "";
+				} else if (elm_tag === "select") {
+					//select要素の場合
+					let selectedTexts: string[] = [];
+					$rep_elm.find("option:selected").each(function () {
+						// 選択されたoptionのテキストを配列に追加
+						selectedTexts.push($(this).text());
+					});
+					rep_word = selectedTexts.join(",");
+				}
+				//デザインタイトルの時
+				const $titleElm = $rep_elm.filter(".wp-block-itmar-design-title");
+				if ($titleElm.length > 0) {
+					const titleText = $titleElm
+						.find("h1 div, h2 div, h3 div, h4 div, h5 div, h6 div")
+						.text();
+
+					rep_word = titleText || "";
+				}
+
+				message = message.replace(match, String(rep_word));
 			}
-
-			message = message.replace(match, String(rep_word));
 		});
 	}
 	return message;
@@ -346,3 +394,78 @@ export function require_check($: JQueryStatic, form: JQuery) {
 		});
 	return err_flg;
 }
+
+//onSubmitを早期に処理するフック
+export const usePreventEditorFormSubmit = ({
+	parentClientId,
+	currentStep,
+	updateBlockAttributes,
+}: UsePreventEditorFormSubmitParams) => {
+	const formRef = useRef<HTMLFormElement | null>(null);
+
+	useEffect(() => {
+		const form = formRef.current;
+
+		if (!form) {
+			return;
+		}
+
+		const handleNativeSubmit = (event: SubmitEvent) => {
+			event.preventDefault();
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+
+			const submitter = event.submitter as HTMLElement | null;
+			const clickId = submitter?.dataset.key;
+			const pageDirection = submitter?.dataset.back;
+
+			//押されたボタンがバックボタンの時
+			if (pageDirection === "back") {
+				if (!currentStep) return; //currentStep未設定なら抜ける
+				updateBlockAttributes(parentClientId, {
+					current_step: currentStep - 1,
+				});
+
+				return;
+			}
+
+			//押されたボタンがフォワードボタンの時
+			if (pageDirection === "forward") {
+				updateBlockAttributes(parentClientId, {
+					current_step: currentStep + 1,
+				});
+
+				return;
+			}
+			//通常ボタンの時はclickIdを見る
+			if (!clickId) {
+				//submitボタンにkeyがないとき
+				updateBlockAttributes(parentClientId, { current_step: 0 });
+			} else {
+				updateBlockAttributes(parentClientId, {
+					current_step: currentStep + 1,
+				});
+			}
+		};
+
+		form.addEventListener("submit", handleNativeSubmit, true);
+
+		return () => {
+			form.removeEventListener("submit", handleNativeSubmit, true);
+		};
+	}, [parentClientId, currentStep, updateBlockAttributes]);
+
+	return formRef;
+};
+
+//Design Titleの中味にデータ流し込むヘルパ
+export const enterTitle = (
+	$dateElm: JQuery<HTMLElement>,
+	formatedValue: string,
+) => {
+	const $targetDiv = $dateElm.find("h1, h2, h3, h4, h5, h6").find("div");
+	if ($targetDiv.length) {
+		// テキストを流し込む
+		$targetDiv.text(formatedValue);
+	}
+};
