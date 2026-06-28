@@ -6,7 +6,6 @@ import {
 	useIsIframeMobile,
 	ShadowStyle,
 	ShadowElm,
-	useStyleIframe,
 } from "itmar-block-packages";
 import {
 	useBlockProps,
@@ -26,7 +25,9 @@ import {
 
 import "./editor.scss";
 
-import { useState, useRef, useEffect } from "@wordpress/element";
+import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
+import { useMergeRefs } from "@wordpress/compose";
+import { StyleSheetManager } from "styled-components";
 import { useSelect, dispatch } from "@wordpress/data";
 import { store as blockEditorStore } from "@wordpress/block-editor";
 import {
@@ -90,9 +91,16 @@ export default function Edit({
 	const isMobile = useIsIframeMobile();
 
 	//ブロックの参照
-	const blockRef = useRef(null);
+	const blockRef = useRef<HTMLDivElement | null>(null);
+	const [styleSheetTarget, setStyleSheetTarget] =
+		useState<HTMLHeadElement | null>(null);
+	const ownerDocumentRef = useCallback((node: HTMLDivElement | null) => {
+		setStyleSheetTarget(node?.ownerDocument.head ?? null);
+	}, []);
+	const mergedBlockRef = useMergeRefs([blockRef, ownerDocumentRef]);
+
 	const blockProps = useBlockProps({
-		ref: blockRef, // ここで参照を blockProps に渡しています
+		ref: mergedBlockRef,
 	});
 
 	//背景色の取得
@@ -110,9 +118,6 @@ export default function Edit({
 			}
 		}
 	}, [baseColor]);
-
-	//iframeにスタイルをわたす。
-	const styledEditorContent = useStyleIframe(StyleComp, attributes);
 	//インナーブロックの制御
 	const TEMPLATE: TemplateArray = [
 		//同一ブロックを２つ以上入れないこと（名称の文字列が重ならないこと）
@@ -780,10 +785,11 @@ export default function Edit({
 			</InspectorControls>
 
 			<div {...blockProps}>
-				{styledEditorContent}
-				<StyleComp attributes={attributes}>
-					<div {...innerBlocksProps}></div>
-				</StyleComp>
+				<StyleSheetManager target={styleSheetTarget ?? undefined}>
+					<StyleComp attributes={attributes}>
+						<div {...innerBlocksProps}></div>
+					</StyleComp>
+				</StyleSheetManager>
 			</div>
 		</>
 	);

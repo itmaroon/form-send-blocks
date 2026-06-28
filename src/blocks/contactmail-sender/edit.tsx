@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import { StyleComp } from "./StyleContactMail";
-//import { useStyleIframe } from "../iframeFooks";
+import { StyleSheetManager } from "styled-components";
 import { store as blockEditorStore } from "@wordpress/block-editor";
 
 import {
@@ -8,7 +8,6 @@ import {
 	useIsIframeMobile,
 	ShadowStyle,
 	ShadowElm,
-	useStyleIframe,
 	flattenBlocks,
 } from "itmar-block-packages";
 import {
@@ -35,7 +34,8 @@ import {
 
 import "./editor.scss";
 
-import { useState, useRef, useEffect } from "@wordpress/element";
+import { useState, useRef, useEffect, useCallback } from "@wordpress/element";
+import { useMergeRefs } from "@wordpress/compose";
 import { useSelect, dispatch } from "@wordpress/data";
 import type { Attributes } from "./type";
 
@@ -86,13 +86,7 @@ export default function Edit({
 	const isMobile = useIsIframeMobile();
 
 	//ブロックの参照
-	const blockRef = useRef(null);
-	const blockProps = useBlockProps({
-		ref: blockRef, // ここで参照を blockProps に渡しています
-	});
-
-	//背景色の取得
-	const baseColor = useElementBackgroundColor(blockRef, blockProps.style);
+	const blockRef = useRef<HTMLDivElement | null>(null);
 
 	//データのCSV出力ハンドラ
 	const handleExportCSV = () => {
@@ -114,6 +108,29 @@ export default function Edit({
 		document.body.removeChild(link);
 	};
 
+	//current_stepの初期化（マウント時だけ）
+	useEffect(() => {
+		setAttributes({ current_step: 0 });
+	}, []);
+
+	//iframeにスタイルをわたす。
+	const [styleTarget, setStyleTarget] = useState<HTMLHeadElement | null>(null);
+
+	// iframeかどうかを問わず、ブロックが存在するdocumentのheadを取得
+	const styleTargetRef = useCallback((element: HTMLDivElement | null) => {
+		const head = element?.ownerDocument.head ?? null;
+
+		setStyleTarget((current) => (current === head ? current : head));
+	}, []);
+	const mergedRef = useMergeRefs([blockRef, styleTargetRef]);
+
+	const blockProps = useBlockProps({
+		ref: mergedRef,
+	});
+
+	//背景色の取得
+	const baseColor = useElementBackgroundColor(blockRef, blockProps.style);
+
 	//背景色変更によるシャドー属性の書き換え
 	useEffect(() => {
 		if (baseColor) {
@@ -126,14 +143,6 @@ export default function Edit({
 			}
 		}
 	}, [baseColor]);
-
-	//current_stepの初期化（マウント時だけ）
-	useEffect(() => {
-		setAttributes({ current_step: 0 });
-	}, []);
-
-	//iframeにスタイルをわたす。
-	const styledEditorContent = useStyleIframe(StyleComp, attributes);
 
 	//インナーブロックの制御
 	const TEMPLATE: TemplateArray = [
@@ -521,10 +530,15 @@ export default function Edit({
 			</InspectorControls>
 
 			<div {...blockProps}>
-				{styledEditorContent}
-				<StyleComp attributes={attributes}>
-					<div {...innerBlocksProps}></div>
-				</StyleComp>
+				{styleTarget ? (
+					<StyleSheetManager target={styleTarget}>
+						<StyleComp attributes={attributes}>
+							<div {...innerBlocksProps} />
+						</StyleComp>
+					</StyleSheetManager>
+				) : (
+					<div {...innerBlocksProps} />
+				)}
 			</div>
 		</>
 	);

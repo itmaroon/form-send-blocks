@@ -19,9 +19,11 @@ import {
 
 import "./editor.scss";
 
-import { useEffect, useRef } from "@wordpress/element";
+import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
+import { useMergeRefs } from "@wordpress/compose";
 import { store as blockEditorStore } from "@wordpress/block-editor";
+import { StyleSheetManager } from "styled-components";
 import { StyleComp } from "./StyleInputFigure";
 
 import {
@@ -30,7 +32,6 @@ import {
 	ShadowStyle,
 	ShadowElm,
 	ShadowState,
-	useStyleIframe,
 } from "itmar-block-packages";
 
 import {
@@ -474,10 +475,17 @@ export default function Edit({
 	const isMobile = useIsIframeMobile();
 
 	//ブロックの参照
-	const blockRef = useRef(null);
+	const blockRef = useRef<HTMLDivElement | null>(null);
+	const [styleSheetTarget, setStyleSheetTarget] =
+		useState<HTMLHeadElement | null>(null);
+	const ownerDocumentRef = useCallback((node: HTMLDivElement | null) => {
+		setStyleSheetTarget(node?.ownerDocument.head ?? null);
+	}, []);
+	const mergedBlockRef = useMergeRefs([blockRef, ownerDocumentRef]);
+
 	//ルート要素にスタイルとクラスを付加
 	const blockProps = useBlockProps({
-		ref: blockRef, // ここで参照を blockProps に渡しています
+		ref: mergedBlockRef,
 		style: blockStyle,
 		className: `figure_fieldset ${
 			//context["itmar/state_process"] === "input" ? "appear" : ""
@@ -516,9 +524,6 @@ export default function Edit({
 		}
 		// ✅ 依存配列に現在の属性値も含めることで、不整合を防ぎます
 	}, [thisInputIndex, totalInput]);
-
-	//iframeにスタイルをわたす。
-	const styledEditorContent = useStyleIframe(StyleComp, attributes);
 
 	return (
 		<>
@@ -689,12 +694,13 @@ export default function Edit({
 			</InspectorControls>
 
 			<div {...blockProps}>
-				{styledEditorContent}
-				<StyleComp attributes={attributes}>
-					<form ref={formRef}>
-						<div {...innerBlocksProps}></div>
-					</form>
-				</StyleComp>
+				<StyleSheetManager target={styleSheetTarget ?? undefined}>
+					<StyleComp attributes={attributes}>
+						<form ref={formRef}>
+							<div {...innerBlocksProps}></div>
+						</form>
+					</StyleComp>
+				</StyleSheetManager>
 			</div>
 		</>
 	);
