@@ -1,11 +1,16 @@
 import { __ } from "@wordpress/i18n";
-import { styleComponentApply } from "itmar-block-packages";
-import { StyleComp } from "./StyleInputFigure";
+import { styleDataApply } from "itmar-block-packages";
+import { createInputFigureStyleCss } from "./StyleInputFigure";
 import { Attributes } from "./type";
 
-//styled_conponentの適用
-styleComponentApply<Attributes>(
-	StyleComp,
+//保存済み属性から、React非依存のスコープ付きCSSを適用
+styleDataApply<Attributes>(
+	createInputFigureStyleCss,
 	".wp-block-itmar-input-figure-block",
-	{ selector: ".itmar-wrap", target: "inner" },
+	{
+		selector: ".itmar-wrap",
+		target: "inner",
+		classPrefix: "itmar-input-style-",
+		observe: true,
+	},
 );

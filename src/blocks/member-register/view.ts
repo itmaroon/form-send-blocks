@@ -12,16 +12,22 @@ import {
 } from "../front_common";
 import {
 	sendRegistrationRequest,
-	styleComponentApply,
+	styleDataApply,
 } from "itmar-block-packages";
-import { StyleComp } from "./StyleMemberRegister";
+import { createMemberRegisterStyleCss } from "./StyleMemberRegister";
 import { Attributes } from "./type";
 
-//styled_conponentの適用
-styleComponentApply<Attributes>(StyleComp, ".wp-block-itmar-member-register", {
-	selector: ".itmar-wrap",
-	target: "inner",
-});
+//保存済み属性から、React非依存のスコープ付きCSSを適用
+styleDataApply<Attributes>(
+	createMemberRegisterStyleCss,
+	".wp-block-itmar-member-register",
+	{
+		selector: ".itmar-wrap",
+		target: "inner",
+		classPrefix: "itmar-member-style-",
+		observe: true,
+	},
+);
 
 jQuery(function ($) {
 	//アニメーション関連パラメータ

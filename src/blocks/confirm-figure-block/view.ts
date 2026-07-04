@@ -1,17 +1,22 @@
 import { __ } from "@wordpress/i18n";
 import { evaluateCheckboxes } from "../front_common";
 
-import { StyleComp } from "./StyleConfirmFigure";
+import { createConfirmFigureStyleCss } from "./StyleConfirmFigure";
 import { Attributes } from "./type";
-import { styleComponentApply } from "itmar-block-packages";
+import { styleDataApply } from "itmar-block-packages";
 import { enterTitle } from "../front_common";
 //import $ from "jquery";
 
-//styled_conponentの適用
-styleComponentApply<Attributes>(
-	StyleComp,
+//保存済み属性から、React非依存のスコープ付きCSSを適用
+styleDataApply<Attributes>(
+	createConfirmFigureStyleCss,
 	".wp-block-itmar-confirm-figure-block",
-	{ selector: ".itmar-wrap", target: "inner" },
+	{
+		selector: ".itmar-wrap",
+		target: "inner",
+		classPrefix: "itmar-confirm-style-",
+		observe: true,
+	},
 );
 
 jQuery(function ($) {

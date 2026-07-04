@@ -307,9 +307,7 @@ export const message_rebuild = (message: string): string => {
 				//デザインタイトルの時
 				const $titleElm = $rep_elm.filter(".wp-block-itmar-design-title");
 				if ($titleElm.length > 0) {
-					const titleText = $titleElm
-						.find("h1 div, h2 div, h3 div, h4 div, h5 div, h6 div")
-						.text();
+					const titleText = $titleElm.find("h1, h2, h3, h4, h5, h6").text();
 
 					rep_word = titleText || "";
 				}

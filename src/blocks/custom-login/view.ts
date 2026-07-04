@@ -8,17 +8,23 @@ import {
 } from "../front_common";
 import {
 	redirectCustomerAuthorize,
-	styleComponentApply,
+	styleDataApply,
 } from "itmar-block-packages";
 
-import { StyleComp } from "./StyleCustomLogin";
+import { createCustomLoginStyleCss } from "./StyleCustomLogin";
 import { Attributes } from "./type";
 
-//styled_conponentの適用
-styleComponentApply<Attributes>(StyleComp, ".wp-block-itmar-coustom-login", {
-	selector: ".itmar-wrap",
-	target: "inner",
-});
+//保存済み属性から、React非依存のスコープ付きCSSを適用
+styleDataApply<Attributes>(
+	createCustomLoginStyleCss,
+	".wp-block-itmar-coustom-login",
+	{
+		selector: ".itmar-wrap",
+		target: "inner",
+		classPrefix: "itmar-login-style-",
+		observe: true,
+	},
+);
 
 jQuery(function ($) {
 	//アニメーション関連パラメータ

@@ -9,9 +9,9 @@ import {
 	sendMail_ajax,
 } from "../front_common";
 
-import { styleComponentApply } from "itmar-block-packages";
+import { styleDataApply } from "itmar-block-packages";
 
-import { StyleComp } from "./StyleContactMail";
+import { createContactMailStyleCss } from "./StyleContactMail";
 import { Attributes } from "./type";
 
 interface TableRowData {
@@ -19,11 +19,16 @@ interface TableRowData {
 	value: string | number | string[];
 }
 
-//styled_conponentの適用
-styleComponentApply<Attributes>(
-	StyleComp,
+//保存済み属性から、React非依存のスコープ付きCSSを適用
+styleDataApply<Attributes>(
+	createContactMailStyleCss,
 	".wp-block-itmar-contactmail-sender",
-	{ selector: ".itmar-wrap", target: "inner" },
+	{
+		selector: ".itmar-wrap",
+		target: "inner",
+		classPrefix: "itmar-contact-style-",
+		observe: true,
+	},
 );
 
 jQuery(function ($) {
@@ -323,7 +328,13 @@ jQuery(function ($) {
 
 							// ラベルの取得（inputのidに関連付けられたlabel、または直近のlabel）
 							const labelText =
-								$(`label[for="${$(this).attr("id")}"]`).text() ||
+								$(`label[for="${$(this).attr("id")}"]`)
+									.contents()
+									.filter(function () {
+										return this.nodeType === Node.TEXT_NODE;
+									})
+									.text()
+									.trim() ||
 								$(this).closest("label").text() ||
 								"項目";
 
@@ -399,6 +410,7 @@ jQuery(function ($) {
 		//確認フィギュアからの情報取得
 		const clickKey = confirm_block.attr("data-click-button-id") || "";
 		const displayObj = confirmAttributes.displayMapping?.[clickKey];
+		console.log(displayObj);
 
 		if (rawAttributes && displayObj) {
 			try {
