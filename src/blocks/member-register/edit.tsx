@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { StyleComp } from "./StyleMemberRegister";
+import { createMemberRegisterStyleCss } from "./StyleMemberRegister";
 
 import {
 	useElementBackgroundColor,
@@ -25,9 +25,7 @@ import {
 
 import "./editor.scss";
 
-import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
-import { useMergeRefs } from "@wordpress/compose";
-import { StyleSheetManager } from "styled-components";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { useSelect, dispatch } from "@wordpress/data";
 import { store as blockEditorStore } from "@wordpress/block-editor";
 import {
@@ -92,15 +90,17 @@ export default function Edit({
 
 	//ブロックの参照
 	const blockRef = useRef<HTMLDivElement | null>(null);
-	const [styleSheetTarget, setStyleSheetTarget] =
-		useState<HTMLHeadElement | null>(null);
-	const ownerDocumentRef = useCallback((node: HTMLDivElement | null) => {
-		setStyleSheetTarget(node?.ownerDocument.head ?? null);
-	}, []);
-	const mergedBlockRef = useMergeRefs([blockRef, ownerDocumentRef]);
+	const editorStyleClass = `itmar-member-editor-${clientId.replace(
+		/[^a-zA-Z0-9_-]/g,
+		"",
+	)}`;
+	const editorStyleCss = createMemberRegisterStyleCss(
+		attributes,
+		`.${editorStyleClass}`,
+	);
 
 	const blockProps = useBlockProps({
-		ref: mergedBlockRef,
+		ref: blockRef,
 	});
 
 	//背景色の取得
@@ -785,11 +785,10 @@ export default function Edit({
 			</InspectorControls>
 
 			<div {...blockProps}>
-				<StyleSheetManager target={styleSheetTarget ?? undefined}>
-					<StyleComp attributes={attributes}>
+				<style>{editorStyleCss}</style>
+				<div className={`itmar-wrap ${editorStyleClass}`}>
 						<div {...innerBlocksProps}></div>
-					</StyleComp>
-				</StyleSheetManager>
+				</div>
 			</div>
 		</>
 	);

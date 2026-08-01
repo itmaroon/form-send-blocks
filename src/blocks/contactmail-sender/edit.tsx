@@ -1,6 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { StyleComp } from "./StyleContactMail";
-import { StyleSheetManager } from "styled-components";
+import { createContactMailStyleCss } from "./StyleContactMail";
 import { store as blockEditorStore } from "@wordpress/block-editor";
 
 import {
@@ -34,8 +33,7 @@ import {
 
 import "./editor.scss";
 
-import { useState, useRef, useEffect, useCallback } from "@wordpress/element";
-import { useMergeRefs } from "@wordpress/compose";
+import { useState, useRef, useEffect } from "@wordpress/element";
 import { useSelect, dispatch } from "@wordpress/data";
 import type { Attributes } from "./type";
 
@@ -113,19 +111,17 @@ export default function Edit({
 		setAttributes({ current_step: 0 });
 	}, []);
 
-	//iframeにスタイルをわたす。
-	const [styleTarget, setStyleTarget] = useState<HTMLHeadElement | null>(null);
-
-	// iframeかどうかを問わず、ブロックが存在するdocumentのheadを取得
-	const styleTargetRef = useCallback((element: HTMLDivElement | null) => {
-		const head = element?.ownerDocument.head ?? null;
-
-		setStyleTarget((current) => (current === head ? current : head));
-	}, []);
-	const mergedRef = useMergeRefs([blockRef, styleTargetRef]);
+	const editorStyleClass = `itmar-contact-editor-${clientId.replace(
+		/[^a-zA-Z0-9_-]/g,
+		"",
+	)}`;
+	const editorStyleCss = createContactMailStyleCss(
+		attributes,
+		`.${editorStyleClass}`,
+	);
 
 	const blockProps = useBlockProps({
-		ref: mergedRef,
+		ref: blockRef,
 	});
 
 	//背景色の取得
@@ -530,15 +526,10 @@ export default function Edit({
 			</InspectorControls>
 
 			<div {...blockProps}>
-				{styleTarget ? (
-					<StyleSheetManager target={styleTarget}>
-						<StyleComp attributes={attributes}>
-							<div {...innerBlocksProps} />
-						</StyleComp>
-					</StyleSheetManager>
-				) : (
+				<style>{editorStyleCss}</style>
+				<div className={`itmar-wrap ${editorStyleClass}`}>
 					<div {...innerBlocksProps} />
-				)}
+				</div>
 			</div>
 		</>
 	);

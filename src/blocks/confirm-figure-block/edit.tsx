@@ -7,11 +7,8 @@ import {
 	useRef,
 	useState,
 	useMemo,
-	useCallback,
 } from "@wordpress/element";
-import { useMergeRefs } from "@wordpress/compose";
-import { StyleComp } from "./StyleConfirmFigure";
-import { StyleSheetManager } from "styled-components";
+import { createConfirmFigureStyleCss } from "./StyleConfirmFigure";
 import { usePreventEditorFormSubmit } from "../front_common";
 import {
 	useElementBackgroundColor,
@@ -360,19 +357,17 @@ export default function Edit({
 
 	//ブロックの参照
 	const blockRef = useRef(null);
-
-	const [styleTarget, setStyleTarget] = useState<HTMLHeadElement | null>(null);
-
-	// iframeかどうかを問わず、ブロックが存在するdocumentのheadを取得
-	const styleTargetRef = useCallback((element: HTMLDivElement | null) => {
-		const head = element?.ownerDocument.head ?? null;
-
-		setStyleTarget((current) => (current === head ? current : head));
-	}, []);
-	const mergedRef = useMergeRefs([blockRef, styleTargetRef]);
+	const editorStyleClass = `itmar-confirm-editor-${clientId.replace(
+		/[^a-zA-Z0-9_-]/g,
+		"",
+	)}`;
+	const editorStyleCss = createConfirmFigureStyleCss(
+		attributes,
+		`.${editorStyleClass}`,
+	);
 	//ルート要素にスタイルとクラスを付加
 	const blockProps = useBlockProps({
-		ref: mergedRef,
+		ref: blockRef,
 		style: blockStyle,
 		className: `figure_fieldset ${
 			//context["itmar/state_process"] === "confirm" ? "appear" : ""
@@ -395,9 +390,6 @@ export default function Edit({
 			}
 		}
 	}, [baseColor]);
-
-	//サイトエディタの場合はiframeにスタイルをわたす。
-	//const styledEditorContent = useStyleIframe(StyleComp, attributes);
 
 	//メール文書編成用のNoticeを返す関数
 	const createMailNotice = (
@@ -886,29 +878,13 @@ export default function Edit({
 				</PanelBody>
 			</InspectorControls>
 
-			{/* <div {...blockProps}>
-				{styledEditorContent}
-				<StyleComp attributes={attributes}>
-					<form ref={formRef}>
-						<div {...innerBlocksProps}></div>
-					</form>
-				</StyleComp>
-			</div> */}
-
 			<div {...blockProps}>
-				{styleTarget ? (
-					<StyleSheetManager target={styleTarget}>
-						<StyleComp attributes={attributes}>
-							<form ref={formRef}>
-								<div {...innerBlocksProps}></div>
-							</form>
-						</StyleComp>
-					</StyleSheetManager>
-				) : (
+				<style>{editorStyleCss}</style>
+				<div className={`itmar-wrap ${editorStyleClass}`}>
 					<form ref={formRef}>
 						<div {...innerBlocksProps}></div>
 					</form>
-				)}
+				</div>
 			</div>
 		</>
 	);

@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { StyleComp } from "./StyleCustomLogin";
+import { createCustomLoginStyleCss } from "./StyleCustomLogin";
 import type { Attributes } from "./type";
 
 import {
@@ -20,9 +20,7 @@ import { BlockEditProps, TemplateArray } from "@wordpress/blocks";
 
 import "./editor.scss";
 
-import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
-import { useMergeRefs } from "@wordpress/compose";
-import { StyleSheetManager } from "styled-components";
+import { useEffect, useRef } from "@wordpress/element";
 
 //スペースのリセットバリュー
 const padding_resetValues = {
@@ -65,15 +63,17 @@ export default function Edit({
 
 	//ブロックの参照
 	const blockRef = useRef<HTMLDivElement | null>(null);
-	const [styleSheetTarget, setStyleSheetTarget] =
-		useState<HTMLHeadElement | null>(null);
-	const ownerDocumentRef = useCallback((node: HTMLDivElement | null) => {
-		setStyleSheetTarget(node?.ownerDocument.head ?? null);
-	}, []);
-	const mergedBlockRef = useMergeRefs([blockRef, ownerDocumentRef]);
+	const editorStyleClass = `itmar-login-editor-${clientId.replace(
+		/[^a-zA-Z0-9_-]/g,
+		"",
+	)}`;
+	const editorStyleCss = createCustomLoginStyleCss(
+		attributes,
+		`.${editorStyleClass}`,
+	);
 
 	const blockProps = useBlockProps({
-		ref: mergedBlockRef,
+		ref: blockRef,
 	});
 
 	//背景色の取得
@@ -242,11 +242,10 @@ export default function Edit({
 			</InspectorControls>
 
 			<div {...blockProps}>
-				<StyleSheetManager target={styleSheetTarget ?? undefined}>
-					<StyleComp attributes={attributes}>
+				<style>{editorStyleCss}</style>
+				<div className={`itmar-wrap ${editorStyleClass}`}>
 						<div {...innerBlocksProps}></div>
-					</StyleComp>
-				</StyleSheetManager>
+				</div>
 			</div>
 		</>
 	);

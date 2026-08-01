@@ -19,12 +19,10 @@ import {
 
 import "./editor.scss";
 
-import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
+import { useEffect, useRef } from "@wordpress/element";
 import { useSelect, useDispatch } from "@wordpress/data";
-import { useMergeRefs } from "@wordpress/compose";
 import { store as blockEditorStore } from "@wordpress/block-editor";
-import { StyleSheetManager } from "styled-components";
-import { StyleComp } from "./StyleInputFigure";
+import { createInputFigureStyleCss } from "./StyleInputFigure";
 
 import {
 	useElementBackgroundColor,
@@ -476,16 +474,18 @@ export default function Edit({
 
 	//ブロックの参照
 	const blockRef = useRef<HTMLDivElement | null>(null);
-	const [styleSheetTarget, setStyleSheetTarget] =
-		useState<HTMLHeadElement | null>(null);
-	const ownerDocumentRef = useCallback((node: HTMLDivElement | null) => {
-		setStyleSheetTarget(node?.ownerDocument.head ?? null);
-	}, []);
-	const mergedBlockRef = useMergeRefs([blockRef, ownerDocumentRef]);
+	const editorStyleClass = `itmar-input-editor-${clientId.replace(
+		/[^a-zA-Z0-9_-]/g,
+		"",
+	)}`;
+	const editorStyleCss = createInputFigureStyleCss(
+		attributes,
+		`.${editorStyleClass}`,
+	);
 
 	//ルート要素にスタイルとクラスを付加
 	const blockProps = useBlockProps({
-		ref: mergedBlockRef,
+		ref: blockRef,
 		style: blockStyle,
 		className: `figure_fieldset ${
 			//context["itmar/state_process"] === "input" ? "appear" : ""
@@ -694,13 +694,12 @@ export default function Edit({
 			</InspectorControls>
 
 			<div {...blockProps}>
-				<StyleSheetManager target={styleSheetTarget ?? undefined}>
-					<StyleComp attributes={attributes}>
+				<style>{editorStyleCss}</style>
+				<div className={`itmar-wrap ${editorStyleClass}`}>
 						<form ref={formRef}>
 							<div {...innerBlocksProps}></div>
 						</form>
-					</StyleComp>
-				</StyleSheetManager>
+				</div>
 			</div>
 		</>
 	);
