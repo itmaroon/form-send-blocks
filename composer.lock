@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "itmar/block-class-package",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itmaroon/block-class-package.git",
-                "reference": "8ab78afa1307bbc6a7d1c6b308271d4658096de2"
+                "reference": "911cf1a100b0696a1cef76ae096ee3776a7a15c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itmaroon/block-class-package/zipball/8ab78afa1307bbc6a7d1c6b308271d4658096de2",
-                "reference": "8ab78afa1307bbc6a7d1c6b308271d4658096de2",
+                "url": "https://api.github.com/repos/itmaroon/block-class-package/zipball/911cf1a100b0696a1cef76ae096ee3776a7a15c8",
+                "reference": "911cf1a100b0696a1cef76ae096ee3776a7a15c8",
                 "shasum": ""
             },
             "require": {
@@ -42,22 +42,22 @@
             "description": "Gutenberg block class package",
             "support": {
                 "issues": "https://github.com/itmaroon/block-class-package/issues",
-                "source": "https://github.com/itmaroon/block-class-package/tree/v1.4.1"
+                "source": "https://github.com/itmaroon/block-class-package/tree/v1.4.2"
             },
-            "time": "2025-04-27T06:05:15+00:00"
+            "time": "2025-12-05T00:59:09+00:00"
         },
         {
             "name": "itmar/loader-package",
-            "version": "v1.1.0",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itmaroon/loader-package.git",
-                "reference": "9b4ff033396e2c96b84b191b6f3e897f57400c2e"
+                "reference": "0327c311f2a057912e62ffb36f9bc16e5af59b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itmaroon/loader-package/zipball/9b4ff033396e2c96b84b191b6f3e897f57400c2e",
-                "reference": "9b4ff033396e2c96b84b191b6f3e897f57400c2e",
+                "url": "https://api.github.com/repos/itmaroon/loader-package/zipball/0327c311f2a057912e62ffb36f9bc16e5af59b0a",
+                "reference": "0327c311f2a057912e62ffb36f9bc16e5af59b0a",
                 "shasum": ""
             },
             "type": "library",
@@ -79,22 +79,22 @@
             "description": "This package provides the ability to load classes via Composer's PSR-4 configuration without relying on the autoloader. This is useful when you want to avoid class conflicts between loaders in multiple plugins.",
             "support": {
                 "issues": "https://github.com/itmaroon/loader-package/issues",
-                "source": "https://github.com/itmaroon/loader-package/tree/v1.1.0"
+                "source": "https://github.com/itmaroon/loader-package/tree/v1.2.2"
             },
-            "time": "2025-05-03T12:36:23+00:00"
+            "time": "2025-12-01T05:31:51+00:00"
         },
         {
             "name": "itmar/wpsetting-class-package",
-            "version": "v1.3.0",
+            "version": "v1.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itmaroon/wpsetting-class-package.git",
-                "reference": "29e51d60e8d3f5ba46860fc7264ed8ee54832745"
+                "reference": "180462cacab84b317ef361539c5e6bbe89451928"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itmaroon/wpsetting-class-package/zipball/29e51d60e8d3f5ba46860fc7264ed8ee54832745",
-                "reference": "29e51d60e8d3f5ba46860fc7264ed8ee54832745",
+                "url": "https://api.github.com/repos/itmaroon/wpsetting-class-package/zipball/180462cacab84b317ef361539c5e6bbe89451928",
+                "reference": "180462cacab84b317ef361539c5e6bbe89451928",
                 "shasum": ""
             },
             "require": {
@@ -119,18 +119,18 @@
             "description": "This package contains classes that provide a GUI for configuring various settings in WordPress.",
             "support": {
                 "issues": "https://github.com/itmaroon/wpsetting-class-package/issues",
-                "source": "https://github.com/itmaroon/wpsetting-class-package/tree/v1.3.0"
+                "source": "https://github.com/itmaroon/wpsetting-class-package/tree/v1.3.4"
             },
-            "time": "2025-06-11T01:57:41+00:00"
+            "time": "2025-12-01T03:18:12+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
