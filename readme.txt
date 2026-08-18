@@ -2,8 +2,8 @@
 Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.4
-Tested up to:      6.9
-Stable tag:        2.0.0
+Tested up to:      7.0
+Stable tag:        2.1.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,10 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 2.1.1 =
+- Converted JavaScript to TypeScript.
+- I moved away from styled-components and switched to `useElementStyleObject` from my own custom npm component.
+
 = 1.3.1 =
 - Changed to prioritize redirect destination after processing custom login form if there is a redirect_to option in the redirect destination
   
