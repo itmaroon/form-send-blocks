@@ -2,8 +2,8 @@
 Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.4
-Tested up to:      7.0
-Stable tag:        2.1.1
+Tested up to:      7.1
+Stable tag:        2.1.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,9 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 2.1.2 =
+- Composer component fixed.
+
 = 2.1.1 =
 - Converted JavaScript to TypeScript.
 - I moved away from styled-components and switched to `useElementStyleObject` from my own custom npm component.
