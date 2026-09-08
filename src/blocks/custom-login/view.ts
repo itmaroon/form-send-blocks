@@ -7,12 +7,60 @@ import {
 	evaluateCheckboxes,
 } from "../front_common";
 import {
-	redirectCustomerAuthorize,
 	styleDataApply,
 } from "itmar-block-packages";
 
 import { createCustomLoginStyleCss } from "./StyleCustomLogin";
 import { Attributes } from "./type";
+
+const createSiteUrl = (path: string, homeUrl: string): string => {
+	const baseUrl = `${homeUrl.replace(/\/+$/, "")}/`;
+	return new URL(path.replace(/^\/+/, ""), baseUrl).href;
+};
+
+interface ShopifyOAuthStartResponse {
+	success?: boolean;
+	authorization_url?: string;
+	message?: string;
+}
+
+async function startShopifyCustomerAuthorization(
+	shopId: string,
+	clientId: string,
+	userMail: string,
+	callbackUri: string,
+	returnUrl: string,
+): Promise<void> {
+	const endpoint = createSiteUrl(
+		"wp-json/itmar-ec-relate/v1/customer/oauth-start",
+		itmar_option.home_url,
+	);
+	const response = await fetch(endpoint, {
+		method: "POST",
+		credentials: "same-origin",
+		headers: {
+			"Content-Type": "application/json",
+			"X-WP-Nonce": itmar_option.nonce,
+		},
+		body: JSON.stringify({
+			shop_id: shopId,
+			client_id: clientId,
+			user_mail: userMail,
+			callback_uri: callbackUri,
+			return_url: returnUrl,
+		}),
+	});
+	const contentType = response.headers.get("content-type") || "";
+	const result = contentType.includes("application/json")
+		? ((await response.json()) as ShopifyOAuthStartResponse)
+		: null;
+	if (!response.ok || !result?.success || !result.authorization_url) {
+		throw new Error(
+			result?.message || `Shopify authentication request failed (HTTP ${response.status}).`,
+		);
+	}
+	window.location.href = result.authorization_url;
+}
 
 //保存済み属性から、React非依存のスコープ付きCSSを適用
 styleDataApply<Attributes>(
@@ -39,7 +87,15 @@ jQuery(function ($) {
 	}
 	// 2. オブジェクトに変換
 	const attributes = JSON.parse(rawAttributes);
-	const { isRemember } = attributes;
+	const { isRemember, redirectPath, selectedSlug } = attributes;
+	const configuredRedirectUrl = createSiteUrl(
+		redirectPath || selectedSlug || "",
+		itmar_option.home_url,
+	);
+	const shopifyAuthCallbackUrl = createSiteUrl(
+		"shopify-auth-callback/",
+		itmar_option.home_url,
+	);
 
 	//ページのセット
 	let fieldset_objs = login_block.find(".figure_fieldset");
@@ -98,12 +154,13 @@ jQuery(function ($) {
 			},
 			dataType: "json",
 		})
-			.done(function (response) {
+			.done(async function (response) {
 				if (response.success) {
 					const urlParams = new URLSearchParams(window.location.search);
 
-					// リダイレクト先URL（指定がなければルートに戻す）
-					const redirectUrl = urlParams.get("redirect_to") || "/";
+					// URLパラメータを優先し、指定がなければブロック設定から生成する
+					const redirectUrl =
+						urlParams.get("redirect_to") || configuredRedirectUrl;
 
 					// Shopify 関連のパラメータ
 					const shopId = urlParams.get("shop_id") || "";
@@ -113,22 +170,59 @@ jQuery(function ($) {
 						form_data[item.name] = item.value;
 					});
 					const userMail = form_data.userID; //入力されたメールアドレス
-					const authCalllbackUrl = redirectUrl.replace(
-						"[home_url]",
-						itmar_option.home_url,
-					);
-
 					console.log(shopId, headlessId);
 
 					// Shopify の認証が必要であればここで実行
 					if (shopId && headlessId) {
-						redirectCustomerAuthorize(
-							shopId,
-							headlessId,
-							userMail,
-							authCalllbackUrl,
-							redirectUrl,
+						let $authStatus = $form.find(".itmar-shopify-auth-status");
+						if (!$authStatus.length) {
+							$authStatus = $("<p>", {
+								class: "itmar-shopify-auth-status",
+								role: "status",
+								"aria-live": "polite",
+								tabindex: "-1",
+							});
+							$form.prepend($authStatus);
+						}
+						$authStatus.text(
+							__(
+								"ログインに成功しました。初回はShopifyの本人確認画面へ移動します。",
+								"form-send-blocks",
+							),
 						);
+						try {
+							// ログインCookieが反映された別リクエストで、
+							// 現在のセッションに対応するREST nonceを取得する。
+							const nonceResponse = await $.ajax({
+								url: ajaxUrl,
+								type: "POST",
+								data: { action: "itmar_refresh_rest_nonce" },
+								dataType: "json",
+							});
+							if (!nonceResponse?.success || !nonceResponse.data?.rest_nonce) {
+								throw new Error("REST nonce could not be refreshed after login.");
+							}
+							itmar_option.nonce = nonceResponse.data.rest_nonce;
+
+							await startShopifyCustomerAuthorization(
+								shopId,
+								headlessId,
+								userMail,
+								shopifyAuthCallbackUrl,
+								redirectUrl,
+							);
+						} catch (error) {
+							console.error("Shopify authentication could not be started.", error);
+							$authStatus
+								.attr("role", "alert")
+								.text(
+									__(
+										"Shopifyの本人確認を開始できませんでした。時間をおいて再度お試しください。",
+										"form-send-blocks",
+									),
+								)
+								.trigger("focus");
+						}
 					} else {
 						// [home_url]をhomeUrlに置き換え
 						let updatedHref = redirectUrl

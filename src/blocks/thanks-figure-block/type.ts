@@ -23,6 +23,4 @@ export interface Attributes {
 	radius_form: any;
 	border_form: any;
 	stage_info: string;
-	selectedSlug: string;
-	selectedPageUrl: string;
 }

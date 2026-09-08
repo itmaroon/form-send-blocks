@@ -3,7 +3,7 @@ Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.4
 Tested up to:      7.1
-Stable tag:        2.1.2
+Stable tag:        2.1.8
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,27 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 2.1.8 =
+- Fixed Shopify authentication to use a dedicated callback page while preserving the original post-login destination separately.
+- Fixed the OAuth start request URL for WordPress installations running in a subdirectory.
+
+= 2.1.7 =
+- Updated Shopify authentication startup to use the server-side OAuth flow and refreshed the REST nonce after WordPress login.
+- Updated the bundled `itmar-block-packages` dependency to version 3.2.2.
+
+= 2.1.6 =
+- Set the default Thanks Figure button to a portable home-page destination provided by Design Button.
+
+= 2.1.5 =
+- Changed member registration confirmation links to the WordPress admin-post endpoint so they work in both root and subdirectory installations.
+- Kept compatibility with previously issued register-confirm links.
+
+= 2.1.4 =
+- Fixed an issue where redirect url for the Custom Login were not moving with the site URL.
+
+= 2.1.3 =
+- Fixed an issue where the URL links for the Thanks Figure Block were not moving with the site URL.
+
 = 2.1.2 =
 - Composer component fixed.
 

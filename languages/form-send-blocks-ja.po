@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Form Send Blocks 0.1.0\n"
+"Project-Id-Version: Form Send Blocks 2.1.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
 "POT-Creation-Date: 2026-04-19T02:09:06+02:00\n"
 "PO-Revision-Date: 2026-04-19 09:38+0900\n"

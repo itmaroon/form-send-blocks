@@ -8,7 +8,6 @@ export default function save({ attributes }: { attributes: Attributes }) {
 		infomail_faile,
 		retmail_success,
 		retmail_faile,
-		selectedPageUrl,
 		bgColor,
 	} = attributes;
 
@@ -29,7 +28,6 @@ export default function save({ attributes }: { attributes: Attributes }) {
 					data-info_mail_error={infomail_faile}
 					data-ret_mail_success={retmail_success}
 					data-ret_mail_error={retmail_faile}
-					data-selected_page={selectedPageUrl}
 				>
 					<InnerBlocks.Content />
 				</form>

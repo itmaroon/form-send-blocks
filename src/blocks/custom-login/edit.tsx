@@ -44,6 +44,32 @@ const units = [
 	{ value: "rem", label: "rem" },
 ];
 
+const toSiteRelativePath = (link: string, homeUrl: string): string => {
+	const normalizedHomeUrl = `${homeUrl.replace(/\/+$/, "")}/`;
+
+	try {
+		const targetUrl = new URL(link, normalizedHomeUrl);
+		const siteUrl = new URL(normalizedHomeUrl);
+		if (targetUrl.origin !== siteUrl.origin) {
+			return "";
+		}
+
+		const sitePath = siteUrl.pathname.replace(/\/+$/, "");
+		let relativePath = targetUrl.pathname;
+		if (
+			sitePath &&
+			sitePath !== "/" &&
+			(relativePath === sitePath || relativePath.startsWith(`${sitePath}/`))
+		) {
+			relativePath = relativePath.slice(sitePath.length);
+		}
+
+		return `${relativePath.replace(/^\/+/, "")}${targetUrl.search}${targetUrl.hash}`;
+	} catch {
+		return "";
+	}
+};
+
 export default function Edit({
 	attributes,
 	setAttributes,
@@ -138,12 +164,15 @@ export default function Edit({
 						<PageSelectControl
 							label={__("Select Redirect Page", "form-send-blocks")}
 							selectedSlug={selectedSlug}
-							homeUrl="[home_url]"
+							homeUrl={itmar_option.home_url}
 							onChange={(postInfo) => {
 								if (postInfo) {
 									setAttributes({
 										selectedSlug: postInfo.slug,
-										redirectUrl: postInfo.link,
+										redirectPath: toSiteRelativePath(
+											postInfo.link,
+											itmar_option.home_url,
+										),
 									});
 								}
 							}}

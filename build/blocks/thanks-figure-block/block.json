@@ -101,10 +101,6 @@
     "is_shadow": {
       "type": "boolean",
       "default": false
-    },
-    "selectedSlug": {
-      "type": "string",
-      "default": ""
     }
   },
   "usesContext": [

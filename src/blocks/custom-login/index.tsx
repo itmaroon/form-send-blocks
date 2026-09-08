@@ -20,14 +20,6 @@ registerBlockType(blockConfig, {
 		"This block provides the functionality to display a customized login screen.",
 		"form-send-blocks",
 	),
-	attributes: {
-		...metadata.attributes,
-		redirectUrl: {
-			type: "string",
-			default: itmar_option.home_url,
-		},
-	} as any,
-
 	edit: Edit,
 	save,
 });

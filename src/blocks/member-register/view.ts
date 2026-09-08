@@ -139,8 +139,8 @@ jQuery(function ($) {
 			};
 			isRest = "auto";
 		} else if (register_type === "shopify") {
-			targetUrl = "/wp-json/itmar-ec-relate/v1/customer/create";
-			pendingRecUrl = "/wp-json/itmar-ec-relate/v1/customer/pending-upsert";
+			targetUrl = "/itmar-ec-relate/v1/customer/create";
+			pendingRecUrl = "/itmar-ec-relate/v1/customer/pending-upsert";
 			const formDataObj: Record<string, string> = {};
 			$form.serializeArray().forEach((item) => {
 				formDataObj[item.name] = item.value;

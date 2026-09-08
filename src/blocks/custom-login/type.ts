@@ -12,6 +12,6 @@ export interface Attributes {
 	shadow_element: any;
 	shadow_result: any;
 	selectedSlug: string;
-	redirectUrl: string;
+	redirectPath: string;
 	isRemember: boolean;
 }

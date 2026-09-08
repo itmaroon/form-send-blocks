@@ -29,7 +29,6 @@ import {
 	useIsIframeMobile,
 	ShadowStyle,
 	ShadowElm,
-	PageSelectControl,
 	flattenBlocks,
 } from "itmar-block-packages";
 
@@ -84,7 +83,6 @@ export default function Edit({
 		stage_info,
 		shadow_element,
 		is_shadow,
-		selectedSlug,
 	} = attributes;
 
 	//ブロックのスタイル設定
@@ -186,6 +184,10 @@ export default function Edit({
 			"itmar/design-button",
 			{
 				buttonType: "submit",
+				labelContent: __("Return to home", "form-send-blocks"),
+				linkKind: "fixed",
+				selectedSlug: "__home__",
+				selectedPageUrl: "[home_url]",
 				align: "center",
 			},
 		],

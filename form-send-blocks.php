@@ -6,7 +6,7 @@
  * Description:       This is a block that summarizes the display screen when submitting a form.
  * Requires at least: 6.4
  * Requires PHP:      8.2.10
- * Version:           2.1.2
+ * Version:           2.1.8
  * Author:            Web Creator ITmaroon
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -259,10 +259,11 @@ function itmar_register_send_token()
 
 	// メール送信
 	$confirm_url = add_query_arg([
+		'action'      => 'itmar_register_confirm',
 		'token'       => $token,
 		'redirect_to' => $redirect_to, // リダイレクト先
-		'is_logon' => $is_logon
-	], site_url('/register-confirm'));
+		'is_logon'    => $is_logon
+	], admin_url('admin-post.php'));
 
 	$subject = $subject_prov;
 	$lines = [
@@ -325,45 +326,24 @@ function itmar_create_pending_users_table_if_not_exists()
 		dbDelta($sql);
 	}
 }
-//本登録クエリ用クエリーの生成とフロントエンドへのリダイレクト情報送信
-//1.クエリ変数を登録
-function itmar_register_query_vars($vars)
-{
-	$vars[] = 'token';
-	$vars[] = 'redirect_to';
-	$vars[] = 'is_logon';
-	return $vars;
-}
-add_filter('query_vars', 'itmar_register_query_vars');
-//2. リライトルールを追加
-add_action('init', function () {
-	add_rewrite_rule(
-		'^register-confirm/token/([^/]+)/redirect/(.+)/?$',
-		'index.php?register_token=$matches[1]&redirect_to=$matches[2]',
-		'top'
-	);
-});
-//3. リライトルールをフラッシュ
-function itmar_flush_rewrite_rules()
-{
-	flush_rewrite_rules();
-}
-register_activation_hook(__FILE__, 'itmar_flush_rewrite_rules');
-
-//4.処理を実行
+//メール内の認証URLから本登録を実行し、指定されたサイト内URLへ戻す
 function itmar_handle_register_confirm()
 {
-	$token       = get_query_var('token');
-	$redirect_to = get_query_var('redirect_to');
-	$is_logon = get_query_var('is_logon');
-
-	if (!$token) return;
-
-	$token = sanitize_text_field($token);
-	$redirect_url = $redirect_to ? rawurldecode($redirect_to) : home_url();
+	$token = isset($_GET['token'])
+		? sanitize_text_field(wp_unslash($_GET['token']))
+		: '';
+	$redirect_to = isset($_GET['redirect_to'])
+		? esc_url_raw(wp_unslash($_GET['redirect_to']))
+		: home_url('/');
+	$is_logon = isset($_GET['is_logon'])
+		? filter_var(wp_unslash($_GET['is_logon']), FILTER_VALIDATE_BOOLEAN)
+		: false;
+	$redirect_url = wp_validate_redirect($redirect_to, home_url('/'));
 
 	// 本登録処理
-	$result = itmar_process_token_registration($token, $is_logon);
+	$result = $token
+		? itmar_process_token_registration($token, $is_logon)
+		: ['success' => false, 'error_code' => 'invalid_token'];
 
 	if ($result['success']) {
 		$user_name = isset($result['user_name']) ? $result['user_name'] : 'unknown';
@@ -387,13 +367,26 @@ function itmar_handle_register_confirm()
 	}
 	exit;
 }
-add_action('template_redirect', function () {
+
+add_action('admin_post_itmar_register_confirm', 'itmar_handle_register_confirm');
+add_action('admin_post_nopriv_itmar_register_confirm', 'itmar_handle_register_confirm');
+
+//旧バージョンから送信済みの /register-confirm リンクも有効期限内は処理する
+function itmar_handle_legacy_register_confirm()
+{
 	$request_uri = isset($_SERVER['REQUEST_URI']) ? esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])) : '';
 	$path = wp_parse_url($request_uri, PHP_URL_PATH);
-	if (strpos($path, '/register-confirm') === 0) { //register-confirm以外のURLでは発火させない
+	$confirm_path = wp_parse_url(home_url('/register-confirm/'), PHP_URL_PATH);
+
+	if (
+		is_string($path)
+		&& is_string($confirm_path)
+		&& untrailingslashit($path) === untrailingslashit($confirm_path)
+	) {
 		itmar_handle_register_confirm();
 	}
-});
+}
+add_action('template_redirect', 'itmar_handle_legacy_register_confirm');
 
 
 //トークン検証とユーザー作成処理
@@ -516,7 +509,7 @@ function itmar_custom_login()
 		'remember'      => $remember,
 	];
 
-	$user = wp_signon($creds, false);
+	$user = wp_signon($creds, is_ssl());
 
 	if (is_wp_error($user)) {
 		//仮登録ユーザーの取得
@@ -536,6 +529,8 @@ function itmar_custom_login()
 		}
 	}
 
+	wp_set_current_user($user->ID);
+
 	// ✅ 正常ログイン時 → JSONで成功 + リダイレクト先を渡す
 	wp_send_json_success([
 		'result' => 'login_ok',
@@ -546,6 +541,24 @@ function itmar_custom_login()
 
 add_action('wp_ajax_itmar_custom_login', 'itmar_custom_login');
 add_action('wp_ajax_nopriv_itmar_custom_login', 'itmar_custom_login');
+
+/**
+ * AJAXログインのSet-Cookieがブラウザーへ反映された後にREST nonceを発行する。
+ * ログイン処理と同じリクエスト内では、新しいセッショントークンを
+ * wp_create_nonce() が参照できないため、必ず別リクエストで取得する。
+ */
+function itmar_refresh_rest_nonce()
+{
+	if (!is_user_logged_in()) {
+		wp_send_json_error(['message' => 'ログイン状態を確認できません'], 401);
+	}
+
+	wp_send_json_success([
+		'rest_nonce' => wp_create_nonce('wp_rest'),
+	]);
+}
+
+add_action('wp_ajax_itmar_refresh_rest_nonce', 'itmar_refresh_rest_nonce');
 
 // 問い合わせデータのCSV出力
 add_action('wp_ajax_export_inquiry_csv', 'export_inquiry_csv');

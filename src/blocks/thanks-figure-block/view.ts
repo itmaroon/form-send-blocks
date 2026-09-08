@@ -18,29 +18,11 @@ styleDataApply<Attributes>(
 
 jQuery(function ($) {
 	const parent_block = $(".wp-block-itmar-thanks-figure-block");
-	const rawAttributes = parent_block.attr("data-attributes");
 
-	//ホームに戻るボタンの処理
+	//ネイティブのフォーム送信による再読み込みだけを防ぐ。
+	//遷移先は内部のdesign-buttonが決定する。
 	parent_block.find("form").on("submit", function (e) {
 		e.preventDefault();
-
-		if (rawAttributes) {
-			try {
-				// オブジェクトに変換
-				const attributes = JSON.parse(rawAttributes);
-				const { selectedPageUrl } = attributes;
-				// href属性の[home_url]をhomeUrlに置き換え
-				let updatedHref = selectedPageUrl.replace(
-					"[home_url]",
-					itmar_option.home_url,
-				);
-
-				//リダイレクト
-				window.location.href = updatedHref;
-			} catch (e) {
-				console.error("Attributes parsing failed:", e);
-			}
-		}
 	});
 
 	//表示用の文言をセット

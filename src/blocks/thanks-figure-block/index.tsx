@@ -25,10 +25,6 @@ registerBlockType(blockConfig, {
 			type: "string",
 			default: __("Processing completed", "form-send-blocks"),
 		},
-		selectedPageUrl: {
-			type: "string",
-			default: itmar_option.home_url,
-		},
 	} as any,
 	icon: <Thanks />,
 	edit: Edit,

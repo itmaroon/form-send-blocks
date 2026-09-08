@@ -86,6 +86,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"redirectPath": {
+			"type": "string",
+			"default": ""
+		},
 
 		"isRemember":{
 			"type":"boolean",
