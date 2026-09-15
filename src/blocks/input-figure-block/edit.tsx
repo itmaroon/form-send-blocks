@@ -38,7 +38,7 @@ import {
 	TemplateArray,
 } from "@wordpress/blocks";
 
-import { usePreventEditorFormSubmit } from "../front_common";
+import { usePreventEditorFormSubmit } from "../useEditorFormSubmit";
 
 import type { Attributes } from "./type";
 

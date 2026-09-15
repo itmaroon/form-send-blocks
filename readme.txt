@@ -3,7 +3,7 @@ Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.4
 Tested up to:      7.1
-Stable tag:        2.1.8
+Stable tag:        2.1.9
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,11 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 2.1.9 =
+- Colors now read the `--itmar-*` slots provided by Block Collections, with theme-independent fallbacks, so labels, placeholders and error text stay visible on themes that do not define itmaroon's palette.
+- View scripts import from `itmar-block-packages/front`, so the block editor bundle is no longer served to visitors.
+- Moved the editor-only submit hook out of the shared front-end module, which was pulling `wp-element` into every form block's view script.
+
 = 2.1.8 =
 - Fixed Shopify authentication to use a dedicated callback page while preserving the original post-login destination separately.
 - Fixed the OAuth start request URL for WordPress installations running in a subdirectory.

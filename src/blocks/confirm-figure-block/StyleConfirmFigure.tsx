@@ -5,7 +5,7 @@ import {
 	convertToScss,
 	borderProperty,
 	cssValueToString,
-} from "itmar-block-packages";
+} from "itmar-block-packages/front";
 
 /**
  * エディタ・フロントエンド共通のスコープ付きCSSを生成する。

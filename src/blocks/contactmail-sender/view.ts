@@ -9,7 +9,7 @@ import {
 	sendMail_ajax,
 } from "../front_common";
 
-import { styleDataApply } from "itmar-block-packages";
+import { styleDataApply } from "itmar-block-packages/front";
 
 import { createContactMailStyleCss } from "./StyleContactMail";
 import { Attributes } from "./type";

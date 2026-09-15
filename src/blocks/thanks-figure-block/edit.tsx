@@ -32,7 +32,7 @@ import {
 	flattenBlocks,
 } from "itmar-block-packages";
 
-import { usePreventEditorFormSubmit } from "../front_common";
+import { usePreventEditorFormSubmit } from "../useEditorFormSubmit";
 
 import { store as blockEditorStore } from "@wordpress/block-editor";
 import {

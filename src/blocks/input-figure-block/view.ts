@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import { styleDataApply } from "itmar-block-packages";
+import { styleDataApply } from "itmar-block-packages/front";
 import { createInputFigureStyleCss } from "./StyleInputFigure";
 import { Attributes } from "./type";
 

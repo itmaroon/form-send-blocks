@@ -13,7 +13,7 @@ import {
 import {
 	sendRegistrationRequest,
 	styleDataApply,
-} from "itmar-block-packages";
+} from "itmar-block-packages/front";
 import { createMemberRegisterStyleCss } from "./StyleMemberRegister";
 import { Attributes } from "./type";
 

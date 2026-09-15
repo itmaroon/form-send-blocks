@@ -1,18 +1,13 @@
+/**
+ * フォーム系ブロックのフロントエンド共通処理（jQueryベース）。
+ *
+ * 【重要】このファイルは view.ts から読まれる。@wordpress/element や React を
+ * 値として import しないこと（訪問者にReactが配信される）。エディタ専用の
+ * フックは ./useEditorFormSubmit.tsx にある。拡張子が .ts なのも JSX を
+ * 書けないようにするため。
+ */
 import { __ } from "@wordpress/i18n";
-import { useEffect, useRef } from "@wordpress/element";
 
-type UpdateBlockAttributes = (
-	clientId: string,
-	attributes: Record<string, unknown>,
-) => void;
-
-type UsePreventEditorFormSubmitParams = {
-	parentClientId: string;
-	currentStep: number;
-	updateBlockAttributes: UpdateBlockAttributes;
-	forwardKey?: string;
-	backKey?: string;
-};
 
 // プロセスエリアのセット（最初に見つかった要素を取得）
 const process_area = document.querySelector(
@@ -393,68 +388,6 @@ export function require_check($: JQueryStatic, form: JQuery) {
 	return err_flg;
 }
 
-//onSubmitを早期に処理するフック
-export const usePreventEditorFormSubmit = ({
-	parentClientId,
-	currentStep,
-	updateBlockAttributes,
-}: UsePreventEditorFormSubmitParams) => {
-	const formRef = useRef<HTMLFormElement | null>(null);
-
-	useEffect(() => {
-		const form = formRef.current;
-
-		if (!form) {
-			return;
-		}
-
-		const handleNativeSubmit = (event: SubmitEvent) => {
-			event.preventDefault();
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-
-			const submitter = event.submitter as HTMLElement | null;
-			const clickId = submitter?.dataset.key;
-			const pageDirection = submitter?.dataset.back;
-
-			//押されたボタンがバックボタンの時
-			if (pageDirection === "back") {
-				if (!currentStep) return; //currentStep未設定なら抜ける
-				updateBlockAttributes(parentClientId, {
-					current_step: currentStep - 1,
-				});
-
-				return;
-			}
-
-			//押されたボタンがフォワードボタンの時
-			if (pageDirection === "forward") {
-				updateBlockAttributes(parentClientId, {
-					current_step: currentStep + 1,
-				});
-
-				return;
-			}
-			//通常ボタンの時はclickIdを見る
-			if (!clickId) {
-				//submitボタンにkeyがないとき
-				updateBlockAttributes(parentClientId, { current_step: 0 });
-			} else {
-				updateBlockAttributes(parentClientId, {
-					current_step: currentStep + 1,
-				});
-			}
-		};
-
-		form.addEventListener("submit", handleNativeSubmit, true);
-
-		return () => {
-			form.removeEventListener("submit", handleNativeSubmit, true);
-		};
-	}, [parentClientId, currentStep, updateBlockAttributes]);
-
-	return formRef;
-};
 
 //Design Titleの中味にデータ流し込むヘルパ
 export const enterTitle = (

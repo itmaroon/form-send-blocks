@@ -3,7 +3,7 @@ import { evaluateCheckboxes } from "../front_common";
 
 import { createConfirmFigureStyleCss } from "./StyleConfirmFigure";
 import { Attributes } from "./type";
-import { styleDataApply } from "itmar-block-packages";
+import { styleDataApply } from "itmar-block-packages/front";
 import { enterTitle } from "../front_common";
 //import $ from "jquery";
 

@@ -4,7 +4,7 @@ import {
 	convertToScss,
 	borderProperty,
 	cssValueToString,
-} from "itmar-block-packages";
+} from "itmar-block-packages/front";
 
 import type { Attributes } from "./type";
 

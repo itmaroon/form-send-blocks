@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { createThanksFigureStyleCss } from "./StyleThanksFigure";
 import { Attributes } from "./type";
-import { styleDataApply } from "itmar-block-packages";
+import { styleDataApply } from "itmar-block-packages/front";
 import { enterTitle, errorMap } from "../front_common";
 
 //保存済み属性から、React非依存のスコープ付きCSSを適用

@@ -9,7 +9,7 @@ import {
 	useMemo,
 } from "@wordpress/element";
 import { createConfirmFigureStyleCss } from "./StyleConfirmFigure";
-import { usePreventEditorFormSubmit } from "../front_common";
+import { usePreventEditorFormSubmit } from "../useEditorFormSubmit";
 import {
 	useElementBackgroundColor,
 	useIsIframeMobile,

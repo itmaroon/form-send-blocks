@@ -8,7 +8,7 @@ import {
 } from "../front_common";
 import {
 	styleDataApply,
-} from "itmar-block-packages";
+} from "itmar-block-packages/front";
 
 import { createCustomLoginStyleCss } from "./StyleCustomLogin";
 import { Attributes } from "./type";
