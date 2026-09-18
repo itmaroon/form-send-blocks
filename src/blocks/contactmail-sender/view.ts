@@ -7,6 +7,7 @@ import {
 	process_change,
 	message_rebuild,
 	sendMail_ajax,
+	findProcessItems,
 } from "../front_common";
 
 import { styleDataApply } from "itmar-block-packages/front";
@@ -119,7 +120,7 @@ jQuery(function ($) {
 		//fieldset_objsの再読み込み
 		fieldset_objs = parent_block.find(".figure_fieldset");
 		//プログレスの要素
-		let process_lis = $(".wp-block-itmar-design-process")?.find("li");
+		let process_lis = findProcessItems(parent_block);
 		//親ブロックがトリガーしたタイプによってdetachするformを決める
 		const form_name = data.type;
 
@@ -193,7 +194,7 @@ jQuery(function ($) {
 		step_count = 0;
 
 		//プログレスの初期化
-		process_lis = $(".wp-block-itmar-design-process")?.find("li");
+		process_lis = findProcessItems(parent_block);
 		if (process_lis.length > 0) {
 			process_lis.eq(step_count).addClass("ready");
 			process_lis.not(process_lis.eq(step_count)).removeClass("ready");
@@ -319,23 +320,45 @@ jQuery(function ($) {
 								let selectedTexts: string[] = [];
 								$elm.find("option:selected").each(function () {
 									// 選択されたoptionのテキストを配列に追加
-									selectedTexts.push($elm.text());
+									// （以前は $elm＝select 全体の文字列を入れており、全選択肢が連結されていた）
+									// value が空の案内用 option（「選択してください」）は除く
+									if ($(this).val() !== "") {
+										selectedTexts.push($(this).text().trim());
+									}
 								});
 								input_val = selectedTexts.join(",");
 							} else if ($elm.data("unique_id")) {
 								input_val = $elm.text();
 							}
 
-							// ラベルの取得（inputのidに関連付けられたlabel、または直近のlabel）
-							const labelText =
-								$(`label[for="${$(this).attr("id")}"]`)
+							/*
+							 * ラベルの取得。
+							 * 1. input の id に関連付いた label
+							 * 2. 同じ入力ブロック内の label（design-select は select と label が
+							 *    for で結び付いていないので、1 では見つからない）
+							 * 3. 入力を包んでいる label（design-checkbox）
+							 * いずれも「(必須)」の span を除いた文字だけを使う。
+							 */
+							const labelTextOf = ($label: JQuery) =>
+								$label
+									.first()
 									.contents()
 									.filter(function () {
 										return this.nodeType === Node.TEXT_NODE;
 									})
 									.text()
-									.trim() ||
-								$(this).closest("label").text() ||
+									.trim();
+							const elmId = $(this).attr("id");
+							const labelText =
+								(elmId ? labelTextOf($(`label[for="${elmId}"]`)) : "") ||
+								labelTextOf(
+									$(this)
+										.closest(
+											".wp-block-itmar-design-select, .wp-block-itmar-design-text-ctrl",
+										)
+										.find("label"),
+								) ||
+								$(this).closest("label").text().trim() ||
 								"項目";
 
 							rowData.push({ label: labelText, value: input_val });
@@ -419,13 +442,14 @@ jQuery(function ($) {
 
 				// 3. 必要な変数に割り当て
 				// 分割代入（Destructuring）を使うと非常にスッキリします
+				/*
+				 * 送信先アドレスと差出人名はページに出さない。サーバーが出力した
+				 * mail_token を渡し、宛先・差出人はサーバー側で決める。
+				 */
 				const {
-					master_mail: master_email,
+					mail_token = "",
 					mailAddressType,
-					master_name,
 					is_retmail,
-					is_footer,
-					footer_content,
 					ret_mail,
 					is_dataSave,
 					save_post_type,
@@ -452,15 +476,16 @@ jQuery(function ($) {
 				//通知メールの送信
 				promises.push(
 					sendMail_ajax(
-						master_email,
+						"", // 管理者への通知先はサーバーが決める
 						notice_subject,
 						rebuild_message_info,
-						master_email,
-						master_name,
+						"",
+						"",
 						false,
 						false,
 						"",
 						"",
+						mail_token,
 					),
 				);
 				//自動応答メール
@@ -468,11 +493,10 @@ jQuery(function ($) {
 					let ret_email = $(`[name="${ret_mail}"]`).val();
 
 					//message_retの再構築
+					// フッター（問い合わせ先など）はサーバーが末尾に付ける
 					const rebuild_message_ret = `${
 						data?.message ? data.message.text : ""
-					} \n ${message_rebuild(response_content)}\n ${
-						is_footer ? footer_content : ""
-					} 
+					} \n ${message_rebuild(response_content)}
 				`;
 
 					//自動応答メールの送信
@@ -481,12 +505,13 @@ jQuery(function ($) {
 							ret_email,
 							response_subject,
 							rebuild_message_ret,
-							master_email,
-							master_name,
+							"",
+							"",
 							is_dataSave,
 							true,
 							save_post_type,
 							mailAddressType,
+							mail_token,
 						),
 					);
 				}

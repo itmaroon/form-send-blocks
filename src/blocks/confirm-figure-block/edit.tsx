@@ -1,4 +1,4 @@
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import "./editor.scss";
 import { useSelect, useDispatch } from "@wordpress/data";
 import { store as blockEditorStore } from "@wordpress/block-editor";
@@ -187,6 +187,12 @@ export default function Edit({
 		setAttributes({ blockTableMapping: newMapping });
 	};
 
+	// ラベルと入力名を持つ入力ブロック（確認用の表・メール本文の差し込みに使う）
+	const isLabeledInput = (name: string) =>
+		name === "itmar/design-text-ctrl" ||
+		name === "itmar/design-checkbox" ||
+		name === "itmar/design-select";
+
 	// セル要素を生成する関数
 	interface SelectOption {
 		id: string | number;
@@ -209,8 +215,7 @@ export default function Edit({
 			const message_label =
 				input_elm.name === "itmar/design-title"
 					? input_elm.attributes.headingContent
-					: input_elm.name === "itmar/design-text-ctrl" ||
-					  input_elm.name === "itmar/design-checkbox"
+					: isLabeledInput(input_elm.name)
 					? input_elm.attributes.labelContent
 					: "";
 
@@ -402,15 +407,13 @@ export default function Edit({
 		const message_value =
 			input_elm.name === "itmar/design-title"
 				? input_elm.attributes.uniqueID
-				: input_elm.name === "itmar/design-text-ctrl" ||
-				  input_elm.name === "itmar/design-checkbox"
+				: isLabeledInput(input_elm.name)
 				? input_elm.attributes.inputName
 				: "";
 		const message_label =
 			input_elm.name === "itmar/design-title"
 				? input_elm.attributes.headingContent
-				: input_elm.name === "itmar/design-text-ctrl" ||
-				  input_elm.name === "itmar/design-checkbox"
+				: isLabeledInput(input_elm.name)
 				? input_elm.attributes.labelContent
 				: "";
 		const actions = [
@@ -487,7 +490,9 @@ export default function Edit({
 	return (
 		<>
 			<InspectorControls group="settings">
-				<PanelBody title={__("Input Figure Mapping", "itmar")}>
+				<PanelBody
+					title={__("Input screens and mail settings", "form-send-blocks")}
+				>
 					{inputFigureBlocks.map((block: BlockInstance) => {
 						const attrs = block.attributes as { form_name: string };
 						// 現在このブロックに紐付いているテーブルIDを探す
@@ -525,10 +530,15 @@ export default function Edit({
 										: [];
 									return (
 										<PanelBody
-											title={`${btnBlock.attributes.buttonKey || ""} ${__(
-												"Button Mapping",
-												"form-send-blocks",
-											)}`}
+											title={sprintf(
+													/* translators: 1: button label, 2: button key */
+													__(
+														'Mail settings for the "%1$s" button (%2$s)',
+														"form-send-blocks",
+													),
+													btnBlock.attributes.labelContent || "",
+													buttonKey,
+												)}
 											initialOpen={false}
 										>
 											<TextControl

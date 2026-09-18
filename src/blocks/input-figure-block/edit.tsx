@@ -7,6 +7,7 @@ import {
 	InspectorControls,
 	__experimentalPanelColorGradientSettings as PanelColorGradientSettings,
 	__experimentalBorderRadiusControl as BorderRadiusControl,
+	__experimentalBlockVariationPicker as BlockVariationPicker,
 } from "@wordpress/block-editor";
 import {
 	PanelBody,
@@ -20,7 +21,7 @@ import {
 import "./editor.scss";
 
 import { useEffect, useRef } from "@wordpress/element";
-import { useSelect, useDispatch } from "@wordpress/data";
+import { useSelect, useDispatch, select as selectStore } from "@wordpress/data";
 import { store as blockEditorStore } from "@wordpress/block-editor";
 import { createInputFigureStyleCss } from "./StyleInputFigure";
 
@@ -36,9 +37,23 @@ import {
 	BlockEditProps,
 	BlockInstance,
 	TemplateArray,
+	createBlocksFromInnerBlocksTemplate,
 } from "@wordpress/blocks";
 
+/*
+ * アイコンは SVG を使う。エディタのキャンバスは iframe で、Dashicons の
+ * スタイルシートが読み込まれないため、文字列指定（"email-alt" など）では
+ * アイコンが描画されず、選択肢のボタンが見えなくなる。
+ */
+import { inbox, postCommentsForm, comment, listView } from "@wordpress/icons";
+
 import { usePreventEditorFormSubmit } from "../useEditorFormSubmit";
+import {
+	INQUIRY_CONFIRM_KEY,
+	toConfirmButton,
+	fieldLines,
+	withFieldLines,
+} from "../inquiryStarter";
 
 import type { Attributes } from "./type";
 
@@ -173,54 +188,6 @@ export default function Edit({
 
 	//インナーブロックの制御
 
-	const MAIL_TEMPLATE: TemplateArray = [
-		[
-			"itmar/design-text-ctrl",
-			{
-				inputName: "userName",
-				labelContent: __("Name", "form-send-blocks"),
-				required: { flg: true, display: __("Required", "form-send-blocks") },
-				placeFolder: __("Please enter your name", "form-send-blocks"),
-			},
-		],
-		[
-			"itmar/design-text-ctrl",
-			{
-				inputName: "email",
-				labelContent: __("E-mail Address", "form-send-blocks"),
-				inputType: "email",
-				required: { flg: true, display: __("Required", "form-send-blocks") },
-				placeFolder: __("Please enter your e-mail address", "form-send-blocks"),
-			},
-		],
-		[
-			"itmar/design-text-ctrl",
-			{
-				inputName: "message",
-				labelContent: __("Inquiry details", "form-send-blocks"),
-				inputType: "textarea",
-				required: { flg: true, display: __("Required", "form-send-blocks") },
-				placeFolder: __("Please enter inquiry", "form-send-blocks"),
-			},
-		],
-		[
-			"itmar/design-checkbox",
-			{
-				labelContent: __(
-					"Agree to the privacy policy and send.",
-					"form-send-blocks",
-				),
-			},
-		],
-		[
-			"itmar/design-button",
-			{
-				buttonType: "submit",
-				labelContent: __("To confirmation screen", "form-send-blocks"),
-				align: "center",
-			},
-		],
-	];
 	const MEMBER_TEMPLATE: TemplateArray = [
 		[
 			"itmar/design-text-ctrl",
@@ -409,14 +376,152 @@ export default function Edit({
 		],
 	];
 
+	/*
+	 * 問い合わせフォームの入力欄は、挿入時に固定の並びを押し込まず選ばせる。
+	 * 入力欄の構成はサイトごとに違い、デザイン済みの完成形はテーマの
+	 * パターンが持つもの。ここでは出発点になる並びだけを用意する。
+	 * 会員登録とログインは必須の入力欄が決まっているので従来どおり固定。
+	 */
+	const textCtrl = (
+		inputName: string,
+		labelContent: string,
+		placeFolder: string,
+		inputType?: string,
+	): [string, Record<string, unknown>] => [
+		"itmar/design-text-ctrl",
+		{
+			inputName,
+			labelContent,
+			...(inputType ? { inputType } : {}),
+			required: { flg: true, display: __("Required", "form-send-blocks") },
+			placeFolder,
+		},
+	];
+	const nameField = textCtrl(
+		"userName",
+		__("Name", "form-send-blocks"),
+		__("Please enter your name", "form-send-blocks"),
+	);
+	const emailField = textCtrl(
+		"email",
+		__("E-mail Address", "form-send-blocks"),
+		__("Please enter your e-mail address", "form-send-blocks"),
+		"email",
+	);
+	const messageField = textCtrl(
+		"message",
+		__("Inquiry details", "form-send-blocks"),
+		__("Please enter inquiry", "form-send-blocks"),
+		"textarea",
+	);
+	// 同意のチェックは確認画面側に置く（inquiryStarter.ts の確認画面）
+	const submitButton = toConfirmButton();
+
+	const INQUIRY_VARIATIONS = [
+		{
+			name: "standard",
+			title: __("Standard", "form-send-blocks"),
+			description: __(
+				"Name, email address and inquiry details.",
+				"form-send-blocks",
+			),
+			icon: postCommentsForm,
+			innerBlocks: [nameField, emailField, messageField, submitButton],
+		},
+		{
+			name: "simple",
+			title: __("Simple", "form-send-blocks"),
+			description: __(
+				"Email address and inquiry details only.",
+				"form-send-blocks",
+			),
+			icon: comment,
+			innerBlocks: [emailField, messageField, submitButton],
+		},
+		{
+			name: "detailed",
+			title: __("Detailed", "form-send-blocks"),
+			description: __(
+				"Adds phone number and subject to the standard form.",
+				"form-send-blocks",
+			),
+			icon: listView,
+			innerBlocks: [
+				nameField,
+				emailField,
+				textCtrl(
+					"tel",
+					__("Phone number", "form-send-blocks"),
+					__("Please enter your phone number", "form-send-blocks"),
+				),
+				textCtrl(
+					"subject",
+					__("Subject", "form-send-blocks"),
+					__("Please enter the subject", "form-send-blocks"),
+				),
+				messageField,
+				submitButton,
+			],
+		},
+	];
+
 	const input_template =
-		form_type === "inquiry"
-			? MAIL_TEMPLATE
-			: form_type === "member"
+		form_type === "member"
 			? MEMBER_TEMPLATE
 			: form_type === "login"
 			? LOGIN_TEMPLATE
 			: undefined;
+
+	// 問い合わせフォームで入力欄がまだ無いときだけ選択肢を出す
+	const showPicker = form_type === "inquiry" && innerBlocks.length === 0;
+	const { replaceInnerBlocks } = useDispatch(blockEditorStore) as any;
+	const applyVariation = (variation: { innerBlocks: TemplateArray }) => {
+		replaceInnerBlocks(
+			clientId,
+			createBlocksFromInnerBlocksTemplate(variation.innerBlocks),
+			true,
+		);
+
+		/*
+		 * 選んだ入力欄に合わせて、同じフォームの他のブロックを整える。
+		 * - 確認画面：メール本文に「ラベル: [入力名]」を足す（本文に差し込み項目が
+		 *   まだ無いときだけ。利用者が書いた本文は触らない）
+		 * - 送信ブロック：自動応答の宛先に使う入力欄が未設定なら、メール欄を割り当てる
+		 *   （空のままだと自動応答が送れない）
+		 */
+		if (!parentClientId) return;
+		const { getBlocks, getBlockAttributes } = selectStore(blockEditorStore) as any;
+		const lines = fieldLines(variation.innerBlocks);
+
+		const confirm = (getBlocks(parentClientId) || []).find(
+			(block: BlockInstance) => block.name === "itmar/confirm-figure-block",
+		);
+		const mapping = confirm?.attributes?.displayMapping?.[INQUIRY_CONFIRM_KEY];
+		if (confirm && mapping) {
+			updateBlockAttributes(confirm.clientId, {
+				displayMapping: {
+					...confirm.attributes.displayMapping,
+					[INQUIRY_CONFIRM_KEY]: {
+						...mapping,
+						notice_content: withFieldLines(mapping.notice_content, lines),
+						response_content: withFieldLines(mapping.response_content, lines),
+					},
+				},
+			});
+		}
+
+		const sender = getBlockAttributes(parentClientId);
+		const emailField = variation.innerBlocks.find(
+			([name, attrs]) =>
+				name === "itmar/design-text-ctrl" &&
+				(attrs as { inputType?: string })?.inputType === "email",
+		);
+		if (sender && !sender.ret_mail && emailField) {
+			updateBlockAttributes(parentClientId, {
+				ret_mail: (emailField[1] as { inputName: string }).inputName,
+			});
+		}
+	};
 
 	const innerBlocksProps = useInnerBlocksProps(
 		{},
@@ -466,7 +571,20 @@ export default function Edit({
 			},
 			Number.MIN_SAFE_INTEGER,
 		);
-		setAttributes({ label_width: `${Math.round(maxNum)}px` });
+		/*
+		 * ラベル付きの入力欄が無いときは幅を決めない。
+		 * 以前は初期値の Number.MIN_SAFE_INTEGER がそのまま "-9007199254740991px" として
+		 * 保存され、入力欄を後から入れた直後に再計算されないと、フロントでラベル幅が
+		 * 揃わなくなっていた（入力欄を選択式にしたことで「空」の状態ができる）。
+		 * 値が変わらないときは書き込まない（開くだけで変更扱いにしない）。
+		 */
+		const nextWidth =
+			filteredBlocks.length > 0 && maxNum > 0
+				? `${Math.round(maxNum)}px`
+				: "auto";
+		if (nextWidth !== attributes.label_width) {
+			setAttributes({ label_width: nextWidth });
+		}
 	}, [innerBlocks]);
 
 	//モバイルの判定
@@ -696,8 +814,25 @@ export default function Edit({
 			<div {...blockProps}>
 				<style>{editorStyleCss}</style>
 				<div className={`itmar-wrap ${editorStyleClass}`}>
+						{/*
+						 * 選択肢はフォームの外に置く。中に置くと選択ボタンの click が
+						 * usePreventEditorFormSubmit の submit 処理（ステップ送り）に拾われる。
+						 * フォーム自体は常に描画しておく（フックの ref が外れないように）。
+						 */}
+						{showPicker && (
+							<BlockVariationPicker
+								icon={inbox}
+								label={__("Inquiry form", "form-send-blocks")}
+								instructions={__(
+									"Choose the input fields to start with. You can add, remove and rearrange them afterwards.",
+									"form-send-blocks",
+								)}
+								variations={INQUIRY_VARIATIONS}
+								onSelect={applyVariation}
+							/>
+						)}
 						<form ref={formRef}>
-							<div {...innerBlocksProps}></div>
+							{!showPicker && <div {...innerBlocksProps}></div>}
 						</form>
 				</div>
 			</div>

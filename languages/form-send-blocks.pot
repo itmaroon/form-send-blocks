@@ -817,7 +817,7 @@ msgstr ""
 #: build/blocks/confirm-figure-block/block.json
 #: src/blocks/confirm-figure-block/block.json
 msgctxt "block title"
-msgid "Comfirm Figure"
+msgid "Confirm Figure"
 msgstr ""
 
 #: build/blocks/contactmail-sender/block.json
@@ -848,4 +848,237 @@ msgstr ""
 #: src/blocks/thanks-figure-block/block.json
 msgctxt "block title"
 msgid "Thanks Figure"
+msgstr ""
+
+#: includes/mail-settings.php
+msgid "Notification email address"
+msgstr ""
+
+#: includes/mail-settings.php
+msgid "Inquiries are sent to this address. If blank, the site administrator email address is used."
+msgstr ""
+
+#: includes/mail-settings.php
+msgid "Sender name"
+msgstr ""
+
+#: includes/mail-settings.php
+msgid "Shown as the sender of automatic response emails. If blank, the site title is used."
+msgstr ""
+
+#: includes/mail-settings.php
+msgid "Sender email address"
+msgstr ""
+
+#: includes/mail-settings.php
+msgid "Used as the From address. Use an address on this site's domain so that mail is not rejected as spoofed. If blank, the site administrator email address is used."
+msgstr ""
+
+#: form-send-blocks.php
+msgid "The post type for saving inquiries is not allowed."
+msgstr ""
+
+#: build/blocks/contactmail-sender/index.js
+msgid "[master_name] and [master_mail] are replaced with the sender name and address when the email is sent."
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Standard"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Simple"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Email address and inquiry details only."
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Detailed"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Adds phone number and subject to the standard form."
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Phone number"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Please enter your phone number"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Subject"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Please enter the subject"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Inquiry form"
+msgstr ""
+
+#: build/blocks/input-figure-block/index.js
+msgid "Choose the input fields to start with. You can add, remove and rearrange them afterwards."
+msgstr ""
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "Clear block-specific settings"
+msgstr ""
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "This block has its own destination saved, which takes priority over the site setting."
+msgstr ""
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "These settings are shared by every inquiry form on this site and are saved with the site, not with this block."
+msgstr ""
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "Only administrators can change the site's inquiry mail settings."
+msgstr ""
+
+#: src/blocks/inquiryStarter.ts
+msgid "Send"
+msgstr ""
+
+#: src/blocks/inquiryStarter.ts
+msgid "Please check your input"
+msgstr ""
+
+#: src/blocks/inquiryStarter.ts
+msgid "Back to input"
+msgstr ""
+
+#: src/blocks/inquiryStarter.ts
+msgid "Name, email address and inquiry details."
+msgstr ""
+
+#: src/blocks/inquiryStarter.ts
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Return to home"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Input screens and mail settings"
+msgstr ""
+
+#. translators: 1: button label, 2: button key
+#: src/blocks/confirm-figure-block/edit.tsx
+#, php-format
+msgid "Mail settings for the \"%1$s\" button (%2$s)"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Select which table this figure outputs to."
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Confirm Button Label"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Confirm Attention Message"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Attention Display ID"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Inquiry information notification email Content"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Automatic response email Content"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Pause Mail Send"
+msgstr ""
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Is Pause Send"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Messages after sending"
+msgstr ""
+
+#. translators: 1: button label, 2: button key
+#: src/blocks/thanks-figure-block/edit.tsx
+#, php-format
+msgid "Messages for the \"%1$s\" button (%2$s)"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Thanks Main Message"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Main Message Display ID"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Notification success message"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Notification error message"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Automatic response success message"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Automatic response error message"
+msgstr ""
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "The subject line set by the user will be inserted into the sent email."
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Mail subject and body"
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "The subject and body of the notification and automatic response emails are set in the Confirm Figure block, under \"Input screens and mail settings\"."
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "The mail settings appear only when a button on the input screen has a button identification key."
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Select the Confirm Figure block"
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Master Mail"
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Input Value"
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Logon User"
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Add Mail Footer"
+msgstr ""
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Footer Content"
+msgstr ""
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "The email address format is invalid. "
 msgstr ""

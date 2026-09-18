@@ -27,4 +27,5 @@ declare module "@wordpress/block-editor" {
 	// 実験的コンポーネントを型として定義
 	export const __experimentalPanelColorGradientSettings: any;
 	export const __experimentalBorderRadiusControl: any;
+	export const __experimentalBlockVariationPicker: any;
 }

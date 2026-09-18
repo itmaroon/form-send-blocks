@@ -843,7 +843,7 @@ msgstr "背景色を選択"
 #: build/blocks/confirm-figure-block/block.json
 #: src/blocks/confirm-figure-block/block.json
 msgctxt "block title"
-msgid "Comfirm Figure"
+msgid "Confirm Figure"
 msgstr ""
 
 #: build/blocks/contactmail-sender/block.json
@@ -922,3 +922,236 @@ msgstr ""
 #~ msgstr ""
 #~ "ここにサイドバーで設定した内容が送信結果として表示されます。デザインだけを"
 #~ "設定してください。"
+
+#: includes/mail-settings.php
+msgid "Notification email address"
+msgstr "通知先メールアドレス"
+
+#: includes/mail-settings.php
+msgid "Inquiries are sent to this address. If blank, the site administrator email address is used."
+msgstr "問い合わせはこのアドレスに送られます。空欄の場合はサイト管理者のメールアドレスを使います。"
+
+#: includes/mail-settings.php
+msgid "Sender name"
+msgstr "差出人名"
+
+#: includes/mail-settings.php
+msgid "Shown as the sender of automatic response emails. If blank, the site title is used."
+msgstr "自動応答メールの差出人として表示されます。空欄の場合はサイトのタイトルを使います。"
+
+#: includes/mail-settings.php
+msgid "Sender email address"
+msgstr "差出人メールアドレス"
+
+#: includes/mail-settings.php
+msgid "Used as the From address. Use an address on this site's domain so that mail is not rejected as spoofed. If blank, the site administrator email address is used."
+msgstr "メールの差出人（From）に使います。なりすましとして拒否されないよう、このサイトのドメインのアドレスを指定してください。空欄の場合はサイト管理者のメールアドレスを使います。"
+
+#: form-send-blocks.php
+msgid "The post type for saving inquiries is not allowed."
+msgstr "問い合わせの保存先に指定された投稿タイプは使用できません。"
+
+#: build/blocks/contactmail-sender/index.js
+msgid "[master_name] and [master_mail] are replaced with the sender name and address when the email is sent."
+msgstr "[master_name] と [master_mail] は、送信時に差出人名と差出人アドレスに置き換わります。"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Standard"
+msgstr "標準"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Simple"
+msgstr "シンプル"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Email address and inquiry details only."
+msgstr "メールアドレスとお問い合わせ内容だけ"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Detailed"
+msgstr "詳細"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Adds phone number and subject to the standard form."
+msgstr "標準の項目に電話番号と件名を加えます"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Phone number"
+msgstr "電話番号"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Please enter your phone number"
+msgstr "電話番号を入力してください"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Subject"
+msgstr "件名"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Please enter the subject"
+msgstr "件名を入力してください"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Inquiry form"
+msgstr "問い合わせフォーム"
+
+#: build/blocks/input-figure-block/index.js
+msgid "Choose the input fields to start with. You can add, remove and rearrange them afterwards."
+msgstr "最初に配置する入力欄を選んでください。あとから追加・削除・並べ替えができます。"
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "Clear block-specific settings"
+msgstr "個別設定を解除"
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "This block has its own destination saved, which takes priority over the site setting."
+msgstr "このブロックには個別の送信先が保存されています（サイト設定より優先）。"
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "These settings are shared by every inquiry form on this site and are saved with the site, not with this block."
+msgstr "この設定はサイト内のすべての問い合わせフォームで共通です。ブロックではなくサイトに保存されます。"
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "Only administrators can change the site's inquiry mail settings."
+msgstr "問い合わせメールのサイト設定を変更できるのは管理者だけです。"
+
+#: src/blocks/inquiryStarter.ts
+msgid "Send"
+msgstr "送信する"
+
+#: src/blocks/inquiryStarter.ts
+msgid "Please check your input"
+msgstr "入力内容をご確認ください"
+
+#: src/blocks/inquiryStarter.ts
+msgid "Back to input"
+msgstr "入力画面に戻る"
+
+#: src/blocks/inquiryStarter.ts
+msgid "Name, email address and inquiry details."
+msgstr "お名前・メールアドレス・お問い合わせ内容"
+
+#: src/blocks/inquiryStarter.ts
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Return to home"
+msgstr "ホームへ戻る"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Input screens and mail settings"
+msgstr "入力画面とメールの設定"
+
+#. translators: 1: button label, 2: button key
+#: src/blocks/confirm-figure-block/edit.tsx
+#, php-format
+msgid "Mail settings for the \"%1$s\" button (%2$s)"
+msgstr "「%1$s」ボタン（%2$s）のメール設定"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Select which table this figure outputs to."
+msgstr "この入力画面の内容を表示する表を選んでください。"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Confirm Button Label"
+msgstr "送信ボタンの表示"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Confirm Attention Message"
+msgstr "確認画面の案内文"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Attention Display ID"
+msgstr "案内文を表示する見出しのID"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Inquiry information notification email Content"
+msgstr "管理者への通知メールの内容"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Automatic response email Content"
+msgstr "自動返信メールの内容"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Pause Mail Send"
+msgstr "メール送信の一時停止"
+
+#: src/blocks/confirm-figure-block/edit.tsx
+msgid "Is Pause Send"
+msgstr "メールを送信しない"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Messages after sending"
+msgstr "送信後のメッセージ"
+
+#. translators: 1: button label, 2: button key
+#: src/blocks/thanks-figure-block/edit.tsx
+#, php-format
+msgid "Messages for the \"%1$s\" button (%2$s)"
+msgstr "「%1$s」ボタン（%2$s）の完了メッセージ"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Thanks Main Message"
+msgstr "完了画面の見出し"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Main Message Display ID"
+msgstr "見出しを表示するタイトルのID"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Notification success message"
+msgstr "通知メールの送信に成功したときの表示"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Notification error message"
+msgstr "通知メールの送信に失敗したときの表示"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Automatic response success message"
+msgstr "自動返信メールの送信に成功したときの表示"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "Automatic response error message"
+msgstr "自動返信メールの送信に失敗したときの表示"
+
+#: src/blocks/thanks-figure-block/edit.tsx
+msgid "The subject line set by the user will be inserted into the sent email."
+msgstr "送信結果に応じた見出しがここに入ります"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Mail subject and body"
+msgstr "メールの件名と本文"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "The subject and body of the notification and automatic response emails are set in the Confirm Figure block, under \"Input screens and mail settings\"."
+msgstr "通知メールと自動返信メールの件名・本文は、Confirm Figure ブロックの「入力画面とメールの設定」で設定します。"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "The mail settings appear only when a button on the input screen has a button identification key."
+msgstr "メールの設定は、入力画面のボタンに「ボタン識別キー」が設定されているときだけ表示されます。"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Select the Confirm Figure block"
+msgstr "Confirm Figure ブロックを選択"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Master Mail"
+msgstr "差出人アドレス"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Input Value"
+msgstr "入力値"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Logon User"
+msgstr "ログインユーザー"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Add Mail Footer"
+msgstr "メールにフッターを付ける"
+
+#: src/blocks/contactmail-sender/edit.tsx
+msgid "Footer Content"
+msgstr "フッターの内容"
+
+#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+msgid "The email address format is invalid. "
+msgstr "メールアドレスの形式が正しくありません。"

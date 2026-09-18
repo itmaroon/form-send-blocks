@@ -33,9 +33,17 @@ import {
 
 import "./editor.scss";
 
-import { useState, useRef, useEffect } from "@wordpress/element";
-import { useSelect, dispatch } from "@wordpress/data";
+import { useRef, useEffect } from "@wordpress/element";
+import { useSelect, useDispatch } from "@wordpress/data";
 import type { Attributes } from "./type";
+import SiteMailSettings from "./SiteMailSettings";
+import {
+	INQUIRY_FORM_NAME,
+	inquiryConfirmAttributes,
+	inquiryConfirmInnerBlocks,
+	inquiryThanksAttributes,
+	inquiryThanksInnerBlocks,
+} from "../inquiryStarter";
 
 //スペースのリセットバリュー
 const padding_resetValues = {
@@ -58,6 +66,10 @@ const units = [
 	{ value: "em", label: "em" },
 	{ value: "rem", label: "rem" },
 ];
+
+// block.json の既定値。未設定として扱う（includes/mail-settings.php と揃える）
+const PLACEHOLDER_MAIL = "master@sample.com";
+const PLACEHOLDER_NAME = "Contact Mail Sender";
 
 export default function Edit({
 	attributes,
@@ -140,35 +152,37 @@ export default function Edit({
 		}
 	}, [baseColor]);
 
-	//インナーブロックの制御
+	/*
+	 * インナーブロックの制御
+	 *
+	 * 入力 → 確認 → 完了 の3ステップは、view.ts が直下の .figure_fieldset を
+	 * この順で送る前提で動いている。削除や並べ替えをするとフロントで無言で
+	 * 壊れるので、3つのステップには移動・削除のロックをかける。
+	 * 進捗表示（design-process）は任意なので外せるままにしておく。
+	 * 入力欄の中身は input-figure-block 側で選ばせる（ここでは決めない）。
+	 *
+	 * 確認画面と完了画面は、入力画面のボタンのキーで設定を引くので、
+	 * キー・フォーム名・テーブルIDを揃えた状態で置く（inquiryStarter.ts）。
+	 * 以前は完了画面に infomail_success などを渡していたが、どれも
+	 * thanks-figure-block の属性ではなく、黙って捨てられていた。
+	 */
+	const STEP_LOCK = { move: true, remove: true };
 	const TEMPLATE: TemplateArray = [
 		//同一ブロックを２つ以上入れないこと（名称の文字列が重ならないこと）
 		["itmar/design-process", {}],
 		[
 			"itmar/input-figure-block",
-			{ form_type: "inquiry", form_name: "inquiry_form" },
+			{ form_type: "inquiry", form_name: INQUIRY_FORM_NAME, lock: STEP_LOCK },
 		],
-		["itmar/confirm-figure-block", {}],
+		[
+			"itmar/confirm-figure-block",
+			{ ...inquiryConfirmAttributes(), lock: STEP_LOCK },
+			inquiryConfirmInnerBlocks(),
+		],
 		[
 			"itmar/thanks-figure-block",
-			{
-				infomail_success: __(
-					"The person in charge has been notified of your inquiry. Please wait for a while until we reply.",
-					"form-send-blocks",
-				),
-				infomail_faile: __(
-					"Email notification to the person in charge failed.",
-					"form-send-blocks",
-				),
-				retmail_success: __(
-					"We have sent an automatic response email to you, so please check it.",
-					"form-send-blocks",
-				),
-				retmail_faile: __(
-					"Failed to send automatic response email to you.",
-					"form-send-blocks",
-				),
-			},
+			{ ...inquiryThanksAttributes(), lock: STEP_LOCK },
+			inquiryThanksInnerBlocks(),
 		],
 	];
 	const innerBlocksProps = useInnerBlocksProps(
@@ -180,7 +194,7 @@ export default function Edit({
 	);
 
 	//インナーブロックを取得
-	const { inputInnerBlocks } = useSelect(
+	const { inputInnerBlocks, confirmClientId, hasKeyedButton } = useSelect(
 		(select) => {
 			const { getBlocks } = select(blockEditorStore) as any;
 			const blocks = getBlocks(clientId) || [];
@@ -201,28 +215,46 @@ export default function Edit({
 					block.name !== "itmar/design-group" &&
 					(block.name !== "itmar/design-title" || block.attributes.uniqueID),
 			);
+			// メール本文の設定先（確認画面）と、設定パネルが出る条件（キー付きボタン）
+			const confirmBlock = blocks.find(
+				(block: BlockInstance) => block.name === "itmar/confirm-figure-block",
+			);
+			const hasKeyedButton = allInnerBlocks.some(
+				(block: BlockInstance) =>
+					block.name === "itmar/design-button" && !!block.attributes.buttonKey,
+			);
 			return {
 				inputInnerBlocks,
+				confirmClientId: confirmBlock?.clientId as string | undefined,
+				hasKeyedButton,
 			};
 		},
 		[clientId],
 	);
+	const { selectBlock } = useDispatch(blockEditorStore) as any;
 
-	//Emailのバリデーション正規表現
-	const mail_pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	/*
+	 * 送信先と差出人名はサイト設定（インスペクターで編集）を使う。
+	 * 旧来の個別設定がブロックに残っている場合だけ、その値が優先される。
+	 * block.json の既定値（master@sample.com / Contact Mail Sender）は
+	 * 既存ブロックの検証のため据え置いており、「未設定」として扱う。
+	 */
+	const ownMail = master_mail === PLACEHOLDER_MAIL ? "" : master_mail ?? "";
+	const ownName = master_name === PLACEHOLDER_NAME ? "" : master_name ?? "";
 
-	//編集中の値を確保するための状態変数
-	const [master_mail_editing, setMasterMailValue] = useState(master_mail);
-	const [master_name_editing, setMasterNameValue] = useState(master_name);
-
+	/*
+	 * フッターに差し込むのは値そのものではなくプレースホルダー。
+	 * 送信時にサーバーが差出人名・差出人アドレスへ置き換える。
+	 * 実アドレスを書き込むと、テンプレートやパターンと一緒に他サイトへ運ばれる。
+	 */
 	const footerOption = [
 		{
-			label: __("Master Name", "block-collections"),
-			value: master_name,
+			label: __("Master Name", "form-send-blocks"),
+			value: "[master_name]",
 		},
 		{
-			label: __("Master Mail", "block-collections"),
-			value: master_mail,
+			label: __("Master Mail", "form-send-blocks"),
+			value: "[master_mail]",
 		},
 	];
 
@@ -237,61 +269,44 @@ export default function Edit({
 					initialOpen={true}
 					className="mailinfo_ctrl"
 				>
-					<PanelRow>
-						<TextControl
-							label={__(
-								"Notification email address (Master)",
+					<SiteMailSettings
+						ownMail={ownMail}
+						ownName={ownName}
+						onClearOverride={() =>
+							setAttributes({ master_mail: "", master_name: "" })
+						}
+					/>
+				</PanelBody>
+				{/*
+				 * メールの件名・本文は確認画面ブロックが持つ（送信処理もそこを読む）。
+				 * 以前はこのブロックに本文の欄があったため、ここに案内を置く。
+				 */}
+				<PanelBody
+					title={__("Mail subject and body", "form-send-blocks")}
+					initialOpen={true}
+					className="mailinfo_ctrl"
+				>
+					<p className="itmar_mail_body_note">
+						{__(
+							"The subject and body of the notification and automatic response emails are set in the Confirm Figure block, under \"Input screens and mail settings\".",
+							"form-send-blocks",
+						)}
+					</p>
+					{!hasKeyedButton && (
+						<Notice status="warning" isDismissible={false}>
+							{__(
+								"The mail settings appear only when a button on the input screen has a button identification key.",
 								"form-send-blocks",
 							)}
-							value={master_mail_editing}
-							onChange={(newVal) => setMasterMailValue(newVal)} // 一時的な編集値として保存する
-							onBlur={() => {
-								//メールバリデーションチェック
-								if (
-									master_mail_editing.length == 0 ||
-									!mail_pattern.test(master_mail_editing)
-								) {
-									(dispatch("core/notices") as any).createNotice(
-										"error",
-										__(
-											"The notification email address is blank or has an invalid format. ",
-											"form-send-blocks",
-										),
-										{ type: "snackbar", isDismissible: true },
-									);
-									// バリデーションエラーがある場合、編集値を元の値にリセットする
-									setMasterMailValue(master_mail);
-								} else {
-									// バリデーションが成功した場合、編集値を確定する
-									setAttributes({ master_mail: master_mail_editing });
-								}
-							}}
-						/>
-					</PanelRow>
-					<PanelRow>
-						<TextControl
-							label={__("Master Name", "form-send-blocks")}
-							value={master_name_editing}
-							onChange={(newVal) => setMasterNameValue(newVal)} // 一時的な編集値として保存する
-							onBlur={() => {
-								if (master_name_editing.length == 0) {
-									(dispatch("core/notices") as any).createNotice(
-										"error",
-										__(
-											"Do not leave the master name blank. ",
-											"form-send-blocks",
-										),
-										{ type: "snackbar", isDismissible: true },
-									);
-									// バリデーションエラーがある場合、編集値を元の値にリセットする
-									setMasterNameValue(master_name);
-								} else {
-									// バリデーションが成功した場合、編集値を確定する
-									setAttributes({ master_name: master_name_editing });
-								}
-							}}
-						/>
-					</PanelRow>
+						</Notice>
+					)}
+					<Button
+						variant="secondary"
+						disabled={!confirmClientId}
+						onClick={() => confirmClientId && selectBlock(confirmClientId)}
+					>
+						{__("Select the Confirm Figure block", "form-send-blocks")}
+					</Button>
 				</PanelBody>
 				<PanelBody
 					title={__("Automatic response email", "form-send-blocks")}
@@ -312,11 +327,11 @@ export default function Edit({
 									selected={mailAddressType}
 									options={[
 										{
-											label: __("Input Value", "block-collections"),
+											label: __("Input Value", "form-send-blocks"),
 											value: "inputVal",
 										},
 										{
-											label: __("Logon User", "block-collections"),
+											label: __("Logon User", "form-send-blocks"),
 											value: "logonUser",
 										},
 									]}
@@ -375,6 +390,10 @@ export default function Edit({
 						<PanelRow>
 							<TextareaControl
 								label={__("Footer Content", "form-send-blocks")}
+								help={__(
+									"[master_name] and [master_mail] are replaced with the sender name and address when the email is sent.",
+									"form-send-blocks",
+								)}
 								value={footer_content}
 								onChange={(newVal) => {
 									setAttributes({
@@ -402,7 +421,9 @@ export default function Edit({
 							];
 							return (
 								<Notice key={index} actions={actions} isDismissible={false}>
-									<p>{option.label}</p>
+									<p>
+										{option.label} <code>{option.value}</code>
+									</p>
 								</Notice>
 							);
 						})}

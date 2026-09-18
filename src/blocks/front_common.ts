@@ -131,6 +131,8 @@ export const sendMail_ajax = (
 	is_retMail: boolean,
 	save_post_type = "",
 	address_type = "inputVal",
+	// 送信先トークン（サーバーが出力したもの）。宛先・差出人はサーバーがここから決める
+	mail_token = "",
 ) => {
 	//noceの取得
 	const nonce = itmar_option.nonce;
@@ -157,6 +159,7 @@ export const sendMail_ajax = (
 					is_dataSave: is_dataSave,
 					is_retMail: is_retMail,
 					address_type: address_type,
+					mail_token: mail_token,
 				},
 			})
 			.done(function (data) {
@@ -314,16 +317,37 @@ export const message_rebuild = (message: string): string => {
 	return message;
 };
 
+// 進捗表示とステップを束ねるフォームブロック
+const FORM_CONTAINER =
+	".wp-block-itmar-contactmail-sender, .wp-block-itmar-member-register";
+
+/**
+ * フォームに属する進捗表示の li を返す。
+ * 以前はページ全体の .wp-block-itmar-design-process を拾っていたため、
+ * 問い合わせと会員登録が同じページにあると互いの進捗表示を書き換えていた。
+ * フォームの外に置かれた進捗表示（旧来の配置）も動くよう、見つからなければ
+ * ページ内の最初の進捗表示を使う。
+ */
+export const findProcessItems = (from: JQuery): JQuery => {
+	const container = from.closest(FORM_CONTAINER);
+	const scoped = container.find(".wp-block-itmar-design-process li");
+	return scoped.length > 0
+		? scoped
+		: jQuery(".wp-block-itmar-design-process").first().find("li");
+};
+
 //プロセスブロックの更新
 export const process_change = (figure_elm: JQuery, set_flg: boolean) => {
-	// 1. 全てのステップ要素（.figure_fieldset）を取得し、現在の要素が何番目か特定する
-	const allFieldsets = jQuery(".figure_fieldset");
+	// 1. 同じフォーム内のステップ要素（.figure_fieldset）から、現在の要素が何番目か特定する
+	const container = figure_elm.closest(FORM_CONTAINER);
+	const allFieldsets =
+		container.length > 0 ? container.find(".figure_fieldset") : jQuery(".figure_fieldset");
 	const currentIndex = allFieldsets.index(figure_elm);
 
 	if (currentIndex === -1) return; // 見つからない場合は終了
 
 	// 2. 進捗ブロック内の全 li を取得
-	const lis = jQuery(".wp-block-itmar-design-process").find("li");
+	const lis = findProcessItems(figure_elm);
 
 	// 3. インデックスが一致する li を特定
 	// 同一クラス名が複数あっても、DOMの並び順（Index）で 1対1 に紐付けます
@@ -354,9 +378,9 @@ export function require_check($: JQueryStatic, form: JQuery) {
 					$(this).find("select").length !== 0
 						? $(this).find("select")
 						: undefined;
-				//セレクトが選択肢を持っているかどうかの判定（単数選択・複数選択）
+				//セレクトが未選択かどうかの判定（単数選択・複数選択）
 				const select_val = select_elm?.val();
-				const select_flg = select_elm?.attr("multiple")
+				const select_empty = select_elm?.attr("multiple")
 					? Array.isArray(select_val)
 						? select_val.length === 0
 						: true // 複数選択時は配列の長さをチェック
@@ -368,7 +392,8 @@ export function require_check($: JQueryStatic, form: JQuery) {
 					required_err = String(input_val || "").length === 0;
 				}
 				if (select_elm) {
-					required_err = !select_flg;
+					// 以前は !select_flg としており、選択するとエラー・未選択だと通過する逆の判定だった
+					required_err = select_empty;
 				}
 
 				if (required_err) {

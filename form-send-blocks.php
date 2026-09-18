@@ -20,6 +20,9 @@ if (!defined('ABSPATH')) exit;
 //composerによるリモートリポジトリからの読み込みを要求
 require_once __DIR__ . '/vendor/itmar/loader-package/src/register_autoloader.php';
 
+// 問い合わせメールの送信先（サイト設定）と、フロントでの送信先の秘匿
+require_once __DIR__ . '/includes/mail-settings.php';
+
 // プラグイン情報取得に必要なファイルを読み込む
 if (!function_exists('get_plugin_data')) {
 	require_once(ABSPATH . 'wp-admin/includes/plugin.php');
@@ -91,19 +94,42 @@ function itmar_contact_send_ajax()
 
 	if (wp_verify_nonce($nonce, 'wp_rest')) {
 		// メールの設定(無害化処理)
-		$to = sanitize_email(wp_unslash($_POST['email'] ?? ''));
 		$subject = sanitize_text_field(wp_unslash($_POST['subject'] ?? ''));
 		//$user_name = sanitize_text_field(wp_unslash($_POST['userName'] ?? ''));
 		$message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
-		$reply = sanitize_email(wp_unslash($_POST['reply_address'] ?? ''));
-		$reply_name = sanitize_text_field(wp_unslash($_POST['reply_name'] ?? ''));
 		$is_dataSave = filter_var(wp_unslash($_POST['is_dataSave'] ?? ''), FILTER_VALIDATE_BOOLEAN);
 		$is_retMail = filter_var(wp_unslash($_POST['is_retMail'] ?? ''), FILTER_VALIDATE_BOOLEAN);
-		$save_post_type = sanitize_text_field(wp_unslash($_POST['save_post_type'] ?? ''));
+		$save_post_type = sanitize_key(wp_unslash($_POST['save_post_type'] ?? ''));
 		$address_type = sanitize_text_field(wp_unslash($_POST['address_type'] ?? ''));
-		$headers = 'From: ' . $reply_name . '<' . $reply . '>' . "\r\n";
+
+		/*
+		 * 宛先と差出人はブラウザの値を信用しない。
+		 * このエンドポイントは未ログインでも呼べ、nonce はページに公開されているため、
+		 * ブラウザの値を使うと任意の宛先・任意の差出人でメールを送れてしまう。
+		 * 送信先はブロックが出力したトークン（サーバーで暗号化したもの）から、
+		 * トークンが無い・読めないときはサイト設定から決める。
+		 */
+		$token = sanitize_text_field(wp_unslash($_POST['mail_token'] ?? ''));
+		$destination = itmar_fsb_unseal_destination($token) ?? itmar_fsb_site_mail_settings();
+		$reply = $destination['from'];
+		$reply_name = $destination['name'];
+
+		// 管理者への通知は必ず設定済みの送信先へ。自動応答だけが入力されたアドレスへ送る
+		$to = $is_retMail
+			? sanitize_email(wp_unslash($_POST['email'] ?? ''))
+			: $destination['to'];
+
+		// 自動応答のフッター（問い合わせ先など）はサーバーが付ける
+		if ($is_retMail) {
+			$footer = itmar_fsb_build_footer($destination);
+			if ('' !== $footer) {
+				$message .= "\n\n" . $footer;
+			}
+		}
+
+		$headers = 'From: ' . $reply_name . ' <' . $reply . '>' . "\r\n";
 		//メールアドレスタイプがログオンユーザーならアドレスを置き換え
-		if ($address_type === 'logonUser') {
+		if ($is_retMail && $address_type === 'logonUser') {
 			$current_user = wp_get_current_user();
 			$user_email   = $current_user->user_email ?? '';
 			$to = $user_email;
@@ -139,7 +165,9 @@ function itmar_contact_send_ajax()
 		}
 
 		//データの格納
-		if ($is_dataSave) {
+		if ($is_dataSave && !itmar_fsb_is_allowed_save_post_type($save_post_type)) {
+			$response['save'] = array('status' => 'error', 'message' => __('The post type for saving inquiries is not allowed.', 'form-send-blocks'));
+		} elseif ($is_dataSave) {
 			// 2. 投稿の作成（投稿者は管理者に固定するか、0 にする）
 			$new_post = array(
 				'post_type'   => $save_post_type,

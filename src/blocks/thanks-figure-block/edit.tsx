@@ -1,4 +1,4 @@
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import "./editor.scss";
 
 import {
@@ -258,7 +258,9 @@ export default function Edit({
 						onChange={(newVal) => setAttributes({ stage_info: newVal })}
 					/>
 
-					<PanelBody title={__("Input Figure Mapping", "itmar")}>
+					<PanelBody
+						title={__("Messages after sending", "form-send-blocks")}
+					>
 						{inputFigureBlocks.map((block: BlockInstance) => {
 							//インプットフィギュアごとにデザインボタンブロックを取得（buttonKeyを持つもの）
 							const buttonBlocks = flattenBlocks(
@@ -275,10 +277,15 @@ export default function Edit({
 
 										return (
 											<PanelBody
-												title={`${btnBlock.attributes.buttonKey || ""} ${__(
-													"Button Mapping",
-													"form-send-blocks",
-												)}`}
+												title={sprintf(
+													/* translators: 1: button label, 2: button key */
+													__(
+														'Messages for the "%1$s" button (%2$s)',
+														"form-send-blocks",
+													),
+													btnBlock.attributes.labelContent || "",
+													buttonKey,
+												)}
 												initialOpen={false}
 											>
 												<TextControl
@@ -323,7 +330,7 @@ export default function Edit({
 
 												<TextareaControl
 													label={__(
-														"Notificication Success Infomation",
+														"Notification success message",
 														"form-send-blocks",
 													)}
 													value={currentObj?.success_notice || ""}
@@ -344,7 +351,7 @@ export default function Edit({
 												/>
 												<TextareaControl
 													label={__(
-														"Notificication Error Infomation",
+														"Notification error message",
 														"form-send-blocks",
 													)}
 													value={currentObj?.error_notice || ""}
@@ -365,7 +372,7 @@ export default function Edit({
 												/>
 												<TextareaControl
 													label={__(
-														"Responce Success Information",
+														"Automatic response success message",
 														"form-send-blocks",
 													)}
 													value={currentObj?.success_responce || ""}
@@ -386,7 +393,7 @@ export default function Edit({
 												/>
 												<TextareaControl
 													label={__(
-														"Responce Error Information",
+														"Automatic response error message",
 														"form-send-blocks",
 													)}
 													value={currentObj?.responce_error || ""}
@@ -467,8 +474,8 @@ export default function Edit({
 					<BoxControl
 						label={
 							!isMobile
-								? __("Margin settings(desk top)", "itmar_block_collections")
-								: __("Margin settings(mobile)", "itmar_block_collections")
+								? __("Margin settings(desk top)", "form-send-blocks")
+								: __("Margin settings(mobile)", "form-send-blocks")
 						}
 						values={
 							!isMobile ? default_pos.margin_form : mobile_pos.margin_form
@@ -491,8 +498,8 @@ export default function Edit({
 					<BoxControl
 						label={
 							!isMobile
-								? __("Padding settings(desk top)", "itmar_block_collections")
-								: __("Padding settings(mobile)", "itmar_block_collections")
+								? __("Padding settings(desk top)", "form-send-blocks")
+								: __("Padding settings(mobile)", "form-send-blocks")
 						}
 						values={
 							!isMobile ? default_pos.padding_form : mobile_pos.padding_form

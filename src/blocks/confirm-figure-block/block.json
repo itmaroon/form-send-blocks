@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "itmar/confirm-figure-block",
 	"version": "0.1.0",
-	"title": "Comfirm Figure",
+	"title": "Confirm Figure",
 	"category": "design",
 	"supports": {
 		"html": false

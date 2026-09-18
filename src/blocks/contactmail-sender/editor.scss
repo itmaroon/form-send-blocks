@@ -26,3 +26,42 @@
 .wp-block-itmar-contactmail-sender {
 	border: 1px dotted #f00;
 }
+/* 個別設定が残っているブロックの警告（上の .mailinfo_ctrl の通知スタイルを打ち消す） */
+.mailinfo_ctrl .components-notice.itmar_override_notice {
+	padding-right: 12px;
+	background-color: #fcf9e8;
+	margin: 0 0 12px;
+
+	.components-notice__content {
+		display: block;
+
+		p {
+			margin: 0 0 6px;
+		}
+
+		code {
+			word-break: break-all;
+		}
+	}
+
+	.components-notice__actions {
+		margin-top: 4px;
+	}
+}
+
+.mailinfo_ctrl .itmar_site_setting_note {
+	margin: 0 0 12px;
+	color: #757575;
+	font-size: 12px;
+}
+
+.mailinfo_ctrl .itmar_mail_body_note {
+	margin: 0 0 12px;
+}
+
+.mailinfo_ctrl .components-notice.is-warning {
+	display: block;
+	padding-right: 12px;
+	margin: 0 0 12px;
+	background-color: #fcf9e8;
+}
