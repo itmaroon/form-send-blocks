@@ -79,21 +79,40 @@ const units = [
 	{ value: "rem", label: "rem" },
 ];
 
-//要素幅を計測する関数
+/**
+ * 文字列の表示幅を測る。
+ *
+ * canvas の font には `var(--wp--preset--font-family--gothic)` のような CSS 変数を
+ * 書けない。指定が不正だと canvas は既定の 10px sans-serif のまま測るので、
+ * テーマのフォントをプリセット参照で持たせているとラベル幅が実寸より大幅に狭くなり、
+ * 入力欄にラベルが重なる。そこで実際の要素を置いて測る。
+ *
+ * host にブロックの要素を渡すと、その要素のある文書（サイトエディターの iframe）で
+ * 測るので、テーマの CSS 変数とフォントがそのまま解決される。
+ */
 const measureTextWidth = (
 	text: string,
 	fontSize: string,
 	fontFamily: string,
+	fontWeight?: string,
+	host?: HTMLElement | null,
 ) => {
-	const canvas = document.createElement("canvas");
-	const context = canvas.getContext("2d");
-	if (!context) {
-		console.error("Canvas 2D context could not be initialized.");
-		return 0;
-	}
-	context.font = `${fontSize} ${fontFamily}`;
-	const metrics = context.measureText(text);
-	return metrics.width;
+	if (!text) return 0;
+	const doc = host?.ownerDocument ?? document;
+	const parent = doc.body;
+	if (!parent) return 0;
+	const probe = doc.createElement("span");
+	probe.textContent = text;
+	probe.setAttribute("aria-hidden", "true");
+	probe.style.cssText =
+		"position:absolute;left:-9999px;top:0;visibility:hidden;white-space:pre;pointer-events:none;";
+	if (fontSize) probe.style.fontSize = fontSize;
+	if (fontFamily) probe.style.fontFamily = fontFamily;
+	if (fontWeight) probe.style.fontWeight = fontWeight;
+	parent.appendChild(probe);
+	const width = probe.getBoundingClientRect().width;
+	probe.remove();
+	return width;
 };
 
 export default function Edit({
@@ -539,6 +558,9 @@ export default function Edit({
 		},
 	);
 
+	//ブロックの参照
+	const blockRef = useRef<HTMLDivElement | null>(null);
+
 	//インナーブロックのラベル幅を取得
 	useEffect(() => {
 		//'itmar/design-checkbox''itmar/design-button'を除外
@@ -555,19 +577,26 @@ export default function Edit({
 				const dispLabel = block.attributes.required.flg
 					? `${block.attributes.labelContent}(${block.attributes.required.display})`
 					: block.attributes.labelContent;
-				//フォントサイズを取得
-				const renderFontSize = !isMobile
-					? block.attributes.font_style_label.default_fontSize
-					: block.attributes.font_style_label.mobile_fontSize;
-				//幅の計測
-				return Math.max(
-					max,
+				/*
+				 * 幅の計測。
+				 * ラベルの幅は1つしか持てないのに文字サイズは画面幅で変わるので、
+				 * 広い方（ふつうはデスクトップ）に合わせる。狭い方に合わせると、
+				 * もう一方でラベルが入力欄に重なる。
+				 */
+				const fontStyle = block.attributes.font_style_label;
+				const widths = [
+					fontStyle.default_fontSize,
+					fontStyle.mobile_fontSize,
+				].map((size: string | undefined) =>
 					measureTextWidth(
 						dispLabel,
-						renderFontSize,
-						block.attributes.font_style_label.fontFamily,
+						size || fontStyle.default_fontSize,
+						fontStyle.fontFamily,
+						fontStyle.fontWeight,
+						blockRef.current,
 					),
 				);
+				return Math.max(max, ...widths);
 			},
 			Number.MIN_SAFE_INTEGER,
 		);
@@ -590,8 +619,6 @@ export default function Edit({
 	//モバイルの判定
 	const isMobile = useIsIframeMobile();
 
-	//ブロックの参照
-	const blockRef = useRef<HTMLDivElement | null>(null);
 	const editorStyleClass = `itmar-input-editor-${clientId.replace(
 		/[^a-zA-Z0-9_-]/g,
 		"",

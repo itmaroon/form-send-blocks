@@ -184,8 +184,10 @@ jQuery(function ($) {
 				.eq(0);
 
 			//ブロックに属性を付けてトリガー
+			//thanks-figure-block は error_code を最上位で読む（custom-login と同じ形）
 			const thank_result = {
 				status: response.success,
+				error_code: ajax_result.error_code,
 				message: ajax_result,
 			};
 
@@ -326,10 +328,18 @@ jQuery(function ($) {
 			}
 
 			//ブロックに属性を付けてトリガー
-			const thank_result = {
-				status: ajax_result.status,
-				message: ajax_result,
-			};
+			//エラーは status:false ＋ 最上位の error_code で渡す（thanks-figure-block のエラー表示の形）
+			const thank_result =
+				ajax_result.status === "error"
+					? {
+							status: false,
+							error_code: ajax_result.content,
+							message: ajax_result,
+						}
+					: {
+							status: ajax_result.status,
+							message: ajax_result,
+						};
 
 			thank_block
 				.attr("data-click-button-id", clickKey)

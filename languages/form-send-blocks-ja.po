@@ -1155,3 +1155,19 @@ msgstr "フッターの内容"
 #: src/blocks/contactmail-sender/SiteMailSettings.tsx
 msgid "The email address format is invalid. "
 msgstr "メールアドレスの形式が正しくありません。"
+
+#: src/blocks/front_common.ts
+msgid "Shopify refused the request. The app needs approval for protected customer data."
+msgstr "Shopify に拒否されました。アプリが「保護された顧客データ」のアクセス承認を受けている必要があります。"
+
+#: src/blocks/front_common.ts
+msgid "Shopify returned an error. Please check the store settings."
+msgstr "Shopify がエラーを返しました。ストアの設定を確認してください。"
+
+#: src/blocks/front_common.ts
+msgid "Could not reach Shopify."
+msgstr "Shopify に接続できませんでした。"
+
+#: src/blocks/front_common.ts
+msgid "This email address is not registered yet. Please sign up first."
+msgstr "このメールアドレスはまだ会員登録されていません。先に会員登録を行ってください。"

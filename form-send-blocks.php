@@ -241,7 +241,7 @@ function itmar_register_send_token()
 	$email = sanitize_email($form['email'] ?? '');
 	$first_name = sanitize_text_field($form['memberFirstName'] ?? '');
 	$last_name = sanitize_text_field($form['memberLastName'] ?? '');
-	$name = $form['memberDisplayName'] ? sanitize_text_field($form['memberFirstName'] ?? '') : $first_name . $last_name;
+	$name = ! empty($form['memberDisplayName']) ? sanitize_text_field($form['memberDisplayName']) : $first_name . $last_name;
 	$password = $form['password'] ?? '';
 
 	if (empty($email) || !is_email($email)) {
@@ -282,7 +282,7 @@ function itmar_register_send_token()
 	);
 
 	if (!$result) {
-		wp_send_json_error([['err_code' => 'save_error']]);
+		wp_send_json_error(['err_code' => 'save_error']);
 	}
 
 	// メール送信
@@ -498,9 +498,10 @@ function itmar_pending_user_check($username)
 	$table = $wpdb->prefix . 'pending_users';
 
 	// メールアドレス or ユーザー名を照合
+	// 入れ直された場合にそなえて、いちばん新しい仮登録を返す
 	$pending_user = $wpdb->get_row(
 		$wpdb->prepare(
-			"SELECT * FROM {$table} WHERE (email = %s OR name = %s) AND is_used = 0 LIMIT 1",
+			"SELECT * FROM {$table} WHERE (email = %s OR name = %s) AND is_used = 0 ORDER BY id DESC LIMIT 1",
 			$username,
 			$username
 		)
@@ -549,9 +550,19 @@ function itmar_custom_login()
 				'message' => '仮登録が確認できました',
 			]);
 		} else {
+			/*
+			 * ユーザーも仮登録も無いときは「会員登録がまだ」の案内にする。
+			 * WordPress の既定のメッセージは「不明なメールアドレスです。再確認するか
+			 * ユーザー名による指定をお試しください」で、入力間違いを疑わせてしまう。
+			 */
+			$unknown_user = in_array(
+				$user->get_error_code(),
+				['invalid_email', 'invalid_username', 'invalid_user'],
+				true
+			);
 			wp_send_json_error([
 				'message' =>  wp_strip_all_tags($user->get_error_message()),
-				'error_code' => $user->get_error_code(),
+				'error_code' => $unknown_user ? 'not_registered' : $user->get_error_code(),
 				'lost_password_url' => wp_lostpassword_url(),
 			]);
 		}
@@ -577,16 +588,19 @@ add_action('wp_ajax_nopriv_itmar_custom_login', 'itmar_custom_login');
  */
 function itmar_refresh_rest_nonce()
 {
-	if (!is_user_logged_in()) {
-		wp_send_json_error(['message' => 'ログイン状態を確認できません'], 401);
-	}
-
+	/*
+	 * ログイン済みかどうかに関係なく、いまのリクエストの状態に合った nonce を返す。
+	 * 仮登録のまま Shopify の本人確認へ進む経路では、まだ WordPress にログインして
+	 * いない。以前はここで 401 を返していたため、新規ユーザーは先へ進めなかった。
+	 */
 	wp_send_json_success([
 		'rest_nonce' => wp_create_nonce('wp_rest'),
+		'logged_in'  => is_user_logged_in(),
 	]);
 }
 
 add_action('wp_ajax_itmar_refresh_rest_nonce', 'itmar_refresh_rest_nonce');
+add_action('wp_ajax_nopriv_itmar_refresh_rest_nonce', 'itmar_refresh_rest_nonce');
 
 // 問い合わせデータのCSV出力
 add_action('wp_ajax_export_inquiry_csv', 'export_inquiry_csv');

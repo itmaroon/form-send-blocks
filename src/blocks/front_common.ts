@@ -56,7 +56,20 @@ export const errorMap = {
 	invalid_mail: __("The email address format is invalid.", "form-send-blocks"),
 	no_require: __("Your name and password are required.", "form-send-blocks"),
 	email_exists: __("The email address is already in use.", "form-send-blocks"),
+	shopify_forbidden: __(
+		"Shopify refused the request. The app needs approval for protected customer data.",
+		"form-send-blocks",
+	),
+	shopify_error: __(
+		"Shopify returned an error. Please check the store settings.",
+		"form-send-blocks",
+	),
+	shopify_network: __("Could not reach Shopify.", "form-send-blocks"),
 	username_exists: __("The user ID is already in use.", "form-send-blocks"),
+	not_registered: __(
+		"This email address is not registered yet. Please sign up first.",
+		"form-send-blocks",
+	),
 	save_error: __(
 		"Failed to save temporary registration data.",
 		"form-send-blocks",

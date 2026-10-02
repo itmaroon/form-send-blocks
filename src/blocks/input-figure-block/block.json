@@ -21,7 +21,7 @@
 		},
 		"bgColor": {
 			"type": "string",
-			"default": "var(--wp--preset--color--content-back)"
+			"default": "var(--itmar-content-back)"
 		},
 		"bgColor_form": {
 			"type": "string"

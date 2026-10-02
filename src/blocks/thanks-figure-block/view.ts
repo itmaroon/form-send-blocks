@@ -99,11 +99,15 @@ jQuery(function ($) {
 						}
 						//ログインエラーの場合
 						if (attributes.status === false) {
-							const code = attributes.error_code;
+							//最上位に無ければ message の中も見る（呼び出し側の形の違いを吸収）
+							const code =
+								attributes.error_code ?? attributes.message?.error_code;
 							const error_result =
 								code === "incorrect_password"
 									? attributes.message
-									: errorMap[code];
+									: (errorMap as Record<string, string>)[code] ??
+										code ??
+										__("Unknown error", "form-send-blocks");
 							const errorResult = `${displayObj?.error_notice} \n${error_result}`;
 							$resultElm
 								.eq(0)

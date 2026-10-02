@@ -20,7 +20,7 @@
 .wp-block-itmar-contactmail-sender #to_confirm_form .err_msg, .wp-block-itmar-contactmail-sender [id^=to_input_next_] .err_msg {
   position: absolute;
   font-size: 0.8em;
-  color: var(--wp--preset--color--err-message);
+  color: var(--itmar-err-message);
   top: 90%;
   left: 10%;
 }

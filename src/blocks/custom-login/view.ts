@@ -200,7 +200,11 @@ jQuery(function ($) {
 								dataType: "json",
 							});
 							if (!nonceResponse?.success || !nonceResponse.data?.rest_nonce) {
-								throw new Error("REST nonce could not be refreshed after login.");
+								throw new Error(
+									`REST nonce could not be refreshed (${JSON.stringify(
+										nonceResponse,
+									)}).`,
+								);
 							}
 							itmar_option.nonce = nonceResponse.data.rest_nonce;
 
@@ -213,13 +217,15 @@ jQuery(function ($) {
 							);
 						} catch (error) {
 							console.error("Shopify authentication could not be started.", error);
+							const reason =
+								error instanceof Error && error.message ? `（${error.message}）` : "";
 							$authStatus
 								.attr("role", "alert")
 								.text(
 									__(
 										"Shopifyの本人確認を開始できませんでした。時間をおいて再度お試しください。",
 										"form-send-blocks",
-									),
+									) + reason,
 								)
 								.trigger("focus");
 						}

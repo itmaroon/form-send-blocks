@@ -1082,3 +1082,19 @@ msgstr ""
 #: src/blocks/contactmail-sender/SiteMailSettings.tsx
 msgid "The email address format is invalid. "
 msgstr ""
+
+#: src/blocks/front_common.ts
+msgid "Shopify refused the request. The app needs approval for protected customer data."
+msgstr ""
+
+#: src/blocks/front_common.ts
+msgid "Shopify returned an error. Please check the store settings."
+msgstr ""
+
+#: src/blocks/front_common.ts
+msgid "Could not reach Shopify."
+msgstr ""
+
+#: src/blocks/front_common.ts
+msgid "This email address is not registered yet. Please sign up first."
+msgstr ""
