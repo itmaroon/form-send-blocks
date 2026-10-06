@@ -3,7 +3,7 @@ Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.4
 Tested up to:      7.1
-Stable tag:        2.1.9
+Stable tag:        2.2.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,14 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 2.2.0 =
+- Security: the destination and sender of the contact mail are no longer taken from the browser. The block now outputs an encrypted token, and the server decides the destination from the token or the site setting. Notifications to the site owner always go to the configured address; only the automatic reply goes to the address typed in the form.
+- The notification address, sender name and sender address are now site settings. Addresses are no longer stored in templates, patterns or the page HTML, and no longer travel with a migrated theme.
+- Saving inquiries is limited to allowed post types.
+- Fixed the display name used when registering a member.
+- Colors now read the `--itmar-*` role variables, and the blocks were rebuilt with the latest shared packages.
+- Updated the Japanese translation.
+
 = 2.1.9 =
 - Colors now read the `--itmar-*` slots provided by Block Collections, with theme-independent fallbacks, so labels, placeholders and error text stay visible on themes that do not define itmaroon's palette.
 - View scripts import from `itmar-block-packages/front`, so the block editor bundle is no longer served to visitors.
@@ -142,6 +150,10 @@ Corrected the function to align label widths with the addition of responsive fon
 
 = 1.0.0 =
 First public release
+
+== Upgrade Notice ==
+= 2.2.0 =
+Security update: the destination and sender of contact mail are no longer taken from the browser. Mail goes to the address set in the block or in the site settings (the administrator's address by default). Update recommended; send a test mail afterwards.
 
 == Arbitrary section ==
 

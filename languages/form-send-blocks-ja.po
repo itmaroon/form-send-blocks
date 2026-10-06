@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Form Send Blocks 2.1.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
 "POT-Creation-Date: 2026-04-19T02:09:06+02:00\n"
-"PO-Revision-Date: 2026-04-19 09:38+0900\n"
+"PO-Revision-Date: 2026-10-06 12:24+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -27,8 +27,7 @@ msgstr ""
 
 #. Description of the plugin
 #: form-send-blocks.php
-msgid ""
-"This is a block that summarizes the display screen when submitting a form."
+msgid "This is a block that summarizes the display screen when submitting a form."
 msgstr "フォーム送信するときの表示画面をまとめたブロックです。"
 
 #. Author of the plugin
@@ -37,11 +36,8 @@ msgid "Web Creator ITmaroon"
 msgstr "WebクリエイターITmaroon"
 
 #: form-send-blocks.php:107
-msgid ""
-"The server detected an error in the input item. Registration process was "
-"interrupted. "
-msgstr ""
-"サーバーは入力項目にエラーを検出しました。 登録プロセスが中断されました。"
+msgid "The server detected an error in the input item. Registration process was interrupted. "
+msgstr "サーバーは入力項目にエラーを検出しました。 登録プロセスが中断されました。"
 
 #: form-send-blocks.php:117
 msgid "Your autoresponder email has been successfully sent."
@@ -220,8 +216,7 @@ msgstr "一時登録データの保存に失敗しました。"
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
 #: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
-msgid ""
-"The email containing the provisional registration results could not be sent."
+msgid "The email containing the provisional registration results could not be sent."
 msgstr "仮登録結果を記載したメールを送信できませんでした。"
 
 #: build/blocks/confirm-figure-block/view.js:1
@@ -251,11 +246,8 @@ msgid "We have received your inquiry with the following details."
 msgstr "以下の内容でお問い合わせを受け付けております。"
 
 #: build/blocks/contactmail-sender/index.js:16
-msgid ""
-"The person in charge has been notified of your inquiry. Please wait for a "
-"while until we reply."
-msgstr ""
-"お問い合わせ内容は担当者に通知されました。 返信までしばらくお待ちください。"
+msgid "The person in charge has been notified of your inquiry. Please wait for a while until we reply."
+msgstr "お問い合わせ内容は担当者に通知されました。 返信までしばらくお待ちください。"
 
 #: build/blocks/contactmail-sender/index.js:16
 msgid "Email notification to the person in charge failed."
@@ -382,10 +374,8 @@ msgid "sending..."
 msgstr "送信中..."
 
 #: build/blocks/custom-login/index.js:16
-msgid ""
-"This block provides the functionality to display a customized login screen."
-msgstr ""
-"このブロックは、カスタマイズされたログイン画面を表示する機能を提供します。"
+msgid "This block provides the functionality to display a customized login screen."
+msgstr "このブロックは、カスタマイズされたログイン画面を表示する機能を提供します。"
 
 #: build/blocks/custom-login/index.js:16
 #: build/blocks/thanks-figure-block/index.js:18
@@ -531,12 +521,8 @@ msgid "This is the name used to identify it as a data source."
 msgstr "これは、データ ソースとして識別するために使用される名前です。"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"This block sends a verification email to register members and registers them "
-"as WordPress members depending on the response."
-msgstr ""
-"このブロックは、登録メンバーに確認メールを送信し、応答に応じてメンバーを "
-"WordPress メンバーとして登録します。"
+msgid "This block sends a verification email to register members and registers them as WordPress members depending on the response."
+msgstr "このブロックは、登録メンバーに確認メールを送信し、応答に応じてメンバーを WordPress メンバーとして登録します。"
 
 #: build/blocks/member-register/index.js:16
 #: build/blocks/thanks-figure-block/index.js:18
@@ -544,11 +530,8 @@ msgid "Thank you for your provisional registration"
 msgstr "仮登録ありがとうございます"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"Provisional registration has been completed. To complete your registration, "
-"please access the following URL."
-msgstr ""
-"仮登録が完了しました。登録を完了するには、以下のURLにアクセスしてください。"
+msgid "Provisional registration has been completed. To complete your registration, please access the following URL."
+msgstr "仮登録が完了しました。登録を完了するには、以下のURLにアクセスしてください。"
 
 #: build/blocks/member-register/index.js:16
 msgid "Provisional registration completion notice"
@@ -563,20 +546,15 @@ msgid "This registration is complete"
 msgstr "本登録は完了です"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"Registration is now complete. You can log in with the user ID below or the "
-"email address and password you entered."
-msgstr ""
-"本登録が完了しました。下記のユーザーID、または入力したメールアドレスとパス"
-"ワードでログインできます。"
+msgid "Registration is now complete. You can log in with the user ID below or the email address and password you entered."
+msgstr "本登録が完了しました。下記のユーザーID、または入力したメールアドレスとパスワードでログインできます。"
 
 #: build/blocks/member-register/index.js:16
 msgid "Notification of completion of registration"
 msgstr "本登録完了通知"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"The registration process has been completed and the new user has been added."
+msgid "The registration process has been completed and the new user has been added."
 msgstr "登録プロセスが完了し、新しいユーザーが追加されました。"
 
 #: build/blocks/member-register/index.js:16
@@ -588,18 +566,11 @@ msgid "Official Registration"
 msgstr "本登録"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"Your provisional registration has been processed successfully. We have sent "
-"you an email, so please access the URL in the email to complete your "
-"registration."
-msgstr ""
-"仮登録が完了しました。メールをお送りいたしましたので、メール内のURLにアクセス"
-"して登録を完了してください。"
+msgid "Your provisional registration has been processed successfully. We have sent you an email, so please access the URL in the email to complete your registration."
+msgstr "仮登録が完了しました。メールをお送りいたしましたので、メール内のURLにアクセスして登録を完了してください。"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"The provisional registration process has failed. Please check your email "
-"address and try again."
+msgid "The provisional registration process has failed. Please check your email address and try again."
 msgstr "仮登録に失敗しました。メールアドレスをご確認の上、再度お試しください。"
 
 #: build/blocks/member-register/index.js:16
@@ -607,8 +578,7 @@ msgid "Registration complete"
 msgstr "登録完了"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"Your registration has been processed successfully. Thank you for registering."
+msgid "Your registration has been processed successfully. Thank you for registering."
 msgstr "本登録が正常に処理されました。ご登録ありがとうございます。"
 
 #: build/blocks/member-register/index.js:16
@@ -616,9 +586,7 @@ msgid "We are sorry, but please try again with temporary registration."
 msgstr "申し訳ございませんが、仮登録にて再度お試しください。"
 
 #: build/blocks/member-register/index.js:16
-msgid ""
-"We have sent you an email confirming your registration. Please check the "
-"details."
+msgid "We have sent you an email confirming your registration. Please check the details."
 msgstr "本登録の確認メールをお送りいたしました。内容をご確認ください。"
 
 #: build/blocks/member-register/index.js:16
@@ -726,8 +694,7 @@ msgid "Official registration info"
 msgstr "本登録の情報"
 
 #: build/blocks/thanks-figure-block/index.js:18
-msgid ""
-"It is a block that displays to convey gratitude when processing is completed"
+msgid "It is a block that displays to convey gratitude when processing is completed"
 msgstr "処理が完了した際に感謝の気持ちを伝えるために表示するブロックです"
 
 #: build/blocks/thanks-figure-block/index.js:18
@@ -807,14 +774,8 @@ msgid "Response email register error display"
 msgstr "本登録メール送信エラー時の表示"
 
 #: build/blocks/thanks-figure-block/index.js:18
-msgid ""
-"The contents set in the sidebar will be displayed here as the transmission "
-"result. Any changes you make to the contents of this paragraph block will "
-"not be reflected anywhere. Only design settings are valid."
-msgstr ""
-"ここにはサイドバーで設定した内容が送信結果として表示されます。この段落ブロッ"
-"クの内容を変更してもどこにも反映されません。デザインの設定だけが有効になりま"
-"す。"
+msgid "The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid."
+msgstr "ここにはサイドバーで設定した内容が送信結果として表示されます。この段落ブロックの内容を変更してもどこにも反映されません。デザインの設定だけが有効になります。"
 
 #: build/blocks/thanks-figure-block/index.js:18
 msgid "Completion form information settings"
@@ -874,54 +835,6 @@ msgstr ""
 msgctxt "block title"
 msgid "Thanks Figure"
 msgstr ""
-
-#~ msgid "Inquiry Data"
-#~ msgstr "お問合せ内容"
-
-#~ msgid "Please check your entries"
-#~ msgstr "入力内容を確認してください"
-
-#~ msgid "Send"
-#~ msgstr "送信"
-
-#~ msgid "Return to send screen"
-#~ msgstr "入力画面に戻る"
-
-#~ msgid "Open the Mail app"
-#~ msgstr "メールアプリを開く"
-
-#~ msgid "Activate Plugin"
-#~ msgstr "プラグインの有効化"
-
-#~ msgid "Required plugin is not active."
-#~ msgstr "必要なプラグインが有効化されていません。"
-
-#~ msgid "Install Plugin"
-#~ msgstr "プラグインのインストールサイト"
-
-#~ msgid "Required plugin is not installed."
-#~ msgstr "プラグインのインストールが必要です。"
-
-#~ msgid ""
-#~ "Click on the email address displayed below to set the response "
-#~ "destination."
-#~ msgstr ""
-#~ "以下に表示されるメールアドレスをクリックして返信先を設定してください。"
-
-#~ msgid ""
-#~ "This plugin requires \"block collections\" plugins to be installed and "
-#~ "active."
-#~ msgstr "\"block collections\"プラグインのインストールと有効化が必要です。"
-
-#~ msgid " Background Color Setting"
-#~ msgstr "背景色設定"
-
-#~ msgid ""
-#~ "The sending results set in the sidebar will be entered here. Please set "
-#~ "only the design."
-#~ msgstr ""
-#~ "ここにサイドバーで設定した内容が送信結果として表示されます。デザインだけを"
-#~ "設定してください。"
 
 #: includes/mail-settings.php
 msgid "Notification email address"
@@ -1017,7 +930,7 @@ msgstr "問い合わせメールのサイト設定を変更できるのは管理
 
 #: src/blocks/inquiryStarter.ts
 msgid "Send"
-msgstr "送信する"
+msgstr ""
 
 #: src/blocks/inquiryStarter.ts
 msgid "Please check your input"
@@ -1171,3 +1084,51 @@ msgstr "Shopify に接続できませんでした。"
 #: src/blocks/front_common.ts
 msgid "This email address is not registered yet. Please sign up first."
 msgstr "このメールアドレスはまだ会員登録されていません。先に会員登録を行ってください。"
+
+#~ msgid "Inquiry Data"
+#~ msgstr "お問合せ内容"
+
+#~ msgid "Please check your entries"
+#~ msgstr "入力内容を確認してください"
+
+#~ msgid "Send"
+#~ msgstr "送信"
+
+#~ msgid "Return to send screen"
+#~ msgstr "入力画面に戻る"
+
+#~ msgid "Open the Mail app"
+#~ msgstr "メールアプリを開く"
+
+#~ msgid "Activate Plugin"
+#~ msgstr "プラグインの有効化"
+
+#~ msgid "Required plugin is not active."
+#~ msgstr "必要なプラグインが有効化されていません。"
+
+#~ msgid "Install Plugin"
+#~ msgstr "プラグインのインストールサイト"
+
+#~ msgid "Required plugin is not installed."
+#~ msgstr "プラグインのインストールが必要です。"
+
+#~ msgid ""
+#~ "Click on the email address displayed below to set the response "
+#~ "destination."
+#~ msgstr ""
+#~ "以下に表示されるメールアドレスをクリックして返信先を設定してください。"
+
+#~ msgid ""
+#~ "This plugin requires \"block collections\" plugins to be installed and "
+#~ "active."
+#~ msgstr "\"block collections\"プラグインのインストールと有効化が必要です。"
+
+#~ msgid " Background Color Setting"
+#~ msgstr "背景色設定"
+
+#~ msgid ""
+#~ "The sending results set in the sidebar will be entered here. Please set "
+#~ "only the design."
+#~ msgstr ""
+#~ "ここにサイドバーで設定した内容が送信結果として表示されます。デザインだけを"
+#~ "設定してください。"
