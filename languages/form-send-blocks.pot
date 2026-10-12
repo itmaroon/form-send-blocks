@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Form Send Blocks 2.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/form-send-blocks\n"
+"POT-Creation-Date: 2026-10-06T05:19:18+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-06T05:19:18+02:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: form-send-blocks\n"
+"X-Generator: WP-CLI 2.12.0\n"
 
 #. Plugin Name of the plugin
 #: form-send-blocks.php
@@ -26,7 +26,8 @@ msgstr ""
 
 #. Description of the plugin
 #: form-send-blocks.php
-msgid "This is a block that summarizes the display screen when submitting a form."
+msgid ""
+"This is a block that summarizes the display screen when submitting a form."
 msgstr ""
 
 #. Author of the plugin
@@ -34,8 +35,7 @@ msgstr ""
 msgid "Web Creator ITmaroon"
 msgstr ""
 
-#: form-send-blocks.php:141
-#: build/blocks/contactmail-sender/index.js:1
+#: form-send-blocks.php:141 build/blocks/contactmail-sender/index.js:1
 msgid "The email address format is invalid. "
 msgstr ""
 
@@ -72,7 +72,8 @@ msgid "Invalid request."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:1
-msgid "This block is displayed to confirm the information entered in the form."
+msgid ""
+"This block is displayed to confirm the information entered in the form."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:1
@@ -146,7 +147,8 @@ msgstr ""
 #: build/blocks/confirm-figure-block/index.js:2
 #: build/blocks/input-figure-block/index.js:1
 #: build/blocks/thanks-figure-block/index.js:1
-msgid "Please enter the stage information to be displayed in the process area."
+msgid ""
+"Please enter the stage information to be displayed in the process area."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/index.js:2
@@ -229,128 +231,115 @@ msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "The token has already been used or is invalid."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "The token has expired."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "User registration failed."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "Input data missing"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "No email address entered"
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "The email address format is invalid."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "Your name and password are required."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "The email address is already in use."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
-msgid "Shopify refused the request. The app needs approval for protected customer data."
+msgid ""
+"Shopify refused the request. The app needs approval for protected customer "
+"data."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "Shopify returned an error. Please check the store settings."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "Could not reach Shopify."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "The user ID is already in use."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "This email address is not registered yet. Please sign up first."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "Failed to save temporary registration data."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
-msgid "The email containing the provisional registration results could not be sent."
+msgid ""
+"The email containing the provisional registration results could not be sent."
 msgstr ""
 
 #: build/blocks/confirm-figure-block/view.js:1
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 #: build/blocks/thanks-figure-block/view.js:1
 msgid "Failed to send email."
 msgstr ""
@@ -360,7 +349,9 @@ msgid "Clear block-specific settings"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "This block has its own destination saved, which takes priority over the site setting."
+msgid ""
+"This block has its own destination saved, which takes priority over the site"
+" setting."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
@@ -372,7 +363,9 @@ msgid "Sender name"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "These settings are shared by every inquiry form on this site and are saved with the site, not with this block."
+msgid ""
+"These settings are shared by every inquiry form on this site and are saved "
+"with the site, not with this block."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
@@ -380,11 +373,15 @@ msgid "Only administrators can change the site's inquiry mail settings."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "Inquiries are sent to this address. If blank, the site administrator email address is used."
+msgid ""
+"Inquiries are sent to this address. If blank, the site administrator email "
+"address is used."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "Shown as the sender of automatic response emails. If blank, the site title is used."
+msgid ""
+"Shown as the sender of automatic response emails. If blank, the site title "
+"is used."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
@@ -392,12 +389,18 @@ msgid "Sender email address"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "Used as the From address. Use an address on this site's domain so that mail is not rejected as spoofed. If blank, the site administrator email address is used."
+msgid ""
+"Used as the From address. Use an address on this site's domain so that mail "
+"is not rejected as spoofed. If blank, the site administrator email address "
+"is used."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
 #: build/blocks/thanks-figure-block/index.js:1
-msgid "The contents set in the sidebar will be displayed here as the transmission result. Any changes you make to the contents of this paragraph block will not be reflected anywhere. Only design settings are valid."
+msgid ""
+"The contents set in the sidebar will be displayed here as the transmission "
+"result. Any changes you make to the contents of this paragraph block will "
+"not be reflected anywhere. Only design settings are valid."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
@@ -447,7 +450,9 @@ msgid "Back to input"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "The person in charge has been notified of your inquiry. Please wait for a while until we reply."
+msgid ""
+"The person in charge has been notified of your inquiry. Please wait for a "
+"while until we reply."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
@@ -480,11 +485,15 @@ msgid "Mail subject and body"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "The subject and body of the notification and automatic response emails are set in the Confirm Figure block, under \"Input screens and mail settings\"."
+msgid ""
+"The subject and body of the notification and automatic response emails are "
+"set in the Confirm Figure block, under \"Input screens and mail settings\"."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "The mail settings appear only when a button on the input screen has a button identification key."
+msgid ""
+"The mail settings appear only when a button on the input screen has a button"
+" identification key."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
@@ -520,7 +529,9 @@ msgid "Footer Content"
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
-msgid "[master_name] and [master_mail] are replaced with the sender name and address when the email is sent."
+msgid ""
+"[master_name] and [master_mail] are replaced with the sender name and "
+"address when the email is sent."
 msgstr ""
 
 #: build/blocks/contactmail-sender/index.js:1
@@ -560,8 +571,7 @@ msgid "Shadow settings"
 msgstr ""
 
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 msgid "This is a required field."
 msgstr ""
 
@@ -574,13 +584,13 @@ msgid "Don't"
 msgstr ""
 
 #: build/blocks/contactmail-sender/view.js:1
-#: build/blocks/custom-login/view.js:1
-#: build/blocks/member-register/view.js:1
+#: build/blocks/custom-login/view.js:1 build/blocks/member-register/view.js:1
 msgid "sending..."
 msgstr ""
 
 #: build/blocks/custom-login/index.js:1
-msgid "This block provides the functionality to display a customized login screen."
+msgid ""
+"This block provides the functionality to display a customized login screen."
 msgstr ""
 
 #: build/blocks/custom-login/index.js:1
@@ -620,7 +630,8 @@ msgid "Shopifyの本人確認を開始できませんでした。時間をおい
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:1
-msgid "This is a block for collecting and displaying input elements in a form."
+msgid ""
+"This is a block for collecting and displaying input elements in a form."
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:1
@@ -772,11 +783,15 @@ msgid "Inquiry form"
 msgstr ""
 
 #: build/blocks/input-figure-block/index.js:1
-msgid "Choose the input fields to start with. You can add, remove and rearrange them afterwards."
+msgid ""
+"Choose the input fields to start with. You can add, remove and rearrange "
+"them afterwards."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "This block sends a verification email to register members and registers them as WordPress members depending on the response."
+msgid ""
+"This block sends a verification email to register members and registers them"
+" as WordPress members depending on the response."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
@@ -784,7 +799,9 @@ msgid "Thank you for your provisional registration"
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "Provisional registration has been completed. To complete your registration, please access the following URL."
+msgid ""
+"Provisional registration has been completed. To complete your registration, "
+"please access the following URL."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
@@ -800,7 +817,9 @@ msgid "This registration is complete"
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "Registration is now complete. You can log in with the user ID below or the email address and password you entered."
+msgid ""
+"Registration is now complete. You can log in with the user ID below or the "
+"email address and password you entered."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
@@ -808,7 +827,8 @@ msgid "Notification of completion of registration"
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "The registration process has been completed and the new user has been added."
+msgid ""
+"The registration process has been completed and the new user has been added."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
@@ -820,11 +840,16 @@ msgid "Official Registration"
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "Your provisional registration has been processed successfully. We have sent you an email, so please access the URL in the email to complete your registration."
+msgid ""
+"Your provisional registration has been processed successfully. We have sent "
+"you an email, so please access the URL in the email to complete your "
+"registration."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "The provisional registration process has failed. Please check your email address and try again."
+msgid ""
+"The provisional registration process has failed. Please check your email "
+"address and try again."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
@@ -832,7 +857,9 @@ msgid "Registration complete"
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "Your registration has been processed successfully. Thank you for registering."
+msgid ""
+"Your registration has been processed successfully. Thank you for "
+"registering."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
@@ -840,7 +867,9 @@ msgid "We are sorry, but please try again with temporary registration."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
-msgid "We have sent you an email confirming your registration. Please check the details."
+msgid ""
+"We have sent you an email confirming your registration. Please check the "
+"details."
 msgstr ""
 
 #: build/blocks/member-register/index.js:1
@@ -964,7 +993,8 @@ msgid "Official registration info"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:1
-msgid "It is a block that displays to convey gratitude when processing is completed"
+msgid ""
+"It is a block that displays to convey gratitude when processing is completed"
 msgstr ""
 
 #: build/blocks/thanks-figure-block/index.js:1
@@ -1041,8 +1071,7 @@ msgctxt "block title"
 msgid "Contact Mail Sender"
 msgstr ""
 
-#: build/blocks/custom-login/block.json
-#: src/blocks/custom-login/block.json
+#: build/blocks/custom-login/block.json src/blocks/custom-login/block.json
 msgctxt "block title"
 msgid "Custom Login"
 msgstr ""

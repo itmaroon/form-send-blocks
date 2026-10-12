@@ -3,7 +3,7 @@ Contributors:      itmaroon
 Tags:              block, Gutenberg, form, e-mail, contact
 Requires at least: 6.4
 Tested up to:      7.1
-Stable tag:        2.2.0
+Stable tag:        2.2.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 8.2.10
@@ -73,6 +73,12 @@ OR…
 7. Transmission result display form (mobile)
 
 == Changelog ==
+= 2.2.2 =
+- Fixed: opening a template or template part in the Site Editor no longer marks it as changed. The form blocks wrote their own attributes on load (shadow colors, menu flags, block style) now write only when the value really changes, and a transparent background is no longer saved as the shadow base color.
+
+= 2.2.1 =
+- Added the Japanese translation of the "Do" / "Don't" values shown for checkboxes on the confirmation screen.
+
 = 2.2.0 =
 - Security: the destination and sender of the contact mail are no longer taken from the browser. The block now outputs an encrypted token, and the server decides the destination from the token or the site setting. Notifications to the site owner always go to the configured address; only the automatic reply goes to the address typed in the form.
 - The notification address, sender name and sender address are now site settings. Addresses are no longer stored in templates, patterns or the page HTML, and no longer travel with a migrated theme.
@@ -152,6 +158,12 @@ Corrected the function to align label widths with the addition of responsive fon
 First public release
 
 == Upgrade Notice ==
+= 2.2.2 =
+Fixes the Site Editor showing "changes to review" just from opening a template. No configuration changes are required.
+
+= 2.2.1 =
+Translation-only update. No configuration changes are required.
+
 = 2.2.0 =
 Security update: the destination and sender of contact mail are no longer taken from the browser. Mail goes to the address set in the block or in the site settings (the administrator's address by default). Update recommended; send a test mail afterwards.
 
