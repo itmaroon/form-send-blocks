@@ -4,7 +4,7 @@ import { evaluateCheckboxes } from "../front_common";
 import { createConfirmFigureStyleCss } from "./StyleConfirmFigure";
 import { Attributes } from "./type";
 import { styleDataApply } from "itmar-block-packages/front";
-import { enterTitle } from "../front_common";
+import { enterTitle, viewText } from "../front_common";
 //import $ from "jquery";
 
 //保存済み属性から、React非依存のスコープ付きCSSを適用
@@ -38,14 +38,14 @@ jQuery(function ($) {
 				);
 
 				if ($submitButton) {
-					$submitButton.text(displayObj?.button_label);
+					$submitButton.text(viewText(displayObj?.button_label));
 				}
 				//注意メッセージの書き換え
 				const $attentionElm = $(this).find(
 					`[data-unique_id=${displayObj?.attention_Id}]`,
 				);
 				if ($attentionElm) {
-					enterTitle($attentionElm, displayObj?.attention_mess);
+					enterTitle($attentionElm, viewText(displayObj?.attention_mess));
 				}
 			}
 		},

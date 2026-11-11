@@ -1,3 +1,4 @@
+import { plainText } from "../plainText";
 import { __ } from "@wordpress/i18n";
 import { createContactMailStyleCss } from "./StyleContactMail";
 import { store as blockEditorStore } from "@wordpress/block-editor";
@@ -375,7 +376,7 @@ export default function Edit({
 													actions={actions}
 													isDismissible={false}
 												>
-													<p>{input_elm.attributes.labelContent}</p>
+													<p>{plainText(input_elm.attributes.labelContent)}</p>
 												</Notice>
 											);
 										}

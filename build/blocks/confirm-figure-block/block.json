@@ -6,7 +6,10 @@
   "title": "Confirm Figure",
   "category": "design",
   "supports": {
-    "html": false
+    "html": false,
+    "itmarTranslatable": {
+      "attributes": []
+    }
   },
   "attributes": {
     "sel_form_names": {

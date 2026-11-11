@@ -6,7 +6,10 @@
 	"title": "Input Figure",
 	"category": "design",
 	"supports": {
-		"html": false
+		"html": false,
+		"itmarTranslatable": {
+			"attributes": []
+		}
 	},
 	"attributes": {
 		"form_type": {

@@ -22,7 +22,7 @@ registerBlockType(blockConfig, {
 	attributes: {
 		...metadata.attributes,
 		stage_info: {
-			type: "string",
+			type: ["string", "object"],
 			default: __("Processing completed", "form-send-blocks"),
 		},
 	} as any,

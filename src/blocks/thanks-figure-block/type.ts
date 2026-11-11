@@ -22,5 +22,5 @@ export interface Attributes {
 	bgGradient_form: string;
 	radius_form: any;
 	border_form: any;
-	stage_info: string;
+	stage_info: string | Record<string, string>;
 }

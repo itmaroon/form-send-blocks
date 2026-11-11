@@ -23,6 +23,6 @@ export interface Attributes {
 	border_form: any;
 	label_width: string;
 	inputIndex: number;
-	stage_info: string;
+	stage_info: string | Record<string, string>;
 	isLastStep: boolean;
 }

@@ -1,3 +1,5 @@
+import { plainText } from "../plainText";
+import { useStageInfo, LangTextControl } from "../stageLang";
 import { __, sprintf } from "@wordpress/i18n";
 import "./editor.scss";
 
@@ -84,6 +86,11 @@ export default function Edit({
 		shadow_element,
 		is_shadow,
 	} = attributes;
+
+	//進行バーに出す段階の名前は、言語ごとに持てる（編集言語の切り替えと自動翻訳）
+	const stage = useStageInfo("itmar/thanks-figure-block", stage_info, (next) =>
+		setAttributes({ stage_info: next }),
+	);
 
 	//ブロックのスタイル設定
 	const blockStyle = { background: bgColor };
@@ -247,21 +254,14 @@ export default function Edit({
 
 	return (
 		<>
+			{stage.toolbar}
 			<InspectorControls group="settings">
 				<PanelBody
 					title={__("Completion form information settings", "form-send-blocks")}
 					initialOpen={true}
 					className="form_setteing_ctrl"
 				>
-					<TextControl
-						label={__("Stage information", "form-send-blocks")}
-						value={stage_info}
-						help={__(
-							"Please enter the stage information to be displayed in the process area.",
-							"form-send-blocks",
-						)}
-						onChange={(newVal) => setAttributes({ stage_info: newVal })}
-					/>
+					{stage.control}
 
 					<PanelBody
 						title={__("Messages after sending", "form-send-blocks")}
@@ -281,36 +281,31 @@ export default function Edit({
 										const currentObj = displayMapping?.[buttonKey];
 
 										return (
-											<PanelBody
-												title={sprintf(
-													/* translators: 1: button label, 2: button key */
-													__(
-														'Messages for the "%1$s" button (%2$s)',
-														"form-send-blocks",
-													),
-													btnBlock.attributes.labelContent || "",
-													buttonKey,
-												)}
-												initialOpen={false}
-											>
-												<TextControl
-													key={btnBlock.clientId}
-													label={__("Thanks Main Message", "form-send-blocks")}
-													value={currentObj?.main_mess || ""}
-													onChange={(newVal) => {
-														if (buttonKey) {
-															setAttributes({
-																displayMapping: {
-																	...displayMapping,
-																	[buttonKey]: {
-																		...(displayMapping?.[buttonKey] || {}),
-																		main_mess: newVal,
-																	},
-																},
-															});
-														}
-													}}
-												/>
+											<div key={btnBlock.clientId}>
+	{(buttonBlocks.length > 1 || inputFigureBlocks.length > 1) && (
+		<p style={{ fontWeight: 600 }}>
+			{plainText(btnBlock.attributes.labelContent)} ({buttonKey})
+		</p>
+	)}
+												<LangTextControl
+	blockName="itmar/thanks-figure-block"
+	label={__("Thanks Main Message", "form-send-blocks")}
+	value={currentObj?.main_mess}
+	
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						main_mess: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
 												<ComboboxControl
 													label={__(
 														"Main Message Display ID",
@@ -333,91 +328,133 @@ export default function Edit({
 													}}
 												/>
 
-												<TextareaControl
-													label={__(
+												<LangTextControl
+	blockName="itmar/thanks-figure-block"
+	label={__(
 														"Notification success message",
 														"form-send-blocks",
 													)}
-													value={currentObj?.success_notice || ""}
-													onChange={(newVal) => {
-														if (buttonKey) {
-															setAttributes({
-																displayMapping: {
-																	...displayMapping,
-																	[buttonKey]: {
-																		...(displayMapping?.[buttonKey] || {}),
-																		success_notice: newVal,
-																	},
-																},
-															});
-														}
-													}} // 一時的な編集値として保存する
-													rows={5}
-												/>
-												<TextareaControl
-													label={__(
+	value={currentObj?.success_notice}
+	multiline
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						success_notice: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
+												<LangTextControl
+	blockName="itmar/thanks-figure-block"
+	label={__(
 														"Notification error message",
 														"form-send-blocks",
 													)}
-													value={currentObj?.error_notice || ""}
-													onChange={(newVal) => {
-														if (buttonKey) {
-															setAttributes({
-																displayMapping: {
-																	...displayMapping,
-																	[buttonKey]: {
-																		...(displayMapping?.[buttonKey] || {}),
-																		error_notice: newVal,
-																	},
-																},
-															});
-														}
-													}} // 一時的な編集値として保存する
-													rows={5}
-												/>
-												<TextareaControl
-													label={__(
+	value={currentObj?.error_notice}
+	multiline
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						error_notice: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
+<ComboboxControl
+	label={__("Notification result display ID", "form-send-blocks")}
+	help={__("Leave empty to use the paragraph blocks in order.", "form-send-blocks")}
+	value={currentObj?.notice_Id || ""}
+	options={messageBlocksOption}
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						notice_Id: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
+												<LangTextControl
+	blockName="itmar/thanks-figure-block"
+	label={__(
 														"Automatic response success message",
 														"form-send-blocks",
 													)}
-													value={currentObj?.success_responce || ""}
-													onChange={(newVal) => {
-														if (buttonKey) {
-															setAttributes({
-																displayMapping: {
-																	...displayMapping,
-																	[buttonKey]: {
-																		...(displayMapping?.[buttonKey] || {}),
-																		success_responce: newVal,
-																	},
-																},
-															});
-														}
-													}} // 一時的な編集値として保存する
-													rows={5}
-												/>
-												<TextareaControl
-													label={__(
+	value={currentObj?.success_responce}
+	multiline
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						success_responce: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
+												<LangTextControl
+	blockName="itmar/thanks-figure-block"
+	label={__(
 														"Automatic response error message",
 														"form-send-blocks",
 													)}
-													value={currentObj?.responce_error || ""}
-													onChange={(newVal) => {
-														if (buttonKey) {
-															setAttributes({
-																displayMapping: {
-																	...displayMapping,
-																	[buttonKey]: {
-																		...(displayMapping?.[buttonKey] || {}),
-																		responce_error: newVal,
-																	},
-																},
-															});
-														}
-													}} // 一時的な編集値として保存する
-													rows={5}
-												/>
-											</PanelBody>
+	value={currentObj?.responce_error}
+	multiline
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						responce_error: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
+<ComboboxControl
+	label={__("Automatic response result display ID", "form-send-blocks")}
+	help={__("Leave empty to use the paragraph blocks in order.", "form-send-blocks")}
+	value={currentObj?.responce_Id || ""}
+	options={messageBlocksOption}
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						responce_Id: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
+											</div>
 										);
 									})}
 								</div>

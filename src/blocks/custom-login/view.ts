@@ -186,7 +186,7 @@ jQuery(function ($) {
 						}
 						$authStatus.text(
 							__(
-								"ログインに成功しました。初回はShopifyの本人確認画面へ移動します。",
+								"Login succeeded. On your first login you will be taken to Shopify's identity verification screen.",
 								"form-send-blocks",
 							),
 						);
@@ -223,7 +223,7 @@ jQuery(function ($) {
 								.attr("role", "alert")
 								.text(
 									__(
-										"Shopifyの本人確認を開始できませんでした。時間をおいて再度お試しください。",
+										"Could not start Shopify's identity verification. Please try again after a while.",
 										"form-send-blocks",
 									) + reason,
 								)

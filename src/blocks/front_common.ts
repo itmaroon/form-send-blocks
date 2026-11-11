@@ -438,3 +438,21 @@ export const enterTitle = (
 		$targetDiv.text(formatedValue);
 	}
 };
+
+
+//表示している言語（URL → Cookie → 既定）。block-collections の currentViewLang と同じ決め方
+export const viewLang = (): string =>
+	document.documentElement.dataset.itmarLang ||
+	decodeURIComponent(
+		(document.cookie.match(/(?:^|; )itmar_lang=([^;]*)/) || [])[1] || "",
+	) ||
+	"JP";
+
+//文字列、または言語ごとの文字（{JP, EN}）から、表示している言語の文字を取り出す
+export const viewText = (v: unknown): string => {
+	if (v && typeof v === "object" && !Array.isArray(v)) {
+		const map = v as Record<string, string>;
+		return map[viewLang()] || map.JP || Object.values(map)[0] || "";
+	}
+	return typeof v === "string" ? v : "";
+};

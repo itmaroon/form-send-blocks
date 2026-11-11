@@ -18,7 +18,7 @@ export interface Attributes {
 	border_form: any;
 	default_pos: PositionSettings;
 	mobile_pos: PositionSettings;
-	stage_info: string;
+	stage_info: string | Record<string, string>;
 	blockTableMapping: BlockTableMap[];
 	send_id: string;
 	cancel_id: string;

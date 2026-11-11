@@ -6,7 +6,10 @@
   "title": "Thanks Figure",
   "category": "design",
   "supports": {
-    "html": false
+    "html": false,
+    "itmarTranslatable": {
+      "attributes": []
+    }
   },
   "attributes": {
     "displayMapping": {

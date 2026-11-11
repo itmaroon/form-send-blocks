@@ -1,3 +1,4 @@
+import { useStageInfo } from "../stageLang";
 import { __ } from "@wordpress/i18n";
 import "./editor.scss";
 
@@ -135,6 +136,11 @@ export default function Edit({
 		isLastStep,
 		is_shadow,
 	} = attributes;
+
+	//進行バーに出す段階の名前は、言語ごとに持てる（編集言語の切り替えと自動翻訳）
+	const stage = useStageInfo("itmar/input-figure-block", stage_info, (next) =>
+		setAttributes({ stage_info: next }),
+	);
 	const shadow_element = attributes.shadow_element as ShadowState;
 
 	//ブロックの背景色
@@ -677,6 +683,7 @@ export default function Edit({
 
 	return (
 		<>
+			{stage.toolbar}
 			<InspectorControls group="settings">
 				<PanelBody
 					title={__(
@@ -713,15 +720,7 @@ export default function Edit({
 						)}
 						onChange={(newVal) => setAttributes({ form_name: newVal })}
 					/>
-					<TextControl
-						label={__("Stage information", "form-send-blocks")}
-						value={stage_info}
-						help={__(
-							"Please enter the stage information to be displayed in the process area.",
-							"form-send-blocks",
-						)}
-						onChange={(newVal) => setAttributes({ stage_info: newVal })}
-					/>
+					{stage.control}
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="styles">

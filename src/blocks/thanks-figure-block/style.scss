@@ -8,7 +8,8 @@
 .wp-block-itmar-thanks-figure-block {
 	box-sizing: border-box;
 
-	.error {
+	.error,
+	.error :is(h1, h2, h3, h4, h5, h6, div) {
 		color: var(--itmar-err-message);
 	}
 }

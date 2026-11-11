@@ -957,195 +957,211 @@ msgid ""
 "them afterwards."
 msgstr "最初に配置する入力欄を選んでください。あとから追加・削除・並べ替えができます。"
 
-#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Clear block-specific settings"
 msgstr "個別設定を解除"
 
-#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid ""
 "This block has its own destination saved, which takes priority over the site"
 " setting."
 msgstr "このブロックには個別の送信先が保存されています（サイト設定より優先）。"
 
-#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid ""
 "These settings are shared by every inquiry form on this site and are saved "
 "with the site, not with this block."
 msgstr "この設定はサイト内のすべての問い合わせフォームで共通です。ブロックではなくサイトに保存されます。"
 
-#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Only administrators can change the site's inquiry mail settings."
 msgstr "問い合わせメールのサイト設定を変更できるのは管理者だけです。"
 
-#: src/blocks/inquiryStarter.ts
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Send"
-msgstr ""
+msgstr "送信"
 
-#: src/blocks/inquiryStarter.ts
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Please check your input"
 msgstr "入力内容をご確認ください"
 
-#: src/blocks/inquiryStarter.ts
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Back to input"
 msgstr "入力画面に戻る"
 
-#: src/blocks/inquiryStarter.ts
+#: build/blocks/input-figure-block/index.js:1
 msgid "Name, email address and inquiry details."
 msgstr "お名前・メールアドレス・お問い合わせ内容"
 
-#: src/blocks/inquiryStarter.ts src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
+#: build/blocks/thanks-figure-block/index.js:1
 msgid "Return to home"
 msgstr "ホームへ戻る"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:1
 msgid "Input screens and mail settings"
 msgstr "入力画面とメールの設定"
 
 #. translators: 1: button label, 2: button key
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 #, php-format
 msgid "Mail settings for the \"%1$s\" button (%2$s)"
 msgstr "「%1$s」ボタン（%2$s）のメール設定"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:1
 msgid "Select which table this figure outputs to."
 msgstr "この入力画面の内容を表示する表を選んでください。"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 msgid "Confirm Button Label"
 msgstr "送信ボタンの表示"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 msgid "Confirm Attention Message"
 msgstr "確認画面の案内文"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 msgid "Attention Display ID"
 msgstr "案内文を表示する見出しのID"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 msgid "Inquiry information notification email Content"
 msgstr "管理者への通知メールの内容"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 msgid "Automatic response email Content"
 msgstr "自動返信メールの内容"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 msgid "Pause Mail Send"
 msgstr "メール送信の一時停止"
 
-#: src/blocks/confirm-figure-block/edit.tsx
+#: build/blocks/confirm-figure-block/index.js:2
 msgid "Is Pause Send"
 msgstr "メールを送信しない"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:1
 msgid "Messages after sending"
 msgstr "送信後のメッセージ"
 
 #. translators: 1: button label, 2: button key
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:2
 #, php-format
 msgid "Messages for the \"%1$s\" button (%2$s)"
 msgstr "「%1$s」ボタン（%2$s）の完了メッセージ"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:2
 msgid "Thanks Main Message"
 msgstr "完了画面の見出し"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:2
 msgid "Main Message Display ID"
 msgstr "見出しを表示するタイトルのID"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:2
 msgid "Notification success message"
 msgstr "通知メールの送信に成功したときの表示"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:2
 msgid "Notification error message"
 msgstr "通知メールの送信に失敗したときの表示"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:2
 msgid "Automatic response success message"
 msgstr "自動返信メールの送信に成功したときの表示"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:2
 msgid "Automatic response error message"
 msgstr "自動返信メールの送信に失敗したときの表示"
 
-#: src/blocks/thanks-figure-block/edit.tsx
+#: build/blocks/thanks-figure-block/index.js:1
 msgid "The subject line set by the user will be inserted into the sent email."
 msgstr "送信結果に応じた見出しがここに入ります"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Mail subject and body"
 msgstr "メールの件名と本文"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid ""
 "The subject and body of the notification and automatic response emails are "
 "set in the Confirm Figure block, under \"Input screens and mail settings\"."
 msgstr "通知メールと自動返信メールの件名・本文は、Confirm Figure ブロックの「入力画面とメールの設定」で設定します。"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid ""
 "The mail settings appear only when a button on the input screen has a button"
 " identification key."
 msgstr "メールの設定は、入力画面のボタンに「ボタン識別キー」が設定されているときだけ表示されます。"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Select the Confirm Figure block"
 msgstr "Confirm Figure ブロックを選択"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Master Mail"
 msgstr "差出人アドレス"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Input Value"
 msgstr "入力値"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Logon User"
 msgstr "ログインユーザー"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Add Mail Footer"
 msgstr "メールにフッターを付ける"
 
-#: src/blocks/contactmail-sender/edit.tsx
+#: build/blocks/contactmail-sender/index.js:1
 msgid "Footer Content"
 msgstr "フッターの内容"
 
-#: src/blocks/contactmail-sender/SiteMailSettings.tsx
+#: form-send-blocks.php:141
+#: build/blocks/contactmail-sender/index.js:1
 msgid "The email address format is invalid. "
 msgstr "メールアドレスの形式が正しくありません。"
 
-#: src/blocks/front_common.ts
+#: build/blocks/confirm-figure-block/view.js:1
+#: build/blocks/contactmail-sender/view.js:1
+#: build/blocks/custom-login/view.js:1
+#: build/blocks/member-register/view.js:1
+#: build/blocks/thanks-figure-block/view.js:1
 msgid ""
 "Shopify refused the request. The app needs approval for protected customer "
 "data."
 msgstr "Shopify に拒否されました。アプリが「保護された顧客データ」のアクセス承認を受けている必要があります。"
 
-#: src/blocks/front_common.ts
+#: build/blocks/confirm-figure-block/view.js:1
+#: build/blocks/contactmail-sender/view.js:1
+#: build/blocks/custom-login/view.js:1
+#: build/blocks/member-register/view.js:1
+#: build/blocks/thanks-figure-block/view.js:1
 msgid "Shopify returned an error. Please check the store settings."
 msgstr "Shopify がエラーを返しました。ストアの設定を確認してください。"
 
-#: src/blocks/front_common.ts
+#: build/blocks/confirm-figure-block/view.js:1
+#: build/blocks/contactmail-sender/view.js:1
+#: build/blocks/custom-login/view.js:1
+#: build/blocks/member-register/view.js:1
+#: build/blocks/thanks-figure-block/view.js:1
 msgid "Could not reach Shopify."
 msgstr "Shopify に接続できませんでした。"
 
-#: src/blocks/front_common.ts
+#: build/blocks/confirm-figure-block/view.js:1
+#: build/blocks/contactmail-sender/view.js:1
+#: build/blocks/custom-login/view.js:1
+#: build/blocks/member-register/view.js:1
+#: build/blocks/thanks-figure-block/view.js:1
 msgid "This email address is not registered yet. Please sign up first."
 msgstr "このメールアドレスはまだ会員登録されていません。先に会員登録を行ってください。"
 
-#: build/blocks/contactmail-sender/view.js
-#: src/blocks/contactmail-sender/view.ts
+#: build/blocks/contactmail-sender/view.js:1
 msgid "Do"
 msgstr "する"
 
-#: build/blocks/contactmail-sender/view.js
-#: src/blocks/contactmail-sender/view.ts
+#: build/blocks/contactmail-sender/view.js:1
 msgid "Don't"
 msgstr "しない"
 
@@ -1192,3 +1208,39 @@ msgstr "しない"
 #~ "The sending results set in the sidebar will be entered here. Please set only"
 #~ " the design."
 #~ msgstr "ここにサイドバーで設定した内容が送信結果として表示されます。デザインだけを設定してください。"
+
+#: form-send-blocks.php:147
+msgid "The subject or body of the email is blank. "
+msgstr "メールの件名または本文が空です。"
+
+#: build/blocks/custom-login/view.js:1
+msgid "Login succeeded. On your first login you will be taken to Shopify's identity verification screen."
+msgstr "ログインに成功しました。初回はShopifyの本人確認画面へ移動します。"
+
+#: build/blocks/custom-login/view.js:1
+msgid "Could not start Shopify's identity verification. Please try again after a while."
+msgstr "Shopifyの本人確認を開始できませんでした。時間をおいて再度お試しください。"
+
+#: build/blocks/thanks-figure-block/view.js:1
+msgid "Error:"
+msgstr "エラー:"
+
+#: build/blocks/thanks-figure-block/view.js:1
+msgid "Unknown error"
+msgstr "不明なエラー"
+
+#: build/blocks/thanks-figure-block/view.js:1
+msgid "You can reset your password using this link."
+msgstr "このリンクからパスワードを再設定できます。"
+
+#: build/blocks/thanks-figure-block/index.js:1
+msgid "Notification result display ID"
+msgstr "通知メールの結果を表示するID"
+
+#: build/blocks/thanks-figure-block/index.js:1
+msgid "Automatic response result display ID"
+msgstr "自動応答メールの結果を表示するID"
+
+#: build/blocks/thanks-figure-block/index.js:1
+msgid "Leave empty to use the paragraph blocks in order."
+msgstr "空のときは、ブロック内の段落を上から順に使います。"

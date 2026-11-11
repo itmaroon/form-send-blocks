@@ -232,7 +232,18 @@ export const fieldLines = (template: TemplateArray): string =>
 		.join("\n");
 
 // 本文にまだ差し込み項目が無いときだけ、項目の行を足す（利用者が書いた本文は壊さない）
-export const withFieldLines = (body: string | undefined, lines: string): string => {
+export const withFieldLines = (
+	body: string | Record<string, string> | undefined,
+	lines: string,
+): string | Record<string, string> => {
+	//言語ごとの文字のときは、言語ごとに追記する
+	if (body && typeof body === "object") {
+		const next: Record<string, string> = {};
+		Object.entries(body).forEach(([k, v]) => {
+			next[k] = withFieldLines(v, lines) as string;
+		});
+		return next;
+	}
 	const current = body ?? "";
 	if (lines === "" || /\[[^\]]+\]/.test(current)) {
 		return current;

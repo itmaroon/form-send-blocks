@@ -6,6 +6,7 @@ import {
 	processAnimation,
 	process_change,
 	message_rebuild,
+	viewText,
 	sendMail_ajax,
 	findProcessItems,
 } from "../front_common";
@@ -59,11 +60,30 @@ jQuery(function ($) {
 		// 一旦中身を空にして再描画（または特定のセルを更新）
 		$tbody.empty();
 		const rowHeadings = $targetTable.data("row_heading");
+		//行見出しを、言語ごとに持っているとき（design-table の data-lang-texts）は、表示している言語の文字にする
+		let rowLangTexts: Record<string, Record<string, string>> = {};
+		try {
+			rowLangTexts =
+				JSON.parse($targetTable.attr("data-lang-texts") || "{}").row ?? {};
+		} catch (e) {
+			rowLangTexts = {};
+		}
+		const viewLang =
+			document.documentElement.dataset.itmarLang ||
+			decodeURIComponent(
+				(document.cookie.match(/(?:^|; )itmar_lang=([^;]*)/) || [])[1] || "",
+			) ||
+			"JP";
+		const rowHeadingText = (index: number): string => {
+			const map = rowLangTexts[String(index)];
+			if (map) return map[viewLang] ?? map.JP ?? Object.values(map)[0] ?? "";
+			return rowHeadings[index];
+		};
 		data.forEach((item, index) => {
 			if (rowHeadings && rowHeadings[index]) {
 				$tbody.append(`
 					<tr>
-						<th>${rowHeadings[index]}</th>
+						<th>${rowHeadingText(index)}</th>
 						<td>${item.value}</td>
 					</tr>
 					}
@@ -455,12 +475,11 @@ jQuery(function ($) {
 					save_post_type,
 				} = attributes;
 
-				const {
-					notice_subject,
-					notice_content,
-					response_subject,
-					response_content,
-				} = displayObj;
+//件名と本文は、言語ごとの文字を持てる。表示している言語の文字でメールを送る
+				const notice_subject = viewText(displayObj.notice_subject);
+				const notice_content = viewText(displayObj.notice_content);
+				const response_subject = viewText(displayObj.response_subject);
+				const response_content = viewText(displayObj.response_content);
 
 				//message_infoの再構築
 				const rebuild_message_info = `${

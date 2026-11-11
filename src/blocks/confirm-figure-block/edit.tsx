@@ -1,3 +1,6 @@
+import { LangTextControl, textForLang, withLangText } from "../stageLang";
+import { useStageInfo } from "../stageLang";
+import { plainText } from "../plainText";
 import { __, sprintf } from "@wordpress/i18n";
 import "./editor.scss";
 import { useSelect, useDispatch } from "@wordpress/data";
@@ -86,6 +89,11 @@ export default function Edit({
 		is_shadow,
 		isSendPause,
 	} = attributes;
+
+	//進行バーに出す段階の名前は、言語ごとに持てる（編集言語の切り替えと自動翻訳）
+	const stage = useStageInfo("itmar/confirm-figure-block", stage_info, (next) =>
+		setAttributes({ stage_info: next }),
+	);
 	const shadow_element = attributes.shadow_element as ShadowState;
 
 	//親のcontextから今のステップ数を取得
@@ -196,7 +204,8 @@ export default function Edit({
 	// セル要素を生成する関数
 	interface SelectOption {
 		id: string | number;
-		label: string;
+		//文字列、または言語ごとの文字（{JP, EN}）
+		label: string | Record<string, string>;
 	}
 	const cellObjectsForm = (inputFigureInnerBlocks: BlockInstance[]) => {
 		//'itmar/design-checkbox''itmar/design-button'を除外
@@ -209,9 +218,10 @@ export default function Edit({
 				: undefined;
 			//選択された要素をカンマ区切りの文字列にして、input要素と選択
 			const content_td = sel_content
-				? sel_content.map((obj: SelectOption) => obj.label).join(", ")
+				? sel_content.map((obj: SelectOption) => plainText(obj.label)).join(", ")
 				: input_elm.attributes.inputValue;
 
+			//項目名は、言語ごとの文字（{JP, EN}）のまま表に渡す（表が、編集言語の文字で表示する）
 			const message_label =
 				input_elm.name === "itmar/design-title"
 					? input_elm.attributes.headingContent
@@ -405,8 +415,8 @@ export default function Edit({
 	const createMailNotice = (
 		input_elm: BlockInstance,
 		index: number,
-		targetMessage: string,
-		targetButton: string,
+targetMessage: string | Record<string, string> | undefined,
+targetButton: string,
 		targetAttributeKey: string,
 	) => {
 		const message_value =
@@ -417,15 +427,20 @@ export default function Edit({
 				: "";
 		const message_label =
 			input_elm.name === "itmar/design-title"
-				? input_elm.attributes.headingContent
+				? textForLang(input_elm.attributes.headingContent, stage.activeLang)
 				: isLabeledInput(input_elm.name)
-				? input_elm.attributes.labelContent
+				? textForLang(input_elm.attributes.labelContent, stage.activeLang)
 				: "";
 		const actions = [
 			{
 				label: "👆",
 				onClick: () => {
-					const newVal = `${targetMessage ?? ""}[${message_value ?? ""}]`;
+//編集言語の本文に差し込み項目を足す
+					const newVal = withLangText(
+						targetMessage,
+						stage.activeLang,
+						`${textForLang(targetMessage, stage.activeLang)}[${message_value ?? ""}]`,
+					);
 					setAttributes({
 						displayMapping: {
 							...displayMapping,
@@ -494,6 +509,7 @@ export default function Edit({
 
 	return (
 		<>
+			{stage.toolbar}
 			<InspectorControls group="settings">
 				<PanelBody
 					title={__("Input screens and mail settings", "form-send-blocks")}
@@ -541,50 +557,52 @@ export default function Edit({
 														'Mail settings for the "%1$s" button (%2$s)',
 														"form-send-blocks",
 													),
-													btnBlock.attributes.labelContent || "",
+													plainText(btnBlock.attributes.labelContent),
 													buttonKey,
 												)}
 											initialOpen={false}
 										>
-											<TextControl
-												key={btnBlock.clientId}
-												label={__("Confirm Button Label", "form-send-blocks")}
-												value={currentObj?.button_label || ""}
-												onChange={(newVal) => {
-													if (buttonKey) {
-														setAttributes({
-															displayMapping: {
-																...displayMapping,
-																[buttonKey]: {
-																	...(displayMapping?.[buttonKey] || {}),
-																	button_label: newVal,
-																},
-															},
-														});
-													}
-												}}
-											/>
-											<TextControl
-												key={btnBlock.clientId}
-												label={__(
+											<LangTextControl
+	blockName="itmar/confirm-figure-block"
+	label={__("Confirm Button Label", "form-send-blocks")}
+	value={currentObj?.button_label}
+	
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						button_label: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
+											<LangTextControl
+	blockName="itmar/confirm-figure-block"
+	label={__(
 													"Confirm Attention Message",
 													"form-send-blocks",
 												)}
-												value={currentObj?.attention_mess || ""}
-												onChange={(newVal) => {
-													if (buttonKey) {
-														setAttributes({
-															displayMapping: {
-																...displayMapping,
-																[buttonKey]: {
-																	...(displayMapping?.[buttonKey] || {}),
-																	attention_mess: newVal,
-																},
-															},
-														});
-													}
-												}}
-											/>
+	value={currentObj?.attention_mess}
+	
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						attention_mess: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
 											<ComboboxControl
 												label={__("Attention Display ID", "form-send-blocks")}
 												value={currentObj?.attention_Id || ""}
@@ -612,56 +630,61 @@ export default function Edit({
 												className="mailinfo_ctrl"
 											>
 												<PanelRow>
-													<TextControl
-														label={__(
+													<LangTextControl
+	blockName="itmar/confirm-figure-block"
+	label={__(
 															"Notification email subject",
 															"form-send-blocks",
 														)}
-														value={currentObj?.notice_subject || ""}
-														onChange={(newVal) => {
-															if (buttonKey) {
-																setAttributes({
-																	displayMapping: {
-																		...displayMapping,
-																		[buttonKey]: {
-																			...(displayMapping?.[buttonKey] || {}),
-																			notice_subject: newVal,
-																		},
-																	},
-																});
-															}
-														}} // 一時的な編集値として保存する
-													/>
+	
+	value={currentObj?.notice_subject}
+	
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						notice_subject: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
 												</PanelRow>
 												<PanelRow>
-													<TextareaControl
-														label={__(
+													<LangTextControl
+	blockName="itmar/confirm-figure-block"
+	label={__(
 															"Notification email body",
 															"form-send-blocks",
 														)}
-														value={currentObj?.notice_content || ""}
-														onChange={(newVal) => {
-															if (buttonKey) {
-																setAttributes({
-																	displayMapping: {
-																		...displayMapping,
-																		[buttonKey]: {
-																			...(displayMapping?.[buttonKey] || {}),
-																			notice_content: newVal,
-																		},
-																	},
-																});
-															}
-														}} // 一時的な編集値として保存する
-														rows={5}
-													/>
+	
+	value={currentObj?.notice_content}
+	multiline
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						notice_content: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
 												</PanelRow>
 												{inputMessageBlocks.map(
 													(input_elm: BlockInstance, index: number) =>
 														createMailNotice(
 															input_elm,
 															index,
-															currentObj?.notice_content || "",
+															currentObj?.notice_content,
 															buttonKey,
 															"notice_content",
 														),
@@ -676,60 +699,64 @@ export default function Edit({
 												className="mailinfo_ctrl"
 											>
 												<PanelRow>
-													<TextControl
-														label={__(
+													<LangTextControl
+	blockName="itmar/confirm-figure-block"
+	label={__(
 															"Automatic response email title",
 															"form-send-blocks",
 														)}
-														value={currentObj?.response_subject || ""}
-														onChange={(newVal) => {
-															if (buttonKey) {
-																setAttributes({
-																	displayMapping: {
-																		...displayMapping,
-																		[buttonKey]: {
-																			...(displayMapping?.[buttonKey] || {}),
-																			response_subject: newVal,
-																		},
-																	},
-																});
-															}
-														}} // 一時的な編集値として保存する
-													/>
+	
+	value={currentObj?.response_subject}
+	
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						response_subject: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
 												</PanelRow>
 												<PanelRow>
-													<TextareaControl
-														label={__(
+													<LangTextControl
+	blockName="itmar/confirm-figure-block"
+	label={__(
 															"Automatic response email body",
 															"form-send-blocks",
 														)}
-														value={currentObj?.response_content || ""}
-														onChange={(newVal) => {
-															if (buttonKey) {
-																setAttributes({
-																	displayMapping: {
-																		...displayMapping,
-																		[buttonKey]: {
-																			...(displayMapping?.[buttonKey] || {}),
-																			response_content: newVal,
-																		},
-																	},
-																});
-															}
-														}} // 一時的な編集値として保存する
-														rows={5}
-														help={__(
+	help={__(
 															"Click on the input field below to quote it in the text.",
 															"form-send-blocks",
 														)}
-													/>
+	value={currentObj?.response_content}
+	multiline
+	onChange={(newVal) => {
+		if (buttonKey) {
+			setAttributes({
+				displayMapping: {
+					...displayMapping,
+					[buttonKey]: {
+						...(displayMapping?.[buttonKey] || {}),
+						response_content: newVal,
+					},
+				},
+			});
+		}
+	}}
+/>
 												</PanelRow>
 												{inputMessageBlocks.map(
 													(input_elm: BlockInstance, index: number) =>
 														createMailNotice(
 															input_elm,
 															index,
-															currentObj?.response_content || "",
+															currentObj?.response_content,
 															buttonKey,
 															"response_content",
 														),
@@ -750,15 +777,7 @@ export default function Edit({
 					initialOpen={true}
 					className="form_setteing_ctrl"
 				>
-					<TextControl
-						label={__("Stage information", "form-send-blocks")}
-						value={stage_info}
-						help={__(
-							"Please enter the stage information to be displayed in the process area.",
-							"form-send-blocks",
-						)}
-						onChange={(newVal) => setAttributes({ stage_info: newVal })}
-					/>
+					{stage.control}
 				</PanelBody>
 				<PanelBody
 					title={__("Pause Mail Send", "form-send-blocks")}
